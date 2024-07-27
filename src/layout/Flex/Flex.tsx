@@ -1,6 +1,6 @@
 import React from "react";
 
-type FlexProps = {
+interface FlexProps {
   children: React.ReactNode;
   direction?: "row" | "row-reverse" | "column" | "column-reverse";
   justifyContent?:
@@ -15,7 +15,7 @@ type FlexProps = {
   gap?: string;
   width?: string;
   padding?: string;
-};
+}
 
 const Flex: React.FC<FlexProps> = ({
   children,

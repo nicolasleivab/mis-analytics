@@ -1,0 +1,69 @@
+.btnToggle {
+  margin: 0 var(--toggle-default-label-width);
+  padding: 0;
+  position: relative;
+  border: none;
+  height: var(--toggle-default-size);
+  width: calc(var(--toggle-default-size) * 2);
+  border-radius: var(--toggle-default-size);
+  background: var(--btn-default-bg);
+  cursor: pointer;
+  transition: background-color 0.25s;
+}
+
+.btnToggle:focus,
+.btnToggle.focus {
+  outline: none;
+}
+
+.btnToggle:before,
+.btnToggle:after {
+  line-height: var(--toggle-default-size);
+  width: var(--toggle-default-label-width);
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  position: absolute;
+  bottom: 0;
+  transition: opacity 0.25s;
+  color: var(--btn-default-color);
+}
+
+.btnToggle:before {
+  font-family: var(--font-title);
+  content: "light";
+  font-size: 10px;
+  left: calc(-1 * var(--toggle-default-label-width));
+  color: var(--handle-text-color);
+}
+
+.btnToggle:after {
+  font-family: var(--font-title);
+  content: "dark";
+  font-size: 10px;
+  right: calc(-1 * var(--toggle-default-label-width));
+  color: var(--handle-text-color);
+}
+
+.handle {
+  position: absolute;
+  top: calc(var(--toggle-default-size) * 0.25 / 2);
+  left: calc(var(--toggle-default-size) * 0.25 / 2);
+  width: calc(var(--toggle-default-size) * 0.75);
+  height: calc(var(--toggle-default-size) * 0.75);
+  border-radius: calc(var(--toggle-default-size) * 0.75);
+  background: var(--handle-default-bg);
+  transition: left 0.25s;
+}
+
+/* Position for light theme */
+[data-theme="light"] .btnToggle .handle {
+  left: calc(var(--toggle-default-size) * 0.25 / 2);
+}
+
+/* Position for dark theme */
+[data-theme="dark"] .btnToggle .handle {
+  left: calc(
+    var(--toggle-default-size) + (var(--toggle-default-size) * 0.25 / 2)
+  );
+}

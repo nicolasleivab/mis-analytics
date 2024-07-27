@@ -4,7 +4,7 @@ export type TTheme = "light" | "dark";
 
 export const ThemeContext = React.createContext({
   theme: "light",
-  toggleTheme: () => {},
+  toggleTheme: () => console.log("toggleTheme"),
 });
 
 export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
@@ -14,6 +14,7 @@ export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     localStorage.setItem("theme", theme);
+    document.documentElement.setAttribute("data-theme", theme);
   }, [theme]);
 
   const toggleTheme = () => {

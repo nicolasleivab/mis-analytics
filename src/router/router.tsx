@@ -4,10 +4,11 @@ import { DASHBOARD_ROUTE, HOME_ROUTE } from "./routes";
 import Home from "../pages/Home/Home";
 import Dashboard from "../pages/Dashboard/Dashboard";
 import { ThemeProvider } from "../context/Theme/ThemeProvider";
+import { ThemeWrapper } from "../context/Theme/ThemeWrapper";
 
 const AppRouter = () => (
-  <div>
-    <ThemeProvider>
+  <ThemeProvider>
+    <ThemeWrapper>
       <Router>
         <Nav />
         <Routes>
@@ -16,8 +17,8 @@ const AppRouter = () => (
           <Route path="*" element={<Home />} />
         </Routes>
       </Router>
-    </ThemeProvider>
-  </div>
+    </ThemeWrapper>
+  </ThemeProvider>
 );
 
 export default AppRouter;

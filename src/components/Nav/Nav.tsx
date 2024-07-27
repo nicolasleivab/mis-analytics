@@ -1,21 +1,17 @@
-import { useContext } from "react";
 import { Flex } from "../../layout";
-import { TTheme, ThemeContext } from "../../context/Theme/ThemeProvider";
 import * as styles from "./Nav.module.css";
+import { Logo } from "../../assets/icons";
+import ThemeToggle from "../ThemeToggle/ThemeToggle";
 
 export default function Nav() {
-  const { theme, toggleTheme } = useContext(ThemeContext);
-
   return (
-    <div className={styles[`Nav-${theme}`]}>
-      <Flex padding="20px">
-        <button
-          onClick={() => {
-            toggleTheme();
-          }}
-        >
-          {theme}
-        </button>
+    <div className={styles.Nav}>
+      <Flex justifyContent="space-between" alignItems="center">
+        <Flex padding="20px" justifyContent="flex-start" alignItems="center">
+          <Logo />
+          <h2 className={styles.title}>MIS Analytics</h2>
+        </Flex>
+        <ThemeToggle />
       </Flex>
     </div>
   );
