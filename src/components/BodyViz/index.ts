@@ -1,0 +1,13 @@
+export { default as Head } from "./Head/Head";
+export { default as LeftShoulder } from "./LeftShoulder/LeftShoulder";
+export { default as RightShoulder } from "./RightShoulder/RightShoulder";
+export { default as Chest } from "./Chest/Chest";
+export { default as Stomach } from "./Stomach/Stomach";
+export { default as LeftArm } from "./LeftArm/LeftArm";
+export { default as RightArm } from "./RightArm/RightArm";
+export { default as LeftLeg } from "./LeftLeg/LeftLeg";
+export { default as RightLeg } from "./RightLeg/RightLeg";
+export { default as LeftHand } from "./LeftHand/LeftHand";
+export { default as RightHand } from "./RightHand/RightHand";
+export { default as LeftFoot } from "./LeftFoot/LeftFoot";
+export { default as RightFoot } from "./RightFoot/RightFoot";

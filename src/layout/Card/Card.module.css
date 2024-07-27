@@ -1,0 +1,8 @@
+.Card {
+  width: fit-content;
+  padding: var(--spacing-m);
+  background-color: var(--primary-bg);
+  color: var(--color);
+  box-shadow: var(--box-shadow-hover);
+  border-radius: var(--border-radius-s);
+}

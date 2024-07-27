@@ -21,10 +21,10 @@ const Flex: React.FC<FlexProps> = ({
   children,
   direction = "row",
   justifyContent = "center",
-  alignItems = "stretch",
+  alignItems = "center",
   wrap = "nowrap",
   gap = "0px",
-  width = "auto",
+  width = "100%",
   padding = "0px",
 }) => {
   const flexStyle = {
