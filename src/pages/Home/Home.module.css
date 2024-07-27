@@ -1,9 +1,6 @@
 .Home {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
   height: 100vh;
   background-color: var(--primary-bg);
   color: var(--color);
+  padding: var(--page-padding);
 }

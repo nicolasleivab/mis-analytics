@@ -64,6 +64,6 @@
 /* Position for dark theme */
 [data-theme="dark"] .btnToggle .handle {
   left: calc(
-    var(--toggle-default-size) + (var(--toggle-default-size) * 0.25 / 2)
+    var(--toggle-default-size) - (var(--toggle-default-size) * 0.25 / 4)
   );
 }

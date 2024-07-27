@@ -1,0 +1,79 @@
+svg {
+  cursor: pointer;
+}
+.a,
+.b {
+  fill: #677a90;
+}
+.a {
+  clip-rule: evenodd;
+}
+.c {
+  clip-path: url(#a);
+}
+.d {
+  clip-path: url(#b);
+}
+.e {
+  clip-path: url(#c);
+}
+.f {
+  clip-path: url(#e);
+}
+.g {
+  clip-path: url(#g);
+}
+.h {
+  clip-path: url(#i);
+}
+.i {
+  clip-path: url(#k);
+}
+.j {
+  clip-path: url(#m);
+}
+.k {
+  clip-path: url(#o);
+}
+.l {
+  clip-path: url(#q);
+}
+.m {
+  clip-path: url(#s);
+}
+.n {
+  clip-path: url(#u);
+}
+.o {
+  clip-path: url(#w);
+}
+.p {
+  clip-path: url(#y);
+}
+.q {
+  clip-path: url(#aa);
+}
+.r {
+  clip-path: url(#ac);
+}
+.s {
+  clip-path: url(#ae);
+}
+.t {
+  clip-path: url(#ag);
+}
+.u {
+  clip-path: url(#ai);
+}
+.v {
+  clip-path: url(#ak);
+}
+.w {
+  clip-path: url(#am);
+}
+.x {
+  clip-path: url(#ao);
+}
+.y {
+  clip-path: url(#aq);
+}
