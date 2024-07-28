@@ -60,6 +60,7 @@
   --handle-default-bg: var(--color-dark);
   --handle-text-color: var(--color-light);
   --btn-bg: var(--light-blue);
+  --input-bg: var(--color-dark);
 }
 
 [data-theme="dark"] {
@@ -73,6 +74,7 @@
   --handle-default-bg: var(--color-light);
   --handle-text-color: var(--color-dark);
   --btn-bg: var(--bright-blue);
+  --input-bg: var(--light-blue);
 }
 
 p,
