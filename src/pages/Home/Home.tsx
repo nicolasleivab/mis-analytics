@@ -4,13 +4,28 @@ import { useNavigate } from "react-router-dom";
 import { Flex } from "../../layout";
 import ExcelDropzone from "../../components/ExcelDropzone/ExcelDropzone";
 import { useExcelContext } from "../../context/Excel/ExcelProvider";
+import useFileParsing from "../../hooks/useFileParsing"; // Adjust the path as needed
 
 export default function Home() {
   const navigate = useNavigate();
   const { setExcelData } = useExcelContext();
+  const {
+    maxColumns,
+    setMaxColumns,
+    maxRows,
+    setMaxRows,
+    file,
+    handleFileDrop,
+    handleParse,
+    parsedData,
+    isParsing,
+  } = useFileParsing();
 
-  const handleFileParsed = (data: any[][]) => {
-    setExcelData(data);
+  const handleImportClick = () => {
+    if (!isParsing) {
+      setExcelData(parsedData);
+      navigate("/dashboard");
+    }
   };
 
   return (
@@ -18,11 +33,45 @@ export default function Home() {
       <Flex>
         <Flex direction="column" gap="20px">
           <ExcelDropzone
-            onFileParsed={handleFileParsed}
-            columns={[0, 1, 2]}
-            rows={[0, 1, 2, 3]}
+            onFileDrop={handleFileDrop}
+            handleParse={handleParse}
+            file={file}
           />
-          <Button onClick={() => navigate("/dashboard")}>Import csv</Button>
+          {file && (
+            <div>
+              <div>
+                <label>
+                  Columns up to:
+                  <input
+                    type="number"
+                    value={maxColumns ?? ""}
+                    onChange={(e) =>
+                      setMaxColumns(
+                        e.target.value ? parseInt(e.target.value) : null
+                      )
+                    }
+                  />
+                </label>
+              </div>
+              <div>
+                <label>
+                  Rows up to:
+                  <input
+                    type="number"
+                    value={maxRows ?? ""}
+                    onChange={(e) =>
+                      setMaxRows(
+                        e.target.value ? parseInt(e.target.value) : null
+                      )
+                    }
+                  />
+                </label>
+              </div>
+            </div>
+          )}
+          <Button onClick={handleImportClick} disabled={isParsing}>
+            {isParsing ? "Parsing..." : "Import csv"}
+          </Button>
         </Flex>
       </Flex>
     </div>

@@ -1,23 +1,30 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect } from "react";
 import { Accept, useDropzone } from "react-dropzone";
 import ExcelJS from "exceljs";
 import Papa from "papaparse";
 
 interface ExcelDropzoneProps {
-  onFileParsed: (data: any[][]) => void;
-  columns?: number[];
-  rows?: number[];
+  onFileDrop: (file: File) => void;
+  handleParse: (data: any[][]) => void;
+  file: File | null;
 }
 
 const ExcelDropzone: React.FC<ExcelDropzoneProps> = ({
-  onFileParsed,
-  columns,
-  rows,
+  onFileDrop,
+  handleParse,
+  file,
 }) => {
   const onDrop = useCallback(
     (acceptedFiles: File[]) => {
-      const file = acceptedFiles[0];
+      onFileDrop(acceptedFiles[0]);
+    },
+    [onFileDrop]
+  );
 
+  useEffect(() => {
+    if (!file) return;
+
+    const handleFileParse = async () => {
       if (file.type === "text/csv") {
         const reader = new FileReader();
         reader.onload = (event: any) => {
@@ -25,7 +32,7 @@ const ExcelDropzone: React.FC<ExcelDropzoneProps> = ({
             header: false,
           }).data as any[][];
 
-          processParsedData(csvData);
+          handleParse(csvData);
         };
         reader.readAsText(file);
       } else {
@@ -36,26 +43,14 @@ const ExcelDropzone: React.FC<ExcelDropzoneProps> = ({
           await workbook.xlsx.load(buffer);
           const worksheet = workbook.worksheets[0];
           const jsonData = worksheetToArray(worksheet);
-          processParsedData(jsonData);
+          handleParse(jsonData);
         };
         reader.readAsArrayBuffer(file);
       }
-    },
-    [onFileParsed, columns, rows]
-  );
+    };
 
-  const processParsedData = (data: any[][]) => {
-    let filteredData = data;
-    if (rows) {
-      filteredData = filteredData.filter((_, index) => rows.includes(index));
-    }
-    if (columns) {
-      filteredData = filteredData.map((row) =>
-        row.filter((_, index) => columns.includes(index))
-      );
-    }
-    onFileParsed(filteredData);
-  };
+    handleFileParse();
+  }, [file, handleParse]);
 
   const worksheetToArray = (worksheet: ExcelJS.Worksheet) => {
     const data: any[][] = [];
