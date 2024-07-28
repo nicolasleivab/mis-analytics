@@ -14,6 +14,11 @@ const ExcelDropzone: React.FC<ExcelDropzoneProps> = ({
   handleParse,
   file,
 }) => {
+  const [error, setError] = React.useState<string | null>(null);
+  const [dropMsg, setDropMsg] = React.useState<string>(
+    "Drag and drop a file here, or click to select a file"
+  );
+
   const onDrop = useCallback(
     (acceptedFiles: File[]) => {
       onFileDrop(acceptedFiles[0]);
@@ -49,7 +54,13 @@ const ExcelDropzone: React.FC<ExcelDropzoneProps> = ({
       }
     };
 
-    handleFileParse();
+    try {
+      handleFileParse();
+      setDropMsg(`${file.name} uploaded successfully`);
+    } catch (error) {
+      console.error(error);
+      setError(JSON.stringify(error));
+    }
   }, [file, handleParse]);
 
   const worksheetToArray = (worksheet: ExcelJS.Worksheet) => {
@@ -88,7 +99,7 @@ const ExcelDropzone: React.FC<ExcelDropzoneProps> = ({
       }}
     >
       <input {...getInputProps()} />
-      <p>Drag 'n' drop some files here, or click to select files</p>
+      <p>{error ? error : dropMsg}</p>
     </div>
   );
 };

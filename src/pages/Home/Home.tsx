@@ -1,5 +1,5 @@
 import * as styles from "./Home.module.css";
-import { Button, Input } from "../../components";
+import { Button, Input, StepsSlider } from "../../components";
 import { useNavigate } from "react-router-dom";
 import { Flex } from "../../layout";
 import ExcelDropzone from "../../components/ExcelDropzone/ExcelDropzone";
@@ -35,52 +35,72 @@ export default function Home() {
     }
   };
 
+  const importSteps = [
+    {
+      title: "Upload your file",
+      description: "",
+      children: (
+        <ExcelDropzone
+          onFileDrop={handleFileDrop}
+          handleParse={handleParse}
+          file={file}
+        />
+      ),
+    },
+    {
+      title: "Delimit your data",
+      description:
+        "Delimit the columns and rows you want to use from your file",
+      children: (
+        <div>
+          <Input
+            label="Columns up to:"
+            inputType="number"
+            value={maxColumns ?? ""}
+            onChange={(e) =>
+              setMaxColumns(e.target.value ? parseInt(e.target.value) : null)
+            }
+          />
+          <Input
+            label="Rows up to:"
+            inputType="number"
+            value={maxRows ?? ""}
+            onChange={(e) =>
+              setMaxRows(e.target.value ? parseInt(e.target.value) : null)
+            }
+          />
+        </div>
+      ),
+    },
+    {
+      title: "Map your data",
+      description: "Map your column values to the fields of the visualization",
+      children: (
+        <MappingComponent
+          headers={headers}
+          mapping={mapping}
+          setMapping={setMapping}
+        />
+      ),
+    },
+    {
+      title: "Import your data",
+      description: "",
+      children: (
+        <Button
+          onClick={handleImportClick}
+          buttonType={checkEmptyObject(mapping) ? "disabled" : "primary"}
+        >
+          {getButtonLabel({ isParsing, parsedData })}
+        </Button>
+      ),
+    },
+  ];
+
   return (
     <div className={styles.Home}>
       <Flex>
-        <Flex direction="column" gap="20px">
-          <ExcelDropzone
-            onFileDrop={handleFileDrop}
-            handleParse={handleParse}
-            file={file}
-          />
-          {file && (
-            <div>
-              <Input
-                label="Columns up to:"
-                inputType="number"
-                value={maxColumns ?? ""}
-                onChange={(e) =>
-                  setMaxColumns(
-                    e.target.value ? parseInt(e.target.value) : null
-                  )
-                }
-              />
-              <Input
-                label="Rows up to:"
-                inputType="number"
-                value={maxRows ?? ""}
-                onChange={(e) =>
-                  setMaxRows(e.target.value ? parseInt(e.target.value) : null)
-                }
-              />
-            </div>
-          )}
-          {Number(maxRows) > 0 && Number(maxColumns) > 0 ? (
-            <MappingComponent
-              headers={headers}
-              mapping={mapping}
-              setMapping={setMapping}
-            />
-          ) : null}
-
-          <Button
-            onClick={handleImportClick}
-            buttonType={checkEmptyObject(mapping) ? "disabled" : "primary"}
-          >
-            {getButtonLabel({ isParsing, parsedData })}
-          </Button>
-        </Flex>
+        <StepsSlider steps={importSteps} />
       </Flex>
     </div>
   );
