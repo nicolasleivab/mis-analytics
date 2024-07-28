@@ -1,5 +1,5 @@
 import * as styles from "./Home.module.css";
-import { Button } from "../../components";
+import { Button, Input } from "../../components";
 import { useNavigate } from "react-router-dom";
 import { Flex } from "../../layout";
 import ExcelDropzone from "../../components/ExcelDropzone/ExcelDropzone";
@@ -8,7 +8,7 @@ import useFileParsing from "../../hooks/useFileParsing"; // Adjust the path as n
 
 export default function Home() {
   const navigate = useNavigate();
-  const { setExcelData, excelData } = useExcelContext();
+  const { setExcelData } = useExcelContext();
   const {
     maxColumns,
     setMaxColumns,
@@ -39,34 +39,24 @@ export default function Home() {
           />
           {file && (
             <div>
-              <div>
-                <label>
-                  Columns up to:
-                  <input
-                    type="number"
-                    value={maxColumns ?? ""}
-                    onChange={(e) =>
-                      setMaxColumns(
-                        e.target.value ? parseInt(e.target.value) : null
-                      )
-                    }
-                  />
-                </label>
-              </div>
-              <div>
-                <label>
-                  Rows up to:
-                  <input
-                    type="number"
-                    value={maxRows ?? ""}
-                    onChange={(e) =>
-                      setMaxRows(
-                        e.target.value ? parseInt(e.target.value) : null
-                      )
-                    }
-                  />
-                </label>
-              </div>
+              <Input
+                label="Columns up to:"
+                inputType="number"
+                value={maxColumns ?? ""}
+                onChange={(e) =>
+                  setMaxColumns(
+                    e.target.value ? parseInt(e.target.value) : null
+                  )
+                }
+              />
+              <Input
+                label="Rows up to:"
+                inputType="number"
+                value={maxRows ?? ""}
+                onChange={(e) =>
+                  setMaxRows(e.target.value ? parseInt(e.target.value) : null)
+                }
+              />
             </div>
           )}
           <Button

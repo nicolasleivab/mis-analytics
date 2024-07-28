@@ -85,6 +85,8 @@ footer {
 }
 
 button,
+input,
+label,
 a {
   font-family: var(--font-action) !important;
 }

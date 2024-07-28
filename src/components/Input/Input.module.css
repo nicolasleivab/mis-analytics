@@ -1,0 +1,32 @@
+.InputWrapper {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 15px;
+}
+
+.Label {
+  margin-bottom: 5px;
+  font-size: 14px;
+
+  color: var(--color);
+}
+
+.Input {
+  padding: 10px;
+  font-size: 16px;
+  border: 2px solid #007bff;
+  border-radius: 8px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.Input:focus {
+  outline: none;
+  border-color: #0056b3;
+}
+
+.InputDisabled {
+  background-color: #f0f0f0;
+  border-color: #dcdcdc;
+  cursor: not-allowed;
+}
