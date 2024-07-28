@@ -84,6 +84,7 @@ const ExcelDropzone: React.FC<ExcelDropzoneProps> = ({
         border: "2px dashed #007bff",
         padding: "20px",
         textAlign: "center",
+        cursor: "pointer",
       }}
     >
       <input {...getInputProps()} />

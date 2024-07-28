@@ -8,7 +8,7 @@ import useFileParsing from "../../hooks/useFileParsing"; // Adjust the path as n
 
 export default function Home() {
   const navigate = useNavigate();
-  const { setExcelData } = useExcelContext();
+  const { setExcelData, excelData } = useExcelContext();
   const {
     maxColumns,
     setMaxColumns,
@@ -69,11 +69,28 @@ export default function Home() {
               </div>
             </div>
           )}
-          <Button onClick={handleImportClick} disabled={isParsing}>
-            {isParsing ? "Parsing..." : "Import csv"}
+          <Button
+            onClick={handleImportClick}
+            buttonType={isParsing ? "disabled" : "primary"}
+          >
+            {getButtonLabel({ isParsing, parsedData })}
           </Button>
         </Flex>
       </Flex>
     </div>
   );
+}
+
+function getButtonLabel({
+  isParsing,
+  parsedData,
+}: {
+  isParsing: boolean;
+  parsedData: any[][];
+}) {
+  if (parsedData.length === 0) {
+    return "Drop a file";
+  }
+
+  return isParsing ? "Parsing..." : "Import csv";
 }

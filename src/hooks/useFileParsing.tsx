@@ -5,7 +5,7 @@ const useFileParsing = () => {
   const [maxRows, setMaxRows] = useState<number | null>(null);
   const [file, setFile] = useState<File | null>(null);
   const [parsedData, setParsedData] = useState<any[][]>([]);
-  const [isParsing, setIsParsing] = useState(false);
+  const [isParsing, setIsParsing] = useState(true);
 
   const handleFileDrop = (droppedFile: File) => {
     setFile(droppedFile);

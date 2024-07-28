@@ -16,3 +16,17 @@
   transform: translateY(2px);
   box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
 }
+
+.ButtonDisabled {
+  font: inherit;
+  min-width: 35px;
+  padding: 12px 20px;
+  color: #a0a0a0;
+  font-size: 16px;
+  background-color: #e0e0e0;
+  border-radius: var(--border-radius-s);
+  cursor: not-allowed;
+  border: none;
+  box-shadow: none;
+  /* pointer-events: none; */
+}
