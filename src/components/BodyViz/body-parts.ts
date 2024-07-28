@@ -4,6 +4,7 @@
 export const BODY_PARTS = [
   {
     name: "head",
+    id: "head",
     path: "M75.656-378H143.91v78.97H75.656Z",
     transform: "translate(622.984 541.414)",
     className: "c",
@@ -13,7 +14,8 @@ export const BODY_PARTS = [
     partTransform: "translate(622.984 541.414)",
   },
   {
-    name: "neck",
+    name: "head",
+    id: "neck",
     path: "M73.033-339.311h75.709v56.141H73.033Z",
     transform: "translate(621.88 557.702)",
     className: "e",
@@ -23,7 +25,8 @@ export const BODY_PARTS = [
     partTransform: "translate(621.88 557.702)",
   },
   {
-    name: "lower-abdomen",
+    name: "lower-abdomen and pelvis",
+    id: "lower-abdomen",
     path: "M59.976-235.922H172.957v96.049H59.976Z",
     transform: "translate(616.383 601.228)",
     className: "f",
@@ -33,7 +36,8 @@ export const BODY_PARTS = [
     partTransform: "translate(616.383 601.228)",
   },
   {
-    name: "upper-abdomen",
+    name: "thorax",
+    id: "upper-abdomen",
     path: "M62.869-267.508h104.8v65.082H62.869Z",
     transform: "translate(617.601 587.931)",
     className: "g",
@@ -43,7 +47,8 @@ export const BODY_PARTS = [
     partTransform: "translate(617.601 587.931)",
   },
   {
-    name: "left-chest",
+    name: "thorax",
+    id: "left-chest",
     path: "M95.328-319.639h61.323v91.09H95.328Z",
     transform: "translate(631.266 565.984)",
     className: "h",
@@ -53,7 +58,8 @@ export const BODY_PARTS = [
     partTransform: "translate(631.266 565.984)",
   },
   {
-    name: "right-chest",
+    name: "thorax",
+    id: "right-chest",
     path: "M60.9-228.55h61.323v-91.09H60.9Z",
     transform: "translate(616.773 565.984)",
     className: "i",
@@ -63,7 +69,8 @@ export const BODY_PARTS = [
     partTransform: "translate(616.773 565.984)",
   },
   {
-    name: "left-shoulder",
+    name: "arms",
+    id: "left-shoulder",
     path: "M119.918-318.328h47.876v68.361H119.918Z",
     transform: "translate(641.618 566.536)",
     className: "j",
@@ -73,7 +80,8 @@ export const BODY_PARTS = [
     partTransform: "translate(641.618 566.536)",
   },
   {
-    name: "left-elbow",
+    name: "arms",
+    id: "left-elbow",
     path: "M129.431-292.945h53.088v71.532H129.431Z",
     transform: "translate(645.623 577.222)",
     className: "k",
@@ -83,7 +91,8 @@ export const BODY_PARTS = [
     partTransform: "translate(645.623 577.222)",
   },
   {
-    name: "left-wrist",
+    name: "arms",
+    id: "left-wrist",
     path: "M143.525-263.9h64.527v87.356H143.525Z",
     transform: "translate(651.556 589.449)",
     className: "l",
@@ -93,7 +102,8 @@ export const BODY_PARTS = [
     partTransform: "translate(651.556 589.449)",
   },
   {
-    name: "left-hand",
+    name: "arms",
+    id: "left-hand",
     path: "M169.754-216.033h49.631v61.262H169.754Z",
     transform: "translate(662.599 609.602)",
     className: "m",
@@ -103,7 +113,8 @@ export const BODY_PARTS = [
     partTransform: "translate(662.599 609.602)",
   },
   {
-    name: "right-hand",
+    name: "arms",
+    id: "right-hand",
     path: "M-5-154.771H44.631v-61.262H-5Z",
     transform: "translate(589.028 609.602)",
     className: "n",
@@ -113,7 +124,8 @@ export const BODY_PARTS = [
     partTransform: "translate(589.028 609.602)",
   },
   {
-    name: "right-shoulder",
+    name: "arms",
+    id: "right-shoulder",
     path: "M45.82-249.967H93.7v-68.361H45.82Z",
     transform: "translate(610.423 566.536)",
     className: "o",
@@ -123,7 +135,8 @@ export const BODY_PARTS = [
     partTransform: "translate(610.423 566.536)",
   },
   {
-    name: "right-elbow",
+    name: "arms",
+    id: "right-elbow",
     path: "M32.71-221.413H85.8v-71.532H32.71Z",
     transform: "translate(604.904 577.222)",
     className: "p",
@@ -133,7 +146,8 @@ export const BODY_PARTS = [
     partTransform: "translate(604.904 577.222)",
   },
   {
-    name: "right-wrist",
+    name: "arms",
+    id: "right-wrist",
     path: "M10.41-176.545H74.937V-263.9H10.41Z",
     transform: "translate(595.516 589.449)",
     className: "q",
@@ -143,7 +157,8 @@ export const BODY_PARTS = [
     partTransform: "translate(595.516 589.449)",
   },
   {
-    name: "left-thigh",
+    name: "legs",
+    id: "left-thigh",
     path: "M94.672-201.607h67.323V-59.274H94.672Z",
     transform: "translate(630.99 615.675)",
     className: "r",
@@ -153,7 +168,8 @@ export const BODY_PARTS = [
     partTransform: "translate(630.99 615.675)",
   },
   {
-    name: "left-knee",
+    name: "legs",
+    id: "left-knee",
     path: "M104.7-125.416l46.112-8.131,10.477,59.417L115.176-66Z",
     transform: "translate(635.211 644.328)",
     className: "s",
@@ -163,7 +179,8 @@ export const BODY_PARTS = [
     partTransform: "translate(635.211 644.328)",
   },
   {
-    name: "left-ankle",
+    name: "legs",
+    id: "left-ankle",
     path: "M107.459-115.7h50.55V18.241h-50.55Z",
     transform: "translate(636.373 651.839)",
     className: "t",
@@ -173,7 +190,8 @@ export const BODY_PARTS = [
     partTransform: "translate(636.373 651.839)",
   },
   {
-    name: "left-foot",
+    name: "legs",
+    id: "left-foot",
     path: "M112.377-33.738h64.061V20.54H112.377Z",
     transform: "translate(638.443 686.347)",
     className: "u",
@@ -183,7 +201,8 @@ export const BODY_PARTS = [
     partTransform: "translate(638.443 686.347)",
   },
   {
-    name: "right-thigh",
+    name: "legs",
+    id: "right-thigh",
     path: "M124.618-201.607H57.3V-59.274h67.322Z",
     transform: "translate(615.254 615.675)",
     className: "v",
@@ -193,7 +212,8 @@ export const BODY_PARTS = [
     partTransform: "translate(615.254 615.675)",
   },
   {
-    name: "right-knee",
+    name: "legs",
+    id: "right-knee",
     path: "M111.452-125.416,65.34-133.546,54.863-74.129,100.975-66Z",
     transform: "translate(614.231 644.328)",
     className: "w",
@@ -203,7 +223,8 @@ export const BODY_PARTS = [
     partTransform: "translate(614.231 644.328)",
   },
   {
-    name: "right-ankle",
+    name: "legs",
+    id: "right-ankle",
     path: "M106.862-115.7H56.311V18.241h50.55Z",
     transform: "translate(614.84 651.839)",
     className: "x",
@@ -213,7 +234,8 @@ export const BODY_PARTS = [
     partTransform: "translate(614.84 651.839)",
   },
   {
-    name: "right-foot",
+    name: "legs",
+    id: "right-foot",
     path: "M105.947-33.738H41.885V20.54h64.061Z",
     transform: "translate(608.767 686.347)",
     className: "y",

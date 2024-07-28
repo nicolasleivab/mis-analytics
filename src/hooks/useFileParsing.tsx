@@ -17,7 +17,10 @@ const useFileParsing = () => {
     (data: any[][]) => {
       setIsParsing(true);
       if (data.length > 0) {
-        setHeaders(data[0]);
+        const headersByColumns = maxColumns
+          ? data[0].slice(0, maxColumns)
+          : data[0];
+        setHeaders(headersByColumns);
         const filteredData = data.slice(1); // Remove headers row
         let processedData = filteredData;
         if (maxRows !== null) {

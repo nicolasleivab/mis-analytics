@@ -1,8 +1,8 @@
 import React, { useCallback } from "react";
-import * as styles from "./Mapping.module.css";
 import { BODY_PARTS } from "../../BodyViz/body-parts";
 import { FIELDS } from "./fields";
 import { Flex } from "../../../layout";
+import { Dropdown } from "../../index";
 
 interface MappingComponentProps {
   headers: string[];
@@ -16,21 +16,33 @@ const MappingComponent: React.FC<MappingComponentProps> = ({
   setMapping,
 }) => {
   const handleMappingChange = useCallback(
-    (bodyPart: string, event: React.ChangeEvent<HTMLSelectElement>) => {
-      setMapping({ ...mapping, [bodyPart]: event.target.value });
+    (bodyPart: string, value: string) => {
+      setMapping({ ...mapping, [bodyPart]: value });
     },
     [mapping, setMapping]
   );
 
+  const uniqueBodyParts = [...new Set(BODY_PARTS.map((item) => item.name))];
+
   return (
     <Flex>
       <Flex direction="column" gap="10px">
-        {BODY_PARTS.map((part) => (
-          <Flex key={part.name} width="300px">
-            <label className={styles.Label}>{part.name}</label>
+        {uniqueBodyParts.map((part) => (
+          <Flex key={part} width="300px">
+            <Dropdown
+              label={part}
+              options={headers.map((header) => ({
+                value: header,
+                label: header,
+              }))}
+              value={mapping[part] || ""}
+              onChange={(id: string) => handleMappingChange(part, id)}
+              placeholder="None"
+            />
+            {/* <label className={styles.Label}>{part}</label>
             <select
-              value={mapping[part.name] || ""}
-              onChange={(e) => handleMappingChange(part.name, e)}
+              value={mapping[part] || ""}
+              onChange={(e) => handleMappingChange(part, e)}
               className={styles.Select}
             >
               <option value="">None</option>
@@ -39,26 +51,23 @@ const MappingComponent: React.FC<MappingComponentProps> = ({
                   {header}
                 </option>
               ))}
-            </select>
+            </select> */}
           </Flex>
         ))}
       </Flex>
       <Flex direction="column" gap="10px">
         {FIELDS.map((part) => (
           <Flex key={part.name} width="300px">
-            <label className={styles.Label}>{part.name}</label>
-            <select
+            <Dropdown
+              label={part.name}
+              options={headers.map((header) => ({
+                value: header,
+                label: header,
+              }))}
               value={mapping[part.name] || ""}
-              onChange={(e) => handleMappingChange(part.name, e)}
-              className={styles.Select}
-            >
-              <option value="">None</option>
-              {headers.map((header, index) => (
-                <option key={index} value={header}>
-                  {header}
-                </option>
-              ))}
-            </select>
+              onChange={(id: string) => handleMappingChange(part.name, id)}
+              placeholder="None"
+            />
           </Flex>
         ))}
       </Flex>

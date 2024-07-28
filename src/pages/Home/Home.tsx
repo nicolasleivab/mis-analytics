@@ -34,7 +34,7 @@ export default function Home() {
       navigate("/dashboard");
     }
   };
-  console.log(isParsing);
+
   return (
     <div className={styles.Home}>
       <Flex>
@@ -66,7 +66,7 @@ export default function Home() {
               />
             </div>
           )}
-          {headers.length > 0 ? (
+          {Number(maxRows) > 0 && Number(maxColumns) > 0 ? (
             <MappingComponent
               headers={headers}
               mapping={mapping}
@@ -76,7 +76,7 @@ export default function Home() {
 
           <Button
             onClick={handleImportClick}
-            buttonType={isParsing ? "disabled" : "primary"}
+            buttonType={checkEmptyObject(mapping) ? "disabled" : "primary"}
           >
             {getButtonLabel({ isParsing, parsedData })}
           </Button>
@@ -98,4 +98,8 @@ function getButtonLabel({
   }
 
   return isParsing ? "Parsing..." : "Import csv";
+}
+
+function checkEmptyObject(obj: any) {
+  return Object.keys(obj).length === 0;
 }
