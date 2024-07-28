@@ -14,6 +14,7 @@ interface FlexProps {
   wrap?: "nowrap" | "wrap" | "wrap-reverse";
   gap?: string;
   width?: string;
+  height?: string;
   padding?: string;
 }
 
@@ -25,6 +26,7 @@ const Flex: React.FC<FlexProps> = ({
   wrap = "nowrap",
   gap = "0px",
   width = "100%",
+  height = "auto",
   padding = "0px",
 }) => {
   const flexStyle = {
@@ -35,6 +37,7 @@ const Flex: React.FC<FlexProps> = ({
     flexWrap: wrap,
     gap,
     width,
+    height,
     padding,
   };
   return <div style={flexStyle}>{children}</div>;
