@@ -4,7 +4,9 @@ import { useNavigate } from "react-router-dom";
 import { Flex } from "../../layout";
 import ExcelDropzone from "../../components/ExcelDropzone/ExcelDropzone";
 import { useExcelContext } from "../../context/Excel/ExcelProvider";
-import useFileParsing from "../../hooks/useFileParsing"; // Adjust the path as needed
+import useFileParsing from "../../hooks/useFileParsing";
+import MappingComponent from "../../components/ExcelDropzone/Mapping/Mapping";
+import { getMappedData } from "../../data-handlers";
 
 export default function Home() {
   const navigate = useNavigate();
@@ -19,15 +21,20 @@ export default function Home() {
     handleParse,
     parsedData,
     isParsing,
+    headers,
+    mapping,
+    setMapping,
   } = useFileParsing();
 
   const handleImportClick = () => {
     if (!isParsing) {
-      setExcelData(parsedData);
+      const finalData = getMappedData({ parsedData, headers, mapping });
+
+      setExcelData(finalData);
       navigate("/dashboard");
     }
   };
-
+  console.log(isParsing);
   return (
     <div className={styles.Home}>
       <Flex>
@@ -59,6 +66,14 @@ export default function Home() {
               />
             </div>
           )}
+          {headers.length > 0 ? (
+            <MappingComponent
+              headers={headers}
+              mapping={mapping}
+              setMapping={setMapping}
+            />
+          ) : null}
+
           <Button
             onClick={handleImportClick}
             buttonType={isParsing ? "disabled" : "primary"}

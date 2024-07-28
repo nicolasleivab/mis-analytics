@@ -8,7 +8,7 @@ import { useExcelContext } from "../../context/Excel/ExcelProvider";
 export default function Dashboard() {
   const [selected, setSelected] = useState(BODY_PARTS[0].name);
   const { excelData } = useExcelContext();
-
+  console.log(selected);
   return (
     <div className={styles.Dashboard}>
       <Flex direction="column" width="100%">

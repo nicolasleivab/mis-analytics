@@ -1,0 +1,25 @@
+.MappingComponent {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.MappingRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.Label {
+  margin-right: 10px;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.Select {
+  flex-grow: 1;
+  padding: 8px;
+  font-size: 16px;
+  border: 2px solid #007bff;
+  border-radius: 8px;
+}
