@@ -2,9 +2,9 @@
   font: inherit;
   min-width: 35px;
   padding: 12px 20px;
-  color: var(--color);
+  color: var(--color-dark);
   font-size: 16px;
-  background-color: var(--btn-bg);
+  background-color: var(--bright-blue);
   border-radius: var(--border-radius-s);
   cursor: pointer;
   border: none;

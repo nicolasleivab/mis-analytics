@@ -1,128 +1,71 @@
 import * as styles from "./Home.module.css";
-import { Button, Input, StepsSlider } from "../../components";
 import { useNavigate } from "react-router-dom";
-import { Flex } from "../../layout";
-import ExcelDropzone from "../../components/ExcelDropzone/ExcelDropzone";
 import { useExcelContext } from "../../context/Excel/ExcelProvider";
-import useFileParsing from "../../hooks/useFileParsing";
-import MappingComponent from "../../components/ExcelDropzone/Mapping/Mapping";
-import { getMappedData } from "../../data-handlers";
+import { ReactSpreadsheetImport } from "react-spreadsheet-import";
+import { useState, useMemo } from "react";
+import { BODY_PARTS } from "../../components/BodyViz/body-parts";
+import { Flex } from "../../layout";
+import { Button } from "../../components";
+
+
+const uniqueBodyParts = [...new Set(BODY_PARTS.map((item) => item.name))];
+
+export const FIELDS = [
+  ...uniqueBodyParts.map((name) => ({ name })),
+  { name: "id" },
+  { name: "name" },
+  { name: "sex" },
+  { name: "height" },
+  { name: "weight" },
+  { name: "age" },
+];
 
 export default function Home() {
   const navigate = useNavigate();
+  const [openModal, setOpenModal] = useState<boolean>(false);
   const { setExcelData } = useExcelContext();
-  const {
-    maxColumns,
-    setMaxColumns,
-    maxRows,
-    setMaxRows,
-    file,
-    handleFileDrop,
-    handleParse,
-    parsedData,
-    isParsing,
-    headers,
-    mapping,
-    setMapping,
-  } = useFileParsing();
 
   const handleImportClick = () => {
-    if (!isParsing) {
-      const finalData = getMappedData({ parsedData, headers, mapping });
-
-      setExcelData(finalData);
-      navigate("/dashboard");
-    }
+    // setExcelData('excelData');
+    navigate("/dashboard");
   };
 
-  const importSteps = [
-    {
-      title: "Upload your file",
-      description: "",
-      canProceed: parsedData.length > 0,
-      children: (
-        <ExcelDropzone
-          onFileDrop={handleFileDrop}
-          handleParse={handleParse}
-          file={file}
-        />
-      ),
-    },
-    {
-      title: "Delimit your data",
-      description:
-        "Delimit the columns and rows you want to use from your file",
-      canProceed: Number(maxColumns) > 0 && Number(maxRows) > 0,
-      children: (
-        <div>
-          <Input
-            label="Columns up to:"
-            inputType="number"
-            value={maxColumns ?? ""}
-            onChange={(e) =>
-              setMaxColumns(e.target.value ? parseInt(e.target.value) : null)
-            }
-          />
-          <Input
-            label="Rows up to:"
-            inputType="number"
-            value={maxRows ?? ""}
-            onChange={(e) =>
-              setMaxRows(e.target.value ? parseInt(e.target.value) : null)
-            }
-          />
-        </div>
-      ),
-    },
-    {
-      title: "Map your data",
-      description: "Map your column values to the fields of the visualization",
-      canProceed: !checkEmptyObject(mapping),
-      children: (
-        <MappingComponent
-          headers={headers}
-          mapping={mapping}
-          setMapping={setMapping}
-        />
-      ),
-    },
-    {
-      title: "Import your data",
-      description: "",
-      children: (
-        <Button
-          onClick={handleImportClick}
-          buttonType={checkEmptyObject(mapping) ? "disabled" : "primary"}
-        >
-          {getButtonLabel({ isParsing, parsedData })}
-        </Button>
-      ),
-    },
-  ];
+  const fields = useMemo(
+    () =>
+      FIELDS.map((field) => ({
+        label: field.name.charAt(0).toUpperCase() + field.name.slice(1),
+        key: field.name,
+        fieldType: {
+          type: "input",
+        },
+        example: "0.76",
+        validations: [
+          {
+            rule: "required",
+            errorMessage: `${field.name.charAt(0).toUpperCase() + field.name.slice(1)} is required`,
+            level: "error",
+          },
+        ],
+      })),
+    []
+  );
 
   return (
     <div className={styles.Home}>
       <Flex>
-        <StepsSlider steps={importSteps} />
+         <Button onClick={() => setOpenModal(true)}>Import Excel</Button>
       </Flex>
+      <ReactSpreadsheetImport
+        isOpen={openModal}
+        onClose={() => setOpenModal(false)}
+        onSubmit={(data) => {
+          console.log('submit', data);
+          // const typedData = data as any[][];
+          // setExcelData(typedData);
+          navigate("/dashboard");
+        }}
+        fields={fields}
+      />
     </div>
   );
-}
-
-function getButtonLabel({
-  isParsing,
-  parsedData,
-}: {
-  isParsing: boolean;
-  parsedData: any[][];
-}) {
-  if (parsedData.length === 0) {
-    return "Drop a file";
-  }
-
-  return isParsing ? "Parsing..." : "Import csv";
-}
-
-function checkEmptyObject(obj: any) {
-  return Object.keys(obj).length === 0;
 }
