@@ -39,6 +39,7 @@ export default function Home() {
     {
       title: "Upload your file",
       description: "",
+      canProceed: parsedData.length > 0,
       children: (
         <ExcelDropzone
           onFileDrop={handleFileDrop}
@@ -51,6 +52,7 @@ export default function Home() {
       title: "Delimit your data",
       description:
         "Delimit the columns and rows you want to use from your file",
+      canProceed: Number(maxColumns) > 0 && Number(maxRows) > 0,
       children: (
         <div>
           <Input
@@ -75,6 +77,7 @@ export default function Home() {
     {
       title: "Map your data",
       description: "Map your column values to the fields of the visualization",
+      canProceed: !checkEmptyObject(mapping),
       children: (
         <MappingComponent
           headers={headers}

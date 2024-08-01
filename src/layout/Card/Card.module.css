@@ -5,4 +5,6 @@
   color: var(--color);
   box-shadow: var(--box-shadow-hover);
   border-radius: var(--border-radius-s);
+  z-index: 1;
+  overflow-y: auto;
 }

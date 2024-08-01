@@ -6,19 +6,22 @@ import Dashboard from "../pages/Dashboard/Dashboard";
 import { ThemeProvider } from "../context/Theme/ThemeProvider";
 import { ThemeWrapper } from "../context/Theme/ThemeWrapper";
 import { ExcelProvider } from "../context/Excel/ExcelProvider";
+import { ChakraProvider } from "@chakra-ui/react";
 
 const AppRouter = () => (
   <ThemeProvider>
     <ExcelProvider>
       <ThemeWrapper>
-        <Router>
-          <Nav />
-          <Routes>
-            <Route path={HOME_ROUTE} element={<Home />} />
-            <Route path={DASHBOARD_ROUTE} element={<Dashboard />} />
-            <Route path="*" element={<Home />} />
-          </Routes>
-        </Router>
+        <ChakraProvider>
+          <Router>
+            <Nav />
+            <Routes>
+              <Route path={HOME_ROUTE} element={<Home />} />
+              <Route path={DASHBOARD_ROUTE} element={<Dashboard />} />
+              <Route path="*" element={<Home />} />
+            </Routes>
+          </Router>
+        </ChakraProvider>
       </ThemeWrapper>
     </ExcelProvider>
   </ThemeProvider>

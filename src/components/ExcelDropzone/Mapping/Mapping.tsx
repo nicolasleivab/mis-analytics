@@ -56,7 +56,23 @@ const MappingComponent: React.FC<MappingComponentProps> = ({
         ))}
       </Flex>
       <Flex direction="column" gap="10px">
-        {FIELDS.map((part) => (
+        {FIELDS.slice(0, 3).map((part) => (
+          <Flex key={part.name} width="300px">
+            <Dropdown
+              label={part.name}
+              options={headers.map((header) => ({
+                value: header,
+                label: header,
+              }))}
+              value={mapping[part.name] || ""}
+              onChange={(id: string) => handleMappingChange(part.name, id)}
+              placeholder="None"
+            />
+          </Flex>
+        ))}
+      </Flex>
+      <Flex direction="column" gap="10px">
+        {FIELDS.slice(3, 6).map((part) => (
           <Flex key={part.name} width="300px">
             <Dropdown
               label={part.name}

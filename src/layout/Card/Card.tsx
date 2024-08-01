@@ -2,8 +2,18 @@ import * as styles from "./Card.module.css";
 
 export type TCard = {
   children: React.ReactNode;
+  width?: string;
+  height?: string;
 };
 
-export default function Card({ children }: TCard) {
-  return <div className={styles.Card}>{children}</div>;
+export default function Card({
+  children,
+  width = "fit-content",
+  height = "auto",
+}: TCard) {
+  return (
+    <div style={{ width, height }} className={styles.Card}>
+      {children}
+    </div>
+  );
 }
