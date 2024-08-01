@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import * as styles from "./Dropdown.module.css";
-import { ChevronDownIcon } from "../../assets/icons";
+import { ChevronDownIcon, ChevronUpIcon } from "../../assets/icons";
+import useOnClickOutside from "../../hooks/useOnClickOutside";
 
 export interface TDropdownOption {
   value: string | number;
@@ -35,8 +36,10 @@ const Dropdown: React.FC<TDropdownProps> = ({
 
   const selectedOption = options.find((option) => option?.value === value);
 
+  const ref = useOnClickOutside(() => setIsOpen(false));
+
   return (
-    <div className={styles.DropdownWrapper} style={{ width }}>
+    <div ref={ref} className={styles.DropdownWrapper} style={{ width }}>
       {label && <label className={styles.Label}>{label}</label>}
       <div
         className={`${styles.Dropdown} ${
@@ -45,7 +48,11 @@ const Dropdown: React.FC<TDropdownProps> = ({
         onClick={() => !disabled && setIsOpen(!isOpen)}
       >
         <span>{selectedOption ? selectedOption.label : placeholder}</span>
-        <ChevronDownIcon className={styles.CaretIcon} />
+        {isOpen ? (
+          <ChevronUpIcon className={styles.CaretIcon} />
+        ) : (
+          <ChevronDownIcon className={styles.CaretIcon} />
+        )}
       </div>
       {isOpen && !disabled && (
         <ul className={styles.OptionsList}>
