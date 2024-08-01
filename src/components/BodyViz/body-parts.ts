@@ -36,7 +36,7 @@ export const BODY_PARTS = [
     partTransform: "translate(616.383 601.228)",
   },
   {
-    name: "thorax",
+    name: "abdomen",
     id: "upper-abdomen",
     path: "M62.869-267.508h104.8v65.082H62.869Z",
     transform: "translate(617.601 587.931)",

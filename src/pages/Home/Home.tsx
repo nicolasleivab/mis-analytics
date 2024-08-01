@@ -10,14 +10,14 @@ import { Button } from "../../components";
 
 const uniqueBodyParts = [...new Set(BODY_PARTS.map((item) => item.name))];
 
-export const FIELDS = [
-  ...uniqueBodyParts.map((name) => ({ name })),
-  { name: "id" },
-  { name: "name" },
-  { name: "sex" },
-  { name: "height" },
-  { name: "weight" },
-  { name: "age" },
+export const FIELDS: any[] = [
+  ...uniqueBodyParts.map((name) => ({ name: `${name} score` })),
+  { name: "id", example: "001" },
+  { name: "name", example: "John Doe" },
+  { name: "sex", example: "M"},
+  { name: "height", example: "181" },
+  { name: "weight", example: "120" },
+  { name: "age", example: "25" },
 ];
 
 export default function Home() {
@@ -38,7 +38,8 @@ export default function Home() {
         fieldType: {
           type: "input",
         },
-        example: "0.76",
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+        example: field.example ?? "0.76",
         validations: [
           {
             rule: "required",
