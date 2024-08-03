@@ -77,6 +77,10 @@
   --input-bg: var(--light-blue);
 }
 
+.chakra-slider__thumb {
+  background-color: var(--bright-blue) !important;
+}
+
 p,
 span {
   font-family: var(--font-text);
