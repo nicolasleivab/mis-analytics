@@ -11,6 +11,8 @@ import { Stats } from "../../data-handlers/get-table-stats";
 import useTheme from "../../hooks/useTheme";
 import BodyPart from "./BodyPart/BodyPart";
 import { BODY_PARTS } from "./body-parts";
+import { Flex } from "../../layout";
+import { Box } from "@chakra-ui/react";
 
 export default function BodySvg({
   onPartClick: makeClickHandler,
@@ -38,18 +40,19 @@ export default function BodySvg({
     const newColors = { ...initialColors };
     stats.forEach((stat) => {
       let color;
-      if (stat.median < 0.75) {
-        color = "red";
-      } else if (stat.median >= 0.75 && stat.median < 0.8) {
-        color = "yellow";
+      if (stat.median < 0.7) {
+        color = "#8b0000"; // Dark Red
+      } else if (stat.median >= 0.7 && stat.median < 0.85) {
+        color = "#d4b200"; // Dark Yellow
       } else {
-        color = "green";
+        color = "#006400"; // Dark Green
       }
 
       const partName = stat.bodyPart.toLowerCase();
   
       if (newColors[partName]) {
         newColors[partName].active = color;
+        newColors[partName].inactive = `${color}80`; // 50% transparency
       }
     });
 
@@ -57,10 +60,8 @@ export default function BodySvg({
   }, [stats, theme]);
   
 
-
-
-
   return (
+    <div>
     <svg viewBox="0 0 283.746 529.262" style={style} width={400} height={600}>
       <defs>
         <clipPath id="a">
@@ -244,5 +245,13 @@ export default function BodySvg({
         />
       )})}
     </svg>
+          <Flex direction="column" padding="20px">
+          <Box><strong>Legend:</strong></Box>
+          <Box><span style={{ color: "#8b0000" }}>●</span> Median &lt; 0.7 (Dark Red)</Box>
+          <Box><span style={{ color: "#d4b200" }}>●</span> 0.7 ≤ Median &lt; 0.85 (Dark Yellow)</Box>
+          <Box><span style={{ color: "#006400" }}>●</span> Median ≥ 0.85 (Dark Green)</Box>
+        </Flex>
+
+        </div>
   );
 }
