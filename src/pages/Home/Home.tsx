@@ -7,14 +7,13 @@ import { BODY_PARTS } from "../../components/BodyViz/body-parts";
 import { Flex } from "../../layout";
 import { Button } from "../../components";
 
-
 const uniqueBodyParts = [...new Set(BODY_PARTS.map((item) => item.name))];
 
 export const FIELDS: any[] = [
   ...uniqueBodyParts.map((name) => ({ name: `${name} score` })),
   { name: "id", example: "001" },
   { name: "name", example: "John Doe" },
-  { name: "sex", example: "M"},
+  { name: "sex", example: "M" },
   { name: "height", example: "181" },
   { name: "weight", example: "120" },
   { name: "age", example: "25" },
@@ -53,6 +52,20 @@ export default function Home() {
 
   return (
     <div className={styles.Home}>
+      <Flex gap="20px" padding="50px" direction="column">
+        <div className={styles.HomeText}>
+          <h1>Welcome to MIS Analytics</h1>
+          <p>
+            This tool is designed to help you analyze and compare different machine learning models for medical image segmentation. By evaluating these models, you can make data-driven decisions that enhance the accuracy and efficiency of medical image analysis.
+          </p>
+          <p>
+            To get started, please select an XLS, XLSX, or CSV file containing your model results. Follow the import and data validation steps to properly import and parse your data into the system.
+          </p>
+          </div>
+          <div className={styles.HomeImg}>
+          <img src="/public/MISHome.png" alt="MIS Home" width="600" height="600" />
+          </div>
+      </Flex>
       <Flex>
          <Button onClick={() => setOpenModal(true)}>Import Excel</Button>
       </Flex>

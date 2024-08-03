@@ -8,3 +8,16 @@
   color: var(--color);
   padding: var(--page-padding);
 }
+
+.HomeText {
+  flex: 1;
+
+}
+.HomeText h1 {
+  margin-bottom: 20px;
+  font-size: 26px;
+}
+
+.HomeImg {
+  flex: 1;
+}
