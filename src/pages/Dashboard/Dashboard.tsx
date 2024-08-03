@@ -15,9 +15,10 @@ import {
   RangeSliderThumb,
   Box,
 } from '@chakra-ui/react';
+import useBodyPartSelection from "../../hooks/useBodyPartSelection";
 
 export default function Dashboard() {
-  const [selected, setSelected] = useState(BODY_PARTS[0].name);
+  const { bodyPartSelection, handleBodyPartSelection } = useBodyPartSelection();
   const [sexFilter, setSexFilter] = useState<string>('All');
   const [heightRange, setHeightRange] = useState<[number, number]>([0, 500]);
   const [minMaxRanges, setMinMaxRanges] = useState<[number, number]>([0, 500]);
@@ -105,8 +106,8 @@ export default function Dashboard() {
 
         <Flex direction="column" padding="20px">
           <BodyViz
-            selected={selected}
-            onPartClick={(part) => setSelected(part)}
+            selected={bodyPartSelection}
+            onPartClick={(part) => handleBodyPartSelection(part)}
           />
         </Flex>
 

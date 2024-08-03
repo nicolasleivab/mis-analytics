@@ -8,7 +8,7 @@ export default function BodySvg({
   style,
 }: {
   onPartClick: (part: string) => void;
-  selected: string;
+  selected: string[];
   style?: React.CSSProperties;
 }) {
   const { theme } = useTheme();
@@ -192,7 +192,7 @@ export default function BodySvg({
           className={part.className}
           innerClass={part.innerClass}
           onClick={() => makeClickHandler(part.name)}
-          selected={selected === part.name}
+          selected={selected.includes(part.name)}
           bodyPartColors={bodyPartColors}
           partTransform={part.partTransform}
         />
