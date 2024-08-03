@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { BodyViz } from "../../components";
+import { useEffect, useState } from "react";
+import { BodyViz, Dropdown } from "../../components";
 import { Card, Flex } from "../../layout";
 import * as styles from "./Dashboard.module.css";
 import { BODY_PARTS } from "../../components/BodyViz/body-parts";
@@ -10,30 +10,11 @@ import StatsTable from "../../components/StatsTable/StatsTable";
 
 export default function Dashboard() {
   const [selected, setSelected] = useState(BODY_PARTS[0].name);
+  const [sexFilter, setSexFilter] = useState<string>('All');
+  const [heightRange, setHeightRange] = useState<[number, number]>([0, 500]);
   const { excelData } = useExcelContext();
-  // const parsedData = [
-  //   {
-  //       "name": "0dce41ce",
-  //       "id": "AUTOMI_00000",
-  //       "sex": "M",
-  //       "height": "240",
-  //       "head score": "0.8144",
-  //       "thorax score": "0.7356",
-  //       "abdomen score": "0.8447",
-  //       "lower-abdomen and pelvis score": "0.8343"
-  //   },
-  //   {
-  //       "name": "14b56322",
-  //       "id": "AUTOMI_00001",
-  //       "sex": "M",
-  //       "height": "230",
-  //       "head score": "0.8877",
-  //       "thorax score": "0.8831",
-  //       "abdomen score": "0.8844",
-  //       "lower-abdomen and pelvis score": "0.8602"
-  //   },
-  //   // Add the rest of the parsed data here
-  // ];
+  const [filteredData, setFilteredData] = useState(excelData);
+ 
 
   const headers = [
     'name', 'id', 'sex', 'height', 'head score', 'thorax score', 'abdomen score', 'lower-abdomen and pelvis score'
@@ -45,13 +26,56 @@ export default function Dashboard() {
     'lower-abdomen and pelvis score': 'Lower-abdomen and Pelvis'
   };
 
-  const data: TGetMappedData = { parsedData: excelData, headers, mapping };
+
+
+  // useEffect(() => {
+  //   console.log('Parsed Data:', parsedData);
+  // }, [parsedData]);
+
+  useEffect(() => {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-explicit-any
+    let filtered: any[] = excelData;
+
+    if (sexFilter !== 'All') {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+      filtered = filtered.filter(item => item.sex === sexFilter);
+    }
+
+    filtered = filtered.filter(item => {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access
+      const height = parseFloat(item.height);
+      return height >= heightRange[0] && height <= heightRange[1];
+    });
+
+    setFilteredData(filtered);
+  }, [sexFilter, heightRange, excelData]);
+
+  const data: TGetMappedData = { parsedData: filteredData, headers, mapping };
+
   const stats: Stats[] = getTableStats(data);
+
+  useEffect(() => {
+    console.log('Stats:', stats);
+  }, [stats]);
 console.log(stats)
+
   return (
     <div className={styles.Dashboard}>
       <Flex direction="column" width="100%">
-        <h2>Dashboard</h2>
+        <Flex>
+          <Flex direction="column" padding="0px 0 50px 0">
+          <h2>Filters</h2>
+          <div style={{width: '300px'}}>
+        <Dropdown
+          label={"Filter by sex"}
+          options={[{id: 'All', label: 'All'}, {id: 'M', label: 'Male'}, {label: 'Female', id: 'F'}]}
+          id={sexFilter}
+          onChange={setSexFilter}
+          placeholder="Select sex"
+        />
+     </div>
+     </Flex>
+        </Flex>
         <Flex padding="0 50px 0 50px">
 
             <BodyViz

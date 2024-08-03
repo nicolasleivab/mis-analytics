@@ -4,15 +4,15 @@ import { ChevronDownIcon, ChevronUpIcon } from "../../assets/icons";
 import useOnClickOutside from "../../hooks/useOnClickOutside";
 
 export interface TDropdownOption {
-  value: string | number;
+  id: string | number;
   label: string;
 }
 
 export interface TDropdownProps {
   label?: string;
   options: TDropdownOption[];
-  value: string | number;
-  onChange: (value: any) => void;
+  id: string | number;
+  onChange: (id: any) => void;
   width?: string;
   disabled?: boolean;
   placeholder?: string;
@@ -21,7 +21,7 @@ export interface TDropdownProps {
 const Dropdown: React.FC<TDropdownProps> = ({
   label,
   options,
-  value,
+  id,
   onChange,
   width = "100%",
   disabled = false,
@@ -29,12 +29,12 @@ const Dropdown: React.FC<TDropdownProps> = ({
 }) => {
   const [isOpen, setIsOpen] = useState(false);
 
-  const handleOptionClick = (value: string | number) => {
-    onChange(value);
+  const handleOptionClick = (id: string | number) => {
+    onChange(id);
     setIsOpen(false);
   };
 
-  const selectedOption = options.find((option) => option?.value === value);
+  const selectedOption = options.find((option) => option?.id === id);
 
   const ref = useOnClickOutside(() => setIsOpen(false));
 
@@ -58,9 +58,9 @@ const Dropdown: React.FC<TDropdownProps> = ({
         <ul className={styles.OptionsList}>
           {options.map((option) => (
             <li
-              key={option?.value}
+              key={option?.id}
               className={styles.OptionItem}
-              onClick={() => handleOptionClick(option?.value)}
+              onClick={() => handleOptionClick(option?.id)}
             >
               {option.label}
             </li>
