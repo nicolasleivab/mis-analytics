@@ -9,6 +9,7 @@ import {
   TableCaption,
   TableContainer,
 } from '@chakra-ui/react';
+import * as styles from './StatsTable.module.css';
 
 interface Stats {
   bodyPart: string;
@@ -25,7 +26,7 @@ interface StatsTableProps {
 
 const StatsTable: React.FC<StatsTableProps> = ({ stats }) => {
   return (
-    <TableContainer>
+    <TableContainer className={styles.TableContainer}>
       <Table variant='simple'>
         <TableCaption>Medical Image Segmentation Dice Scores</TableCaption>
         <Thead>

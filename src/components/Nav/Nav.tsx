@@ -1,7 +1,7 @@
 import { Flex } from "../../layout";
 import * as styles from "./Nav.module.css";
 import { Logo } from "../../assets/icons";
-import ThemeToggle from "../ThemeToggle/ThemeToggle";
+// import ThemeToggle from "../ThemeToggle/ThemeToggle";
 
 export default function Nav() {
   return (
@@ -11,7 +11,7 @@ export default function Nav() {
           <Logo />
           <h2 className={styles.title}>MIS Analytics</h2>
         </Flex>
-        <ThemeToggle />
+        {/* <ThemeToggle /> */}
       </Flex>
     </div>
   );
