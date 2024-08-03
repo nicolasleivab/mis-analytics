@@ -9,14 +9,18 @@ import { Button } from "../../components";
 
 const uniqueBodyParts = [...new Set(BODY_PARTS.map((item) => item.name))];
 
-export const FIELDS: any[] = [
-  ...uniqueBodyParts.map((name) => ({ name: `${name} score` })),
+export const EXTRA_FIELDS = [
   { name: "id", example: "001" },
   { name: "name", example: "John Doe" },
   { name: "sex", example: "M" },
   { name: "height", example: "181" },
   { name: "weight", example: "120" },
   { name: "age", example: "25" },
+];
+
+export const FIELDS: any[] = [
+  ...uniqueBodyParts.map((name) => ({ name: `${name} score` })),
+  ...EXTRA_FIELDS
 ];
 
 export default function Home() {

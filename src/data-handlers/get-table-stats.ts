@@ -1,7 +1,10 @@
+import { useMemo } from "react";
+
 export interface TGetMappedData {
   parsedData: any[];
   headers: string[];
   mapping: Record<string, string>;
+  selectedBodyParts: string[];
 }
 
 export interface Stats {
@@ -13,8 +16,9 @@ export interface Stats {
   max: number;
 }
 
-export function getTableStats({ parsedData, headers, mapping }: TGetMappedData): Stats[] {
-  const bodyParts = ['head score', 'thorax score', 'abdomen score', 'lower-abdomen and pelvis score'];
+export function getTableStats({ parsedData, headers, mapping, selectedBodyParts }: TGetMappedData): Stats[] {
+  const bodyParts = selectedBodyParts.map(part => `${part} score`);
+console.log(bodyParts, 'bodyPArts', selectedBodyParts)
   const stats: Stats[] = [];
 
   console.log('Parsed Data:', parsedData);
