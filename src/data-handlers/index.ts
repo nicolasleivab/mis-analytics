@@ -1,1 +1,1 @@
-export { getMappedData } from "./get-mapped-data";
+export { getTableStats } from "./get-table-stats";
