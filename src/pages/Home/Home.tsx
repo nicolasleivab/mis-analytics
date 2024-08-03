@@ -24,8 +24,9 @@ export default function Home() {
   const [openModal, setOpenModal] = useState<boolean>(false);
   const { setExcelData } = useExcelContext();
 
-  const handleImportClick = () => {
-    // setExcelData('excelData');
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const handleImportClick = (parsedData: any[][]) => {
+    setExcelData(parsedData);
     navigate("/dashboard");
   };
 
@@ -39,13 +40,13 @@ export default function Home() {
         },
         // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
         example: field.example ?? "0.76",
-        validations: [
-          {
-            rule: "required",
-            errorMessage: `${field.name.charAt(0).toUpperCase() + field.name.slice(1)} is required`,
-            level: "error",
-          },
-        ],
+        // validations: [
+        //   {
+        //     rule: "required",
+        //     errorMessage: `${field.name.charAt(0).toUpperCase() + field.name.slice(1)} is required`,
+        //     level: "error",
+        //   },
+        // ],
       })),
     []
   );
@@ -74,9 +75,9 @@ export default function Home() {
         onClose={() => setOpenModal(false)}
         onSubmit={(data) => {
           console.log('submit', data);
-          // const typedData = data as any[][];
-          // setExcelData(typedData);
-          navigate("/dashboard");
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          const typedData = data?.validData as unknown as any[][];
+          handleImportClick(typedData);
         }}
         fields={fields}
       />

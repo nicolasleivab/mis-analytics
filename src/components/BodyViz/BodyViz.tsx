@@ -184,7 +184,7 @@ export default function BodySvg({
       </defs>
       {BODY_PARTS.map((part) => (
         <BodyPart
-          key={part.name}
+          key={part.id}
           name={part.name}
           path={part.path}
           outerTransform={part.outerTransform}
@@ -194,7 +194,7 @@ export default function BodySvg({
           onClick={() => makeClickHandler(part.name)}
           selected={selected === part.name}
           bodyPartColors={bodyPartColors}
-          partTransform={part.partTransform!}
+          partTransform={part.partTransform}
         />
       ))}
     </svg>
