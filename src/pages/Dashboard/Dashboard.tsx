@@ -70,13 +70,13 @@ export default function Dashboard() {
 
     if (bodyPartSelection.length > 0) {
       const selectedBodyParts = bodyPartSelection.map(part => `${part} score`);
-      console.log('filtered body', selectedBodyParts, filtered)
+
       filtered = filtered.map(item => {
         const filteredItem = { ...item };
         Object.keys(filteredItem).forEach(key => {
           if (selectedBodyParts.includes(key)) {
             const findPatient = excelData.find(patient => patient.id === item.id);
-            console.log('patient', findPatient, excelData, item, key)
+      
    
             filteredItem[key] = findPatient[key];
             return;
@@ -90,7 +90,7 @@ export default function Dashboard() {
       }
       )
     }
-    console.log('filtered body', filtered)
+
     setFilteredData(filtered);
   }, [bodyPartSelection]);
 
@@ -141,6 +141,7 @@ export default function Dashboard() {
             <BodyViz
               selected={bodyPartSelection}
               onPartClick={(part) => handleBodyPartSelection(part)}
+              stats={stats}
             />
           </Flex>
         </Flex>

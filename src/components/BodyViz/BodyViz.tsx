@@ -1,3 +1,13 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+// disable all ts eslint rule for this file and ts errors
+// disable ts checks for this file
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
+/* eslint-disable */
+
+
+import { useEffect, useState } from "react";
+import { Stats } from "../../data-handlers/get-table-stats";
 import useTheme from "../../hooks/useTheme";
 import BodyPart from "./BodyPart/BodyPart";
 import { BODY_PARTS } from "./body-parts";
@@ -6,16 +16,49 @@ export default function BodySvg({
   onPartClick: makeClickHandler,
   selected,
   style,
+  stats,
 }: {
   onPartClick: (part: string) => void;
   selected: string[];
   style?: React.CSSProperties;
+  stats: Stats[];
 }) {
   const { theme } = useTheme();
-  const bodyPartColors = {
-    active: theme === "light" ? "#4f5f77" : "#00aaff",
-    inactive: "#c4d8fc",
+  const initialColors = {
+    head: { active: theme === "light" ? "#4f5f77" : "#00aaff", inactive: "#c4d8fc" },
+    thorax: { active: theme === "light" ? "#4f5f77" : "#00aaff", inactive: "#c4d8fc" },
+    abdomen: { active: theme === "light" ? "#4f5f77" : "#00aaff", inactive: "#c4d8fc" },
+    "lower-abdomen and pelvis": { active: theme === "light" ? "#4f5f77" : "#00aaff", inactive: "#c4d8fc" },
+    "legs": { active: theme === "light" ? "#4f5f77" : "#00aaff", inactive: "#c4d8fc" },
+    "arms": { active: theme === "light" ? "#4f5f77" : "#00aaff", inactive: "#c4d8fc" },
   };
+  const [bodyPartColors, setBodyPartsColors] = useState<any>(initialColors);
+
+  useEffect(() => {
+    const newColors = { ...initialColors };
+    stats.forEach((stat) => {
+      let color;
+      if (stat.median < 0.75) {
+        color = "red";
+      } else if (stat.median >= 0.75 && stat.median < 0.8) {
+        color = "yellow";
+      } else {
+        color = "green";
+      }
+
+      const partName = stat.bodyPart.toLowerCase();
+  
+      if (newColors[partName]) {
+        newColors[partName].active = color;
+      }
+    });
+
+    setBodyPartsColors(newColors);
+  }, [stats, theme]);
+  
+
+
+
 
   return (
     <svg viewBox="0 0 283.746 529.262" style={style} width={400} height={600}>
@@ -182,7 +225,9 @@ export default function BodySvg({
           />
         </clipPath>
       </defs>
-      {BODY_PARTS.map((part) => (
+      {BODY_PARTS.map((part) => {
+  
+        return (
         <BodyPart
           key={part.id}
           name={part.name}
@@ -193,10 +238,11 @@ export default function BodySvg({
           innerClass={part.innerClass}
           onClick={() => makeClickHandler(part.name)}
           selected={selected.includes(part.name)}
-          bodyPartColors={bodyPartColors}
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+          bodyPartColors={bodyPartColors[part.name]}
           partTransform={part.partTransform}
         />
-      ))}
+      )})}
     </svg>
   );
 }

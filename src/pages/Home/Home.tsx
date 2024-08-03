@@ -78,7 +78,7 @@ export default function Home() {
         isOpen={openModal}
         onClose={() => setOpenModal(false)}
         onSubmit={(data) => {
-          console.log('submit', data);
+    
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           const typedData = data?.validData as unknown as any[][];
           handleImportClick(typedData);
