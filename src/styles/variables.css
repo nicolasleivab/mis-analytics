@@ -14,6 +14,7 @@
   --link-color: var(--bright-blue);
   --inactive-link-color: var(--light-blue);
   --action-color: var(--bright-blue);
+  --inactive-link-color: #bdbdbd;
 
   /* Fonts */
   --font-title: "Montserrat", sans-serif;
