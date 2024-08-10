@@ -2,9 +2,21 @@
 
 Analytics tool for generating insights from Medical Image Segmentation data
 
+# docker compose client and server
+
+```
+docker-compose up
+```
+
 # client container
 
 ```
 docker build -t mis-analytics-react-app .
 docker run -p 3000:3000 mis-analytics-react-app
+```
+
+# client local dev server
+
+```
+cd client && npm install && npm run dev
 ```
