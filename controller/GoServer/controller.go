@@ -3,10 +3,12 @@ package GoServer
 import (
     "encoding/json"
     "net/http"
+
+    "MIS-Analytics/model/GoServer"  // Import the model/GoServer package
 )
 
 func GetAllData(w http.ResponseWriter, r *http.Request) {
-    data, err := LoadData()
+    data, err := GoServer.LoadData()  // Use the fully qualified name
     if err != nil {
         http.Error(w, "Unable to load data", http.StatusInternalServerError)
         return
@@ -15,12 +17,12 @@ func GetAllData(w http.ResponseWriter, r *http.Request) {
 }
 
 func UpdateData(w http.ResponseWriter, r *http.Request) {
-    var newData DataModel
+    var newData GoServer.DataModel  // Use the fully qualified name
     if err := json.NewDecoder(r.Body).Decode(&newData); err != nil {
         http.Error(w, "Invalid input", http.StatusBadRequest)
         return
     }
-    data, err := LoadData()
+    data, err := GoServer.LoadData()
     if err != nil {
         http.Error(w, "Unable to load data", http.StatusInternalServerError)
         return
@@ -31,7 +33,7 @@ func UpdateData(w http.ResponseWriter, r *http.Request) {
             break
         }
     }
-    if err := SaveData(data); err != nil {
+    if err := GoServer.SaveData(data); err != nil {
         http.Error(w, "Unable to save data", http.StatusInternalServerError)
         return
     }
