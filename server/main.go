@@ -3,7 +3,7 @@ package main
 import (
     "log"
     "net/http"
-    "MIS-Analytics/controller/GoServer"
+    "MIS-Analytics/controller"
 )
 
 func main() {

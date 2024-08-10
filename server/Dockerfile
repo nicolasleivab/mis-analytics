@@ -5,19 +5,13 @@ FROM golang:1.20-alpine AS build
 WORKDIR /app
 
 # Copy go.mod and go.sum from the /server directory
-COPY server/go.mod server/go.sum ./
+COPY go.mod go.sum ./
 
 # Download dependencies
 RUN go mod tidy
 
-# Copy the controller directory
-COPY ../controller/GoServer ./controller/GoServer
-
-# Copy the model directory
-COPY ../model/GoServer ./model/GoServer
-
 # Copy the contents of the /server directory into the container
-COPY server/main.go ./main.go
+COPY . .
 
 # Build the Go application
 RUN go build -o main .

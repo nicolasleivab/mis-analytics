@@ -6,7 +6,7 @@ import (
     "os"
 )
 
-var jsonFilePath = "model/GoServer/db.json"
+var jsonFilePath = "model/db.json"
 
 func LoadData() ([]DataModel, error) {
     var data []DataModel

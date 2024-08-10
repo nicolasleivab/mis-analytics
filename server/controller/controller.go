@@ -4,7 +4,7 @@ import (
     "encoding/json"
     "net/http"
 
-    "MIS-Analytics/model/GoServer"  // Import the model/GoServer package
+    "MIS-Analytics/model"  // Import the model/GoServer package
 )
 
 func GetAllData(w http.ResponseWriter, r *http.Request) {
