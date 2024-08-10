@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { BODY_PARTS } from '../components/BodyViz/body-parts';
+import { BODY_PARTS } from '../constants/body-parts';
 
 const uniqueBodyParts = [...new Set(BODY_PARTS.map((part) => part.name))];
 

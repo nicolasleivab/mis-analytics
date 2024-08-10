@@ -1,8 +1,8 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { Nav } from '../components';
+import { Nav } from '../../presentation/components';
 import { DASHBOARD_ROUTE, HOME_ROUTE } from './routes';
-import Home from '../pages/Home/Home';
-import Dashboard from '../pages/Dashboard/Dashboard';
+import Home from '../../presentation/pages/Home/Home';
+import Dashboard from '../../presentation/pages/Dashboard/Dashboard';
 import { ThemeProvider } from '../context/Theme/ThemeProvider';
 import { ThemeWrapper } from '../context/Theme/ThemeWrapper';
 import { ExcelProvider } from '../context/Excel/ExcelProvider';

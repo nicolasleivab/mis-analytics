@@ -6,10 +6,10 @@
 /* eslint-disable */
 
 import { useEffect, useState } from 'react';
-import { Stats } from '../../data-handlers/get-table-stats';
-import useTheme from '../../hooks/useTheme';
+import { Stats } from '../../../application/data-handlers/get-table-stats';
+import useTheme from '../../../application/hooks/useTheme';
 import BodyPart from './BodyPart/BodyPart';
-import { BODY_PARTS } from './body-parts';
+import { BODY_PARTS } from '../../../application/constants/body-parts';
 import { Flex } from '../../layout';
 import { Box } from '@chakra-ui/react';
 

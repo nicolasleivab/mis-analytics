@@ -8,9 +8,12 @@ import { useEffect, useState } from 'react';
 import { BodyViz, Dropdown } from '../../components';
 import { Card, Flex } from '../../layout';
 import * as styles from './Dashboard.module.css';
-import { useExcelContext } from '../../context/Excel/ExcelProvider';
-import { getTableStats } from '../../data-handlers';
-import { Stats, TGetMappedData } from '../../data-handlers/get-table-stats';
+import { useExcelContext } from '../../../application/context/Excel/ExcelProvider';
+import { getTableStats } from '../../../application/data-handlers';
+import {
+  Stats,
+  TGetMappedData,
+} from '../../../application/data-handlers/get-table-stats';
 import StatsTable from '../../components/StatsTable/StatsTable';
 import {
   RangeSlider,
@@ -19,7 +22,7 @@ import {
   RangeSliderThumb,
   Box,
 } from '@chakra-ui/react';
-import useBodyPartSelection from '../../hooks/useBodyPartSelection';
+import useBodyPartSelection from '../../../application/hooks/useBodyPartSelection';
 import { EXTRA_FIELDS, FIELDS } from '../Home/Home';
 
 export default function Dashboard() {

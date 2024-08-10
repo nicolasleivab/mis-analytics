@@ -9,7 +9,10 @@ import * as styles from './Nav.module.css';
 import { Logo } from '../../assets/icons';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useCallback } from 'react';
-import { DASHBOARD_ROUTE, HOME_ROUTE } from '../../router/routes';
+import {
+  DASHBOARD_ROUTE,
+  HOME_ROUTE,
+} from '../../../application/router/routes';
 // import ThemeToggle from "../ThemeToggle/ThemeToggle";
 
 export default function Nav() {
