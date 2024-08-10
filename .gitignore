@@ -39,73 +39,73 @@ bower_components
 build/Release
 
 # Dependency directories
-node_modules/
-jspm_packages/
+client/node_modules/
+client/jspm_packages/
 
 # Snowpack dependency directory (https://snowpack.dev/)
-web_modules/
+client/web_modules/
 
 # TypeScript cache
-*.tsbuildinfo
+client/*.tsbuildinfo
 
 # Optional npm cache directory
-.npm
+client/.npm
 
 # Optional eslint cache
-.eslintcache
+client/.eslintcache
 
 # Optional stylelint cache
-.stylelintcache
+client/.stylelintcache
 
 # Microbundle cache
-.rpt2_cache/
-.rts2_cache_cjs/
-.rts2_cache_es/
-.rts2_cache_umd/
+client/.rpt2_cache/
+client/.rts2_cache_cjs/
+client/.rts2_cache_es/
+client/.rts2_cache_umd/
 
 # Optional REPL history
 .node_repl_history
 
 # Output of 'npm pack'
-*.tgz
+client/*.tgz
 
 # Yarn Integrity file
-.yarn-integrity
+client/.yarn-integrity
 
 # dotenv environment variable files
-.env
-.env.development.local
-.env.test.local
-.env.production.local
-.env.local
+client/.env
+client/.env.development.local
+client/.env.test.local
+client/.env.production.local
+client/.env.local
 
 # parcel-bundler cache (https://parceljs.org/)
-.cache
-.parcel-cache
+client/.cache
+client/.parcel-cache
 
 # Next.js build output
-.next
-out
+client/.next
+client/out
 
 # Nuxt.js build / generate output
-.nuxt
-dist
+client/.nuxt
+client/dist
 
 # Gatsby files
-.cache/
-# Comment in the public line in if your project uses Gatsby and not Next.js
+client/.cache/
+# Comment in the public line if your project uses Gatsby and not Next.js
 # https://nextjs.org/blog/next-9-1#public-directory-support
-# public
+# client/public
 
 # vuepress build output
-.vuepress/dist
+client/.vuepress/dist
 
 # vuepress v2.x temp and cache directory
-.temp
-.cache
+client/.temp
+client/.cache
 
 # Docusaurus cache and generated files
-.docusaurus
+client/.docusaurus
 
 # Serverless directories
 .serverless/
@@ -123,8 +123,27 @@ dist
 .vscode-test
 
 # yarn v2
-.yarn/cache
-.yarn/unplugged
-.yarn/build-state.yml
-.yarn/install-state.gz
-.pnp.*
+client/.yarn/cache
+client/.yarn/unplugged
+client/.yarn/build-state.yml
+client/.yarn/install-state.gz
+client/.pnp.*
+
+# Go specific
+# Binaries for programs and plugins
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Test binary, build output, and intermediate files
+*.test
+*.out
+
+# Go workspace files
+go.work
+go.work.sum
+
+# Directory containing the built binary
+/server/bin/
