@@ -31,7 +31,7 @@
 
 .btnToggle:before {
   font-family: var(--font-title);
-  content: "light";
+  content: 'light';
   font-size: 10px;
   left: calc(-1 * var(--toggle-default-label-width));
   color: var(--handle-text-color);
@@ -39,7 +39,7 @@
 
 .btnToggle:after {
   font-family: var(--font-title);
-  content: "dark";
+  content: 'dark';
   font-size: 10px;
   right: calc(-1 * var(--toggle-default-label-width));
   color: var(--handle-text-color);
@@ -57,12 +57,12 @@
 }
 
 /* Position for light theme */
-[data-theme="light"] .btnToggle .handle {
+[data-theme='light'] .btnToggle .handle {
   left: calc(var(--toggle-default-size) * 0.25 / 2);
 }
 
 /* Position for dark theme */
-[data-theme="dark"] .btnToggle .handle {
+[data-theme='dark'] .btnToggle .handle {
   left: calc(
     var(--toggle-default-size) - (var(--toggle-default-size) * 0.25 / 4)
   );

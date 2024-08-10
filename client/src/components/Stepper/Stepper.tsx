@@ -10,8 +10,8 @@ import {
   StepTitle,
   Stepper,
   useSteps,
-} from "@chakra-ui/react";
-import { TStep } from "../StepsSlider/StepsSlider";
+} from '@chakra-ui/react';
+import { TStep } from '../StepsSlider/StepsSlider';
 
 export function StepperComponent({
   steps,

@@ -27,7 +27,7 @@ interface StatsTableProps {
 const StatsTable: React.FC<StatsTableProps> = ({ stats }) => {
   return (
     <TableContainer className={styles.TableContainer}>
-      <Table variant='simple'>
+      <Table variant="simple">
         <TableCaption>Medical Image Segmentation Dice Scores</TableCaption>
         <Thead>
           <Tr>

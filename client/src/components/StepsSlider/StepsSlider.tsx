@@ -1,17 +1,17 @@
-import { useState } from "react";
-import { Card, Flex } from "../../layout";
-import Button from "../Button/Button";
-import { StepperComponent } from "../Stepper/Stepper";
+import { useState } from 'react';
+import { Flex } from '../../layout';
+import Button from '../Button/Button';
+import { StepperComponent } from '../Stepper/Stepper';
 
-export type TStep = {
+export interface TStep {
   title: string;
   description: string;
   children?: React.ReactNode;
   canProceed?: boolean;
-};
-export type TStepsSlider = {
+}
+export interface TStepsSlider {
   steps: TStep[];
-};
+}
 
 export default function StepsSlider({ steps }: TStepsSlider) {
   const [activeStep, setActiveStep] = useState<number>(0);
@@ -38,9 +38,7 @@ export default function StepsSlider({ steps }: TStepsSlider) {
         {activeStep < steps.length - 1 ? (
           <Button
             onClick={handleNext}
-            buttonType={
-              Boolean(steps[activeStep]?.canProceed) ? "primary" : "disabled"
-            }
+            buttonType={steps[activeStep]?.canProceed ? 'primary' : 'disabled'}
           >
             Continue
           </Button>

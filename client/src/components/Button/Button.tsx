@@ -1,9 +1,9 @@
-import React from "react";
-import * as styles from "./Button.module.css";
+import React from 'react';
+import * as styles from './Button.module.css';
 
-export type TButtonType = "primary" | "secondary" | "tertiary" | "disabled";
+export type TButtonType = 'primary' | 'secondary' | 'tertiary' | 'disabled';
 
-export interface TRoundButton extends React.ComponentPropsWithRef<"button"> {
+export interface TRoundButton extends React.ComponentPropsWithRef<'button'> {
   children: React.ReactNode;
   buttonType?: TButtonType;
   width?: string;
@@ -12,14 +12,14 @@ export interface TRoundButton extends React.ComponentPropsWithRef<"button"> {
 export default function Button({
   children,
   onClick,
-  buttonType = "primary",
-  width = "auto",
+  buttonType = 'primary',
+  width = 'auto',
 }: TRoundButton): JSX.Element {
   return (
     <button
-      disabled={buttonType === "disabled"}
+      disabled={buttonType === 'disabled'}
       className={
-        buttonType === "disabled" ? styles.ButtonDisabled : styles.Button
+        buttonType === 'disabled' ? styles.ButtonDisabled : styles.Button
       }
       onClick={onClick}
       style={{ width }}

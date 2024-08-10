@@ -1,4 +1,4 @@
-export type TBodyPartProps = {
+export interface TBodyPartProps {
   name: string;
   path: string;
   outerTransform: string;
@@ -12,4 +12,4 @@ export type TBodyPartProps = {
     active: string;
     inactive: string;
   };
-};
+}

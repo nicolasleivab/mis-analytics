@@ -1,12 +1,12 @@
-const webpack = require("webpack");
-const TerserPlugin = require("terser-webpack-plugin");
+const webpack = require('webpack');
+const TerserPlugin = require('terser-webpack-plugin');
 
 module.exports = {
-  mode: "production",
+  mode: 'production',
   devtool: false,
   plugins: [
     new webpack.DefinePlugin({
-      "process.env.name": JSON.stringify("production"),
+      'process.env.name': JSON.stringify('production'),
     }),
   ],
   optimization: {

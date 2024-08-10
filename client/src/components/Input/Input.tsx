@@ -1,9 +1,9 @@
-import React from "react";
-import * as styles from "./Input.module.css";
+import React from 'react';
+import * as styles from './Input.module.css';
 
-export type TInputType = "text" | "number" | "password" | "email";
+export type TInputType = 'text' | 'number' | 'password' | 'email';
 
-export interface TInputProps extends React.ComponentPropsWithRef<"input"> {
+export interface TInputProps extends React.ComponentPropsWithRef<'input'> {
   label?: string;
   inputType?: TInputType;
   placeholder?: string;
@@ -15,11 +15,11 @@ export interface TInputProps extends React.ComponentPropsWithRef<"input"> {
 
 const Input: React.FC<TInputProps> = ({
   label,
-  inputType = "text",
-  placeholder = "",
+  inputType = 'text',
+  placeholder = '',
   value,
   onChange,
-  width = "100%",
+  width = '100%',
   disabled = false,
   ...rest
 }) => {

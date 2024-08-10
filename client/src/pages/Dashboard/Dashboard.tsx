@@ -4,14 +4,14 @@
 // @ts-nocheck
 /* eslint-disable */
 
-import { useEffect, useState } from "react";
-import { BodyViz, Dropdown } from "../../components";
-import { Card, Flex } from "../../layout";
-import * as styles from "./Dashboard.module.css";
-import { useExcelContext } from "../../context/Excel/ExcelProvider";
-import { getTableStats } from "../../data-handlers";
-import { Stats, TGetMappedData } from "../../data-handlers/get-table-stats";
-import StatsTable from "../../components/StatsTable/StatsTable";
+import { useEffect, useState } from 'react';
+import { BodyViz, Dropdown } from '../../components';
+import { Card, Flex } from '../../layout';
+import * as styles from './Dashboard.module.css';
+import { useExcelContext } from '../../context/Excel/ExcelProvider';
+import { getTableStats } from '../../data-handlers';
+import { Stats, TGetMappedData } from '../../data-handlers/get-table-stats';
+import StatsTable from '../../components/StatsTable/StatsTable';
 import {
   RangeSlider,
   RangeSliderTrack,
@@ -19,8 +19,8 @@ import {
   RangeSliderThumb,
   Box,
 } from '@chakra-ui/react';
-import useBodyPartSelection from "../../hooks/useBodyPartSelection";
-import { EXTRA_FIELDS, FIELDS } from "../Home/Home";
+import useBodyPartSelection from '../../hooks/useBodyPartSelection';
+import { EXTRA_FIELDS, FIELDS } from '../Home/Home';
 
 export default function Dashboard() {
   const { bodyPartSelection, handleBodyPartSelection } = useBodyPartSelection();
@@ -31,21 +31,36 @@ export default function Dashboard() {
   const [filteredData, setFilteredData] = useState(excelData);
 
   const headers = [
-    'name', 'id', 'sex', 'height', 'head score', 'thorax score', 'abdomen score', 'lower-abdomen and pelvis score'
+    'name',
+    'id',
+    'sex',
+    'height',
+    'head score',
+    'thorax score',
+    'abdomen score',
+    'lower-abdomen and pelvis score',
   ];
   const mapping: Record<string, string> = {
     'head score': 'Head',
     'thorax score': 'Thorax',
     'abdomen score': 'Abdomen',
-    'lower-abdomen and pelvis score': 'Lower-abdomen and Pelvis'
+    'lower-abdomen and pelvis score': 'Lower-abdomen and Pelvis',
   };
 
   // Update height range based on excel data
   useEffect(() => {
     if (!excelData?.length) return;
-    const currentHeightRange = excelData.map((item: any) => parseFloat(item.height));
-    setMinMaxRanges([Math.min(...currentHeightRange), Math.max(...currentHeightRange)]);
-    setHeightRange([Math.min(...currentHeightRange), Math.max(...currentHeightRange)]);
+    const currentHeightRange = excelData.map((item: any) =>
+      parseFloat(item.height)
+    );
+    setMinMaxRanges([
+      Math.min(...currentHeightRange),
+      Math.max(...currentHeightRange),
+    ]);
+    setHeightRange([
+      Math.min(...currentHeightRange),
+      Math.max(...currentHeightRange),
+    ]);
   }, [excelData]);
 
   // Apply sex and height filters
@@ -53,10 +68,10 @@ export default function Dashboard() {
     let filtered = excelData;
 
     if (sexFilter !== 'All') {
-      filtered = filtered.filter(item => item.sex === sexFilter);
+      filtered = filtered.filter((item) => item.sex === sexFilter);
     }
 
-    filtered = filtered.filter(item => {
+    filtered = filtered.filter((item) => {
       const height = parseFloat(item.height);
       return height >= heightRange[0] && height <= heightRange[1];
     });
@@ -69,32 +84,39 @@ export default function Dashboard() {
     let filtered = filteredData;
 
     if (bodyPartSelection.length > 0) {
-      const selectedBodyParts = bodyPartSelection.map(part => `${part} score`);
+      const selectedBodyParts = bodyPartSelection.map(
+        (part) => `${part} score`
+      );
 
-      filtered = filtered.map(item => {
+      filtered = filtered.map((item) => {
         const filteredItem = { ...item };
-        Object.keys(filteredItem).forEach(key => {
+        Object.keys(filteredItem).forEach((key) => {
           if (selectedBodyParts.includes(key)) {
-            const findPatient = excelData.find(patient => patient.id === item.id);
-      
-   
+            const findPatient = excelData.find(
+              (patient) => patient.id === item.id
+            );
+
             filteredItem[key] = findPatient[key];
             return;
           }
-          if(EXTRA_FIELDS.map(item => item.name).includes(key)){
+          if (EXTRA_FIELDS.map((item) => item.name).includes(key)) {
             return;
           }
           filteredItem[key] = 0;
         });
         return filteredItem;
-      }
-      )
+      });
     }
 
     setFilteredData(filtered);
   }, [bodyPartSelection]);
 
-  const data: TGetMappedData = { parsedData: filteredData, headers, mapping, selectedBodyParts: bodyPartSelection };
+  const data: TGetMappedData = {
+    parsedData: filteredData,
+    headers,
+    mapping,
+    selectedBodyParts: bodyPartSelection,
+  };
   const stats: Stats[] = getTableStats(data);
 
   return (
@@ -107,7 +129,11 @@ export default function Dashboard() {
               <div style={{ width: '300px' }}>
                 <Dropdown
                   label="Filter by sex"
-                  options={[{id: 'All', label: 'All'}, {id: 'M', label: 'Male'}, {label: 'Female', id: 'F'}]}
+                  options={[
+                    { id: 'All', label: 'All' },
+                    { id: 'M', label: 'Male' },
+                    { label: 'Female', id: 'F' },
+                  ]}
                   id={sexFilter}
                   onChange={setSexFilter}
                   placeholder="Select sex"

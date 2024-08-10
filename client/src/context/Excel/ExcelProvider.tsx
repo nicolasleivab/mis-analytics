@@ -4,7 +4,13 @@
 // @ts-nocheck
 /* eslint-disable */
 
-import React, { createContext, useState, useContext, ReactNode, useEffect } from "react";
+import React, {
+  createContext,
+  useState,
+  useContext,
+  ReactNode,
+  useEffect,
+} from 'react';
 
 interface ExcelContextProps {
   excelData: any[][];
@@ -18,13 +24,13 @@ export const ExcelProvider: React.FC<{ children: ReactNode }> = ({
 }) => {
   const [excelData, setExcelData] = useState<any[][]>(() => {
     // Load initial data from local storage
-    const savedData = localStorage.getItem("excelData");
+    const savedData = localStorage.getItem('excelData');
     return savedData ? JSON.parse(savedData) : [];
   });
 
   useEffect(() => {
     // Save excel data to local storage whenever it updates
-    localStorage.setItem("excelData", JSON.stringify(excelData));
+    localStorage.setItem('excelData', JSON.stringify(excelData));
   }, [excelData]);
 
   return (
@@ -37,7 +43,7 @@ export const ExcelProvider: React.FC<{ children: ReactNode }> = ({
 export const useExcelContext = () => {
   const context = useContext(ExcelContext);
   if (!context) {
-    throw new Error("useExcelContext must be used within an ExcelProvider");
+    throw new Error('useExcelContext must be used within an ExcelProvider');
   }
   return context;
 };

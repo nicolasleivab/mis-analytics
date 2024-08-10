@@ -1,7 +1,7 @@
-import React, { useState } from "react";
-import * as styles from "./Dropdown.module.css";
-import { ChevronDownIcon, ChevronUpIcon } from "../../assets/icons";
-import useOnClickOutside from "../../hooks/useOnClickOutside";
+import React, { useState } from 'react';
+import * as styles from './Dropdown.module.css';
+import { ChevronDownIcon, ChevronUpIcon } from '../../assets/icons';
+import useOnClickOutside from '../../hooks/useOnClickOutside';
 
 export interface TDropdownOption {
   id: string | number;
@@ -23,9 +23,9 @@ const Dropdown: React.FC<TDropdownProps> = ({
   options,
   id,
   onChange,
-  width = "100%",
+  width = '100%',
   disabled = false,
-  placeholder = "Select...",
+  placeholder = 'Select...',
 }) => {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -43,7 +43,7 @@ const Dropdown: React.FC<TDropdownProps> = ({
       {label && <label className={styles.Label}>{label}</label>}
       <div
         className={`${styles.Dropdown} ${
-          disabled ? styles.DropdownDisabled : ""
+          disabled ? styles.DropdownDisabled : ''
         }`}
         onClick={() => !disabled && setIsOpen(!isOpen)}
       >

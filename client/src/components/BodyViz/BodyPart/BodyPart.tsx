@@ -1,4 +1,4 @@
-import { TBodyPartProps } from "../types";
+import { TBodyPartProps } from '../types';
 
 const BodyPart = ({
   name,

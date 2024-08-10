@@ -1,15 +1,15 @@
-export type TChevronDown = {
+export interface TChevronDown {
   width?: number;
   height?: number;
   color?: string;
   className?: string;
-};
+}
 
 export default function ChevronDown({
   width = 20,
   height = 20,
-  color = "#1E4E49",
-  className = "",
+  color = '#1E4E49',
+  className = '',
 }: TChevronDown) {
   return (
     <svg

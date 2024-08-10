@@ -1,15 +1,15 @@
-import * as styles from "./Card.module.css";
+import * as styles from './Card.module.css';
 
-export type TCard = {
+export interface TCard {
   children: React.ReactNode;
   width?: string;
   height?: string;
-};
+}
 
 export default function Card({
   children,
-  width = "fit-content",
-  height = "auto",
+  width = 'fit-content',
+  height = 'auto',
 }: TCard) {
   return (
     <div style={{ width, height }} className={styles.Card}>

@@ -1,10 +1,10 @@
-import { TIconProps } from "./types";
+import { TIconProps } from './types';
 
 export default function Logo({
   width = 40,
   height = 40,
-  color = "#F7DAA1",
-  secondColor = "#F7DAA1",
+  color = '#F7DAA1',
+  secondColor = '#F7DAA1',
 }: TIconProps) {
   return (
     <svg

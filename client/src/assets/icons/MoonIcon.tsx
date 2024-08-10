@@ -1,10 +1,10 @@
-import { TIconProps } from "./types";
+import { TIconProps } from './types';
 
 export default function MoonIcon({
   width = 24,
   height = 24,
-  color = "#F7DAA1",
-  className = "",
+  color = '#F7DAA1',
+  className = '',
 }: TIconProps) {
   return (
     <svg
