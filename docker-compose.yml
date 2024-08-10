@@ -1,0 +1,15 @@
+version: "3.8"
+services:
+  go-server:
+    build: ./server
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./server/model/db.json:/root/model/db.json
+
+  react-app:
+    build: ./client
+    ports:
+      - "3000:3000"
+    depends_on:
+      - go-server
