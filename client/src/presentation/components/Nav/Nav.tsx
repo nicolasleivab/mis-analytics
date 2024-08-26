@@ -13,7 +13,7 @@ import {
   DASHBOARD_ROUTE,
   HOME_ROUTE,
 } from '../../../application/router/routes';
-// import ThemeToggle from "../ThemeToggle/ThemeToggle";
+import ThemeToggle from '../ThemeToggle/ThemeToggle';
 
 export default function Nav() {
   const location = useLocation();
@@ -62,7 +62,7 @@ export default function Nav() {
             Dashboard
           </Link>
         </Flex>
-        {/* <ThemeToggle /> */}
+        <ThemeToggle />
       </Flex>
     </div>
   );

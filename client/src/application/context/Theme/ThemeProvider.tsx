@@ -1,8 +1,13 @@
 import React, { useEffect, useState } from 'react';
 
-export type TTheme = 'light' | 'dark';
+export type TTheme = 'light' | 'dark' | 'auto';
 
-export const ThemeContext = React.createContext({
+export interface TThemeContext {
+  theme: TTheme;
+  toggleTheme: () => void;
+}
+
+export const ThemeContext = React.createContext<TThemeContext>({
   theme: 'light',
   toggleTheme: () => console.log('toggleTheme'),
 });

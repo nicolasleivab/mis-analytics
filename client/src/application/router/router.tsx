@@ -6,13 +6,17 @@ import Dashboard from '../../presentation/pages/Dashboard/Dashboard';
 import { ThemeProvider } from '../context/Theme/ThemeProvider';
 import { ThemeWrapper } from '../context/Theme/ThemeWrapper';
 import { ExcelProvider } from '../context/Excel/ExcelProvider';
-import { ChakraProvider } from '@chakra-ui/react';
+import { createTheme, MantineProvider } from '@mantine/core';
+
+const theme = createTheme({
+  /** Put your mantine theme override here */
+});
 
 const AppRouter = () => (
   <ThemeProvider>
     <ExcelProvider>
-      <ThemeWrapper>
-        <ChakraProvider>
+      <MantineProvider theme={theme}>
+        <ThemeWrapper>
           <Router>
             <Nav />
             <Routes>
@@ -21,8 +25,8 @@ const AppRouter = () => (
               <Route path="*" element={<Home />} />
             </Routes>
           </Router>
-        </ChakraProvider>
-      </ThemeWrapper>
+        </ThemeWrapper>
+      </MantineProvider>
     </ExcelProvider>
   </ThemeProvider>
 );

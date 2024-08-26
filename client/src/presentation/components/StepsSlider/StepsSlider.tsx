@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Flex } from '../../layout';
-import Button from '../Button/Button';
 import { StepperComponent } from '../Stepper/Stepper';
+import { Button } from '@mantine/core';
 
 export interface TStep {
   title: string;
@@ -37,8 +37,8 @@ export default function StepsSlider({ steps }: TStepsSlider) {
         ) : null}
         {activeStep < steps.length - 1 ? (
           <Button
+            disabled={!steps[activeStep]?.canProceed}
             onClick={handleNext}
-            buttonType={steps[activeStep]?.canProceed ? 'primary' : 'disabled'}
           >
             Continue
           </Button>

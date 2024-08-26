@@ -5,7 +5,7 @@ import { ReactSpreadsheetImport } from 'react-spreadsheet-import';
 import { useState, useMemo } from 'react';
 import { BODY_PARTS } from '../../components/BodyViz/body-parts';
 import { Flex } from '../../layout';
-import { Button } from '../../components';
+import { Button } from '@mantine/core';
 
 const uniqueBodyParts = [...new Set(BODY_PARTS.map((item) => item.name))];
 
