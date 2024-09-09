@@ -17,8 +17,8 @@ import {
 import StatsTable from '../../components/StatsTable/StatsTable';
 import { RangeSlider } from '@mantine/core';
 import useBodyPartSelection from '../../../application/hooks/useBodyPartSelection';
-import { EXTRA_FIELDS, FIELDS } from '../Home/Home';
 import { Select, Box } from '@mantine/core';
+import { EXTRA_FIELDS } from '../../../application/hooks/useImportFields';
 
 export default function Dashboard() {
   const { bodyPartSelection, handleBodyPartSelection } = useBodyPartSelection();
