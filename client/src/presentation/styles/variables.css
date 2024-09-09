@@ -4,9 +4,9 @@
   /* Colors */
   --color-light: #434343;
   --color-dark: #ffffff;
-  --primary-bg-dark: #4f5f77;
+  --primary-bg-dark: #393939;
   --light-blue: #f6f9ff;
-  --primary-bg-light: #f6f9ff;
+  --primary-bg-light: #ffffff;
   --bright-blue: #00aaff;
   --text-color: var(--black);
   --text-light-color: var(--blue);
@@ -76,10 +76,6 @@
   --handle-text-color: var(--color-dark);
   --btn-bg: var(--bright-blue);
   --input-bg: var(--light-blue);
-}
-
-.chakra-slider__thumb {
-  background-color: var(--bright-blue) !important;
 }
 
 p,

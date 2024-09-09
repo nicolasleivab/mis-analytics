@@ -122,7 +122,7 @@ export default function Dashboard() {
   return (
     <div className={styles.Dashboard}>
       <Flex>
-        <Flex direction="column" width="100%">
+        <Flex direction="column" width="40%">
           <Flex direction="column" padding="20px">
             <h2>Filters</h2>
             <Flex gap="40px">
@@ -167,7 +167,7 @@ export default function Dashboard() {
             />
           </Flex>
         </Flex>
-        <Flex direction="column" padding="20px">
+        <Flex direction="column" padding="20px" width="60%">
           {stats?.length > 0 ? (
             <Flex direction="column" gap="20px">
               <span>{`Number of rows: ${filteredData.length}`}</span>

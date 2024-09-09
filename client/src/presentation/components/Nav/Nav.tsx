@@ -62,7 +62,8 @@ export default function Nav() {
             Dashboard
           </Link>
         </Flex>
-        <ThemeToggle />
+        {/* TODO: Fix theme conflicts */}
+        {/* <ThemeToggle /> */}
       </Flex>
     </div>
   );

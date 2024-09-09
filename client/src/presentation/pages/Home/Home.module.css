@@ -4,8 +4,8 @@
   min-width: 100%;
   width: fit-content;
   box-sizing: border-box;
-  background-color: var(--primary-bg);
-  color: var(--color);
+  /* background-color: var(--primary-bg);
+  color: var(--color); */
   padding: var(--page-padding);
 }
 
