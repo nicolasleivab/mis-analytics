@@ -12,9 +12,12 @@ import React, {
   useEffect,
 } from 'react';
 
+export type TExcelSheet = { name: string; data: any[][] };
+export type TExcelData = TExcelSheet[];
+
 interface ExcelContextProps {
-  excelData: any[][];
-  setExcelData: React.Dispatch<React.SetStateAction<any[][]>>;
+  excelData: TExcelData;
+  setExcelData: React.Dispatch<React.SetStateAction<TExcelData>>;
 }
 
 const ExcelContext = createContext<ExcelContextProps | undefined>(undefined);

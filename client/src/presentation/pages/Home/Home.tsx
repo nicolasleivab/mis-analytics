@@ -1,22 +1,36 @@
 import * as styles from './Home.module.css';
 import { useNavigate } from 'react-router-dom';
-import { useExcelContext } from '../../../application/context/Excel/ExcelProvider';
+import {
+  TExcelData,
+  useExcelContext,
+} from '../../../application/context/Excel/ExcelProvider';
 import { ReactSpreadsheetImport } from 'react-spreadsheet-import';
 import { useState } from 'react';
 import { Flex } from '../../layout';
-import { Button } from '@mantine/core';
+import { Button, Group, Modal, Text } from '@mantine/core';
 import useImportFields from '../../../application/hooks/useImportFields';
 
 export default function Home() {
   const navigate = useNavigate();
-  const [openModal, setOpenModal] = useState<boolean>(false);
+  const [openModal, setOpenImportModal] = useState<boolean>(false);
+  const [openActionModal, setOpenActionModal] = useState<boolean>(false);
+  const [importedSheets, setImportedSheets] = useState<TExcelData>([]);
   const { setExcelData } = useExcelContext();
 
   const { importFields: fields } = useImportFields();
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const handleImportClick = (parsedData: any[][]) => {
-    setExcelData(parsedData);
+  const handleImportClick = (parsedData: any[][], sheetName: string) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-call
+    setImportedSheets([
+      ...importedSheets,
+      { name: sheetName, data: parsedData },
+    ]);
+    setOpenActionModal(true); // Show action modal with two options
+  };
+
+  const handleConfirmClick = () => {
+    setExcelData(importedSheets);
     navigate('/dashboard');
   };
 
@@ -47,18 +61,37 @@ export default function Home() {
         </div>
       </Flex>
       <Flex>
-        <Button onClick={() => setOpenModal(true)}>Import Excel</Button>
+        <Button onClick={() => setOpenImportModal(true)}>Import Excel</Button>
       </Flex>
       <ReactSpreadsheetImport
         isOpen={openModal}
-        onClose={() => setOpenModal(false)}
-        onSubmit={(data) => {
+        onClose={() => setOpenImportModal(false)}
+        onSubmit={(data, { name: sheetName }) => {
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           const typedData = data?.validData as unknown as any[][];
-          handleImportClick(typedData);
+          handleImportClick(typedData, sheetName);
         }}
         fields={fields}
       />
+      <Modal
+        opened={openActionModal}
+        onClose={() => setOpenActionModal(false)}
+        title="What would you like to do next?"
+      >
+        <Text>
+          You have successfully imported the sheet:{' '}
+          {importedSheets.length > 0 &&
+            importedSheets[importedSheets.length - 1].name}
+        </Text>
+        <Group mt="xl">
+          <Button onClick={handleConfirmClick}>
+            Confirm and Go to Dashboard
+          </Button>
+          <Button variant="outline" onClick={() => setOpenImportModal(true)}>
+            Import Another Sheet
+          </Button>
+        </Group>
+      </Modal>
     </div>
   );
 }

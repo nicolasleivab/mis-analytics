@@ -118,7 +118,7 @@ export default function Dashboard() {
     selectedBodyParts: bodyPartSelection,
   };
   const stats: Stats[] = getTableStats(data);
-  console.log(minMaxRanges);
+  console.log(excelData);
   return (
     <div className={styles.Dashboard}>
       <Flex>
