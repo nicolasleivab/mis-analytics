@@ -7,26 +7,32 @@ import {
 import { ReactSpreadsheetImport } from 'react-spreadsheet-import';
 import { useState } from 'react';
 import { Flex } from '../../layout';
-import { Button, Group, Modal, Text } from '@mantine/core';
+import { Button, Group, Modal, Text, TextInput } from '@mantine/core';
 import useImportFields from '../../../application/hooks/useImportFields';
 
 export default function Home() {
   const navigate = useNavigate();
   const [openModal, setOpenImportModal] = useState<boolean>(false);
   const [openActionModal, setOpenActionModal] = useState<boolean>(false);
+  const [customSheetName, setCustomSheetName] = useState<string>(''); // New state for custom sheet name
   const [importedSheets, setImportedSheets] = useState<TExcelData>([]);
   const { setExcelData } = useExcelContext();
 
   const { importFields: fields } = useImportFields();
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const handleImportClick = (parsedData: any[][], sheetName: string) => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-call
+  const handleImportClick = (parsedData: any[][]) => {
+    if (customSheetName.trim() === '') {
+      // You can add validation if needed
+      alert('Please provide a valid sheet name.');
+      return;
+    }
     setImportedSheets([
       ...importedSheets,
-      { name: sheetName, data: parsedData },
+      { name: customSheetName, data: parsedData },
     ]);
     setOpenActionModal(true); // Show action modal with two options
+    setCustomSheetName(''); // Clear the input after saving the sheet
   };
 
   const handleConfirmClick = () => {
@@ -63,26 +69,41 @@ export default function Home() {
       <Flex>
         <Button onClick={() => setOpenImportModal(true)}>Import Excel</Button>
       </Flex>
+
+      {/* Import Modal */}
       <ReactSpreadsheetImport
         isOpen={openModal}
         onClose={() => setOpenImportModal(false)}
-        onSubmit={(data, { name: sheetName }) => {
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        onSubmit={(data) => {
           const typedData = data?.validData as unknown as any[][];
-          handleImportClick(typedData, sheetName);
+          handleImportClick(typedData);
+          setOpenImportModal(false);
         }}
         fields={fields}
       />
+
+      {/* Action Modal */}
       <Modal
         opened={openActionModal}
         onClose={() => setOpenActionModal(false)}
         title="What would you like to do next?"
       >
-        <Text>
+        {/* Input for custom sheet name */}
+        <TextInput
+          label="Enter a name for the sheet"
+          placeholder="Sheet name"
+          value={customSheetName}
+          onChange={(e) => setCustomSheetName(e.currentTarget.value)}
+          required
+        />
+
+        {/* Display imported sheet */}
+        <Text mt="md">
           You have successfully imported the sheet:{' '}
           {importedSheets.length > 0 &&
             importedSheets[importedSheets.length - 1].name}
         </Text>
+
         <Group mt="xl">
           <Button onClick={handleConfirmClick}>
             Confirm and Go to Dashboard
