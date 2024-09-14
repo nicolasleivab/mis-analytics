@@ -29,13 +29,14 @@ export default function Home() {
   // Triggered after importing the sheet
   const handleImportClick = (data: any[][]) => {
     setParsedData(data); // Save the parsed data temporarily
+    setOpenActionModal(false); // Ensure action modal is closed
     setOpenNameModal(true); // Open modal to name the sheet
   };
 
   // Triggered after naming the sheet
   const handleSaveSheetName = () => {
     if (customSheetName.trim() === '') {
-      // Show alert instead of default alert
+      // Show alert if no sheet name is provided
       setShowAlert(true);
       return;
     }
@@ -44,10 +45,12 @@ export default function Home() {
       ...importedSheets,
       { name: customSheetName, data: parsedData }, // Use the custom name and saved data
     ]);
+
+    // Reset the state after saving the sheet name
     setCustomSheetName(''); // Clear the input after saving the sheet
     setOpenNameModal(false); // Close the name modal
-    setOpenActionModal(true); // Open the action modal
     setShowAlert(false); // Reset alert visibility
+    setOpenActionModal(true); // Open the action modal
   };
 
   const handleConfirmClick = () => {
@@ -92,7 +95,7 @@ export default function Home() {
         onSubmit={(data) => {
           const typedData = data?.validData as unknown as any[][];
           handleImportClick(typedData);
-          setOpenImportModal(false);
+          setOpenImportModal(false); // Close import modal after submission
         }}
         fields={fields}
       />

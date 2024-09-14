@@ -45,7 +45,7 @@ export default function Dashboard() {
     'abdomen score': 'Abdomen',
     'lower-abdomen and pelvis score': 'Lower-abdomen and Pelvis',
   };
-
+  console.log(excelData);
   useEffect(() => {
     if (!excelData?.length) return;
 
