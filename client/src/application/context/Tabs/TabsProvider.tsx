@@ -8,7 +8,7 @@ export interface TTabsContext {
   setActiveTab: Dispatch<SetStateAction<TTab>>;
 }
 
-export const ThemeContext = React.createContext<TTabsContext>({
+export const TabsContext = React.createContext<TTabsContext>({
   activeTab: 'Overview',
   setActiveTab: () => console.log('set activeTab'),
 });
@@ -21,8 +21,8 @@ export const TabsProvider = ({ children }: { children: React.ReactNode }) => {
   }, [activeTab]);
 
   return (
-    <ThemeContext.Provider value={{ activeTab, setActiveTab }}>
+    <TabsContext.Provider value={{ activeTab, setActiveTab }}>
       {children}
-    </ThemeContext.Provider>
+    </TabsContext.Provider>
   );
 };

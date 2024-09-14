@@ -18,16 +18,18 @@ const AppRouter = () => (
     <ExcelProvider>
       <MantineProvider theme={theme}>
         <ThemeWrapper>
-          <Router>
-            <Nav />
-            <Routes>
-              <Route path={HOME_ROUTE} element={<Home />} />
-              <TabsProvider>
+          <TabsProvider>
+            <Router>
+              <Nav />
+              <Routes>
+                <Route path={HOME_ROUTE} element={<Home />} />
+
                 <Route path={DASHBOARD_ROUTE} element={<Dashboard />} />
-              </TabsProvider>
-              <Route path="*" element={<Home />} />
-            </Routes>
-          </Router>
+
+                <Route path="*" element={<Home />} />
+              </Routes>
+            </Router>
+          </TabsProvider>
         </ThemeWrapper>
       </MantineProvider>
     </ExcelProvider>
