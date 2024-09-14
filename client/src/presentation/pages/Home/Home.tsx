@@ -1,22 +1,60 @@
 import * as styles from './Home.module.css';
 import { useNavigate } from 'react-router-dom';
-import { useExcelContext } from '../../../application/context/Excel/ExcelProvider';
+import {
+  TExcelData,
+  useExcelContext,
+} from '../../../application/context/Excel/ExcelProvider';
 import { ReactSpreadsheetImport } from 'react-spreadsheet-import';
 import { useState } from 'react';
 import { Flex } from '../../layout';
-import { Button } from '@mantine/core';
+import { Button, Group, Modal, Text, TextInput, Alert } from '@mantine/core';
+import { IconAlertCircle } from '@tabler/icons-react'; // Import Mantine icon
 import useImportFields from '../../../application/hooks/useImportFields';
+
+const MODAL_OFFSET = 150;
 
 export default function Home() {
   const navigate = useNavigate();
-  const [openModal, setOpenModal] = useState<boolean>(false);
+  const [openModal, setOpenImportModal] = useState<boolean>(false);
+  const [openNameModal, setOpenNameModal] = useState<boolean>(false); // Modal for naming the sheet
+  const [openActionModal, setOpenActionModal] = useState<boolean>(false); // Modal for confirm/import another
+  const [customSheetName, setCustomSheetName] = useState<string>(''); // Custom sheet name state
+  const [importedSheets, setImportedSheets] = useState<TExcelData>([]);
+  const [parsedData, setParsedData] = useState<any[][]>([]); // Store the imported data temporarily
+  const [showAlert, setShowAlert] = useState<boolean>(false); // State to control the alert visibility
   const { setExcelData } = useExcelContext();
 
   const { importFields: fields } = useImportFields();
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const handleImportClick = (parsedData: any[][]) => {
-    setExcelData(parsedData);
+  // Triggered after importing the sheet
+  const handleImportClick = (data: any[][]) => {
+    setParsedData(data); // Save the parsed data temporarily
+    setOpenActionModal(false); // Ensure action modal is closed
+    setOpenNameModal(true); // Open modal to name the sheet
+  };
+
+  // Triggered after naming the sheet
+  const handleSaveSheetName = () => {
+    if (customSheetName.trim() === '') {
+      // Show alert if no sheet name is provided
+      setShowAlert(true);
+      return;
+    }
+
+    setImportedSheets([
+      ...importedSheets,
+      { name: customSheetName, data: parsedData }, // Use the custom name and saved data
+    ]);
+
+    // Reset the state after saving the sheet name
+    setCustomSheetName(''); // Clear the input after saving the sheet
+    setOpenNameModal(false); // Close the name modal
+    setShowAlert(false); // Reset alert visibility
+    setOpenActionModal(true); // Open the action modal
+  };
+
+  const handleConfirmClick = () => {
+    setExcelData(importedSheets);
     navigate('/dashboard');
   };
 
@@ -47,18 +85,75 @@ export default function Home() {
         </div>
       </Flex>
       <Flex>
-        <Button onClick={() => setOpenModal(true)}>Import Excel</Button>
+        <Button onClick={() => setOpenImportModal(true)}>Import Excel</Button>
       </Flex>
+
+      {/* Import Modal */}
       <ReactSpreadsheetImport
         isOpen={openModal}
-        onClose={() => setOpenModal(false)}
+        onClose={() => setOpenImportModal(false)}
         onSubmit={(data) => {
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           const typedData = data?.validData as unknown as any[][];
           handleImportClick(typedData);
+          setOpenImportModal(false); // Close import modal after submission
         }}
         fields={fields}
       />
+
+      {/* Sheet Naming Modal */}
+      <Modal
+        yOffset={MODAL_OFFSET}
+        opened={openNameModal}
+        onClose={() => setOpenNameModal(false)}
+        title="Name your sheet"
+      >
+        {/* Display the alert if no sheet name is entered */}
+        {showAlert && (
+          <Alert
+            icon={<IconAlertCircle size={16} />}
+            title="Error!"
+            color="red"
+            withCloseButton
+            onClose={() => setShowAlert(false)}
+            mb="md"
+          >
+            Please provide a valid sheet name.
+          </Alert>
+        )}
+
+        <TextInput
+          label="Enter a name for the sheet"
+          placeholder="Sheet name"
+          value={customSheetName}
+          onChange={(e) => setCustomSheetName(e.currentTarget.value)}
+          required
+        />
+        <Group mt="xl">
+          <Button onClick={handleSaveSheetName}>Save and Continue</Button>
+        </Group>
+      </Modal>
+
+      {/* Action Modal */}
+      <Modal
+        yOffset={MODAL_OFFSET}
+        opened={openActionModal}
+        onClose={() => setOpenActionModal(false)}
+        title="What would you like to do next?"
+      >
+        <Text>
+          You have successfully imported the sheet:{' '}
+          {importedSheets.length > 0 &&
+            importedSheets[importedSheets.length - 1].name}
+        </Text>
+        <Group mt="xl">
+          <Button onClick={handleConfirmClick}>
+            Confirm and Go to Dashboard
+          </Button>
+          <Button variant="outline" onClick={() => setOpenImportModal(true)}>
+            Import Another Sheet
+          </Button>
+        </Group>
+      </Modal>
     </div>
   );
 }
