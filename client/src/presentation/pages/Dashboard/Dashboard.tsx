@@ -3,10 +3,9 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
 /* eslint-disable */
-
 import { useEffect, useState } from 'react';
 import { BodyViz } from '../../components';
-import { Card, Flex } from '../../layout';
+import { Card } from '../../layout';
 import * as styles from './Dashboard.module.css';
 import { useExcelContext } from '../../../application/context/Excel/ExcelProvider';
 import { getTableStats } from '../../../application/data-handlers';
@@ -15,10 +14,18 @@ import {
   TGetMappedData,
 } from '../../../application/data-handlers/get-table-stats';
 import StatsTable from '../../components/StatsTable/StatsTable';
-import { RangeSlider } from '@mantine/core';
+import { RangeSlider, Flex, Box, Select } from '@mantine/core';
 import useBodyPartSelection from '../../../application/hooks/useBodyPartSelection';
-import { Select, Box } from '@mantine/core';
-import { EXTRA_FIELDS } from '../../../application/hooks/useImportFields';
+import {
+  EXTRA_FIELDS,
+  HEADERS,
+} from '../../../application/hooks/useImportFields';
+
+const DEFAULT_GENDER_VALUES = [
+  { value: 'All', label: 'All' },
+  { value: 'M', label: 'Male' },
+  { value: 'F', label: 'Female' },
+];
 
 export default function Dashboard() {
   const [selectedSheet, setSelectedSheet] = useState<string>('0');
@@ -32,16 +39,6 @@ export default function Dashboard() {
   const { excelData } = useExcelContext();
   const [filteredData, setFilteredData] = useState(excelData);
 
-  const headers = [
-    'name',
-    'id',
-    'sex',
-    'height',
-    'head score',
-    'thorax score',
-    'abdomen score',
-    'lower-abdomen and pelvis score',
-  ];
   const mapping: Record<string, string> = {
     'head score': 'Head',
     'thorax score': 'Thorax',
@@ -102,7 +99,8 @@ export default function Dashboard() {
         const filteredItem = { ...item };
         Object.keys(filteredItem).forEach((key) => {
           if (selectedBodyParts.includes(key)) {
-            const findPatient = excelData.find(
+            const currentDataset = excelData[Number(selectedSheet)]?.data;
+            const findPatient = currentDataset.find(
               (patient) => patient.id === item.id
             );
 
@@ -123,35 +121,32 @@ export default function Dashboard() {
 
   const data: TGetMappedData = {
     parsedData: filteredData,
-    headers,
+    headers: HEADERS,
     mapping,
     selectedBodyParts: bodyPartSelection,
   };
   const stats: Stats[] = getTableStats(data);
-  console.log(excelData);
+
   return (
     <div className={styles.Dashboard}>
-      <Flex height="100%">
-        <Flex direction="column" width="40%">
+      <Flex height="100%" gap="md">
+        <Flex direction="column" align="center" style={{ flex: 1 }}>
           <Flex direction="column" padding="20px">
             <h2>Filters</h2>
             <Flex gap="40px">
               <div style={{ width: '300px' }}>
                 <Select
                   allowDeselect={false}
+                  defaultValue={DEFAULT_GENDER_VALUES[0].value}
                   label="Filter by sex"
                   placeholder="Select sex"
                   onChange={setSexFilter}
-                  data={[
-                    { value: 'All', label: 'All' },
-                    { value: 'M', label: 'Male' },
-                    { value: 'F', label: 'Female' },
-                  ]}
+                  data={DEFAULT_GENDER_VALUES}
                 />
               </div>
               <div style={{ width: '300px' }}>
                 <label>Height Range</label>
-                <Flex alignItems="center" width="100%">
+                <Flex align="center" width="100%">
                   <Box mr="10px">{heightRange[0]}</Box>
                   {minMaxRanges ? (
                     <RangeSlider
@@ -180,8 +175,9 @@ export default function Dashboard() {
         <Flex
           direction="column"
           padding="20px"
-          width="60%"
-          justifyContent="flex-start"
+          style={{ flex: 1.5 }}
+          justify="flex-start"
+          align="center"
         >
           {availableSheets.length > 0 ? (
             <Select

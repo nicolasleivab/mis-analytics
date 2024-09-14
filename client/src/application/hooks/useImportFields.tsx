@@ -10,6 +10,17 @@ export const EXTRA_FIELDS = [
   { name: 'age', example: '25' },
 ];
 
+export const HEADERS = [
+  'name',
+  'id',
+  'sex',
+  'height',
+  'head score',
+  'thorax score',
+  'abdomen score',
+  'lower-abdomen and pelvis score',
+];
+
 export interface TField {
   label?: string;
   name: string;
