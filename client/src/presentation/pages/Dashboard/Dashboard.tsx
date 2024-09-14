@@ -21,6 +21,8 @@ import { Select, Box } from '@mantine/core';
 import { EXTRA_FIELDS } from '../../../application/hooks/useImportFields';
 
 export default function Dashboard() {
+  const [selectedSheet, setSelectedSheet] = useState<string>('0');
+  const [availableSheets, setAvailableSheets] = useState<any[]>([]);
   const { bodyPartSelection, handleBodyPartSelection } = useBodyPartSelection();
   const [sexFilter, setSexFilter] = useState<string>('All');
   const [heightRange, setHeightRange] = useState<[number, number]>([0, 500]);
@@ -47,10 +49,17 @@ export default function Dashboard() {
     'lower-abdomen and pelvis score': 'Lower-abdomen and Pelvis',
   };
 
-  // Update height range based on excel data
   useEffect(() => {
     if (!excelData?.length) return;
-    const currentHeightRange = excelData.map((item: any) =>
+
+    const mappedSheets = excelData.map((sheet, index) => ({
+      value: index.toString(),
+      label: sheet.name,
+    }));
+    setAvailableSheets(mappedSheets);
+
+    const currentDataset = excelData[Number(selectedSheet)]?.data;
+    const currentHeightRange = currentDataset?.map((item: any) =>
       parseFloat(item.height)
     );
     setMinMaxRanges([
@@ -61,11 +70,12 @@ export default function Dashboard() {
       Math.min(...currentHeightRange),
       Math.max(...currentHeightRange),
     ]);
-  }, [excelData]);
+  }, [excelData, selectedSheet]);
 
   // Apply sex and height filters
   useEffect(() => {
-    let filtered = excelData;
+    if (!excelData?.length) return;
+    let filtered = excelData[Number(selectedSheet)]?.data;
 
     if (sexFilter !== 'All') {
       filtered = filtered.filter((item) => item.sex === sexFilter);
@@ -77,7 +87,7 @@ export default function Dashboard() {
     });
 
     setFilteredData(filtered);
-  }, [sexFilter, heightRange, excelData]);
+  }, [sexFilter, heightRange, excelData, selectedSheet]);
 
   // Apply body part selection filter
   useEffect(() => {
@@ -121,7 +131,7 @@ export default function Dashboard() {
   console.log(excelData);
   return (
     <div className={styles.Dashboard}>
-      <Flex>
+      <Flex height="100%">
         <Flex direction="column" width="40%">
           <Flex direction="column" padding="20px">
             <h2>Filters</h2>
@@ -167,7 +177,22 @@ export default function Dashboard() {
             />
           </Flex>
         </Flex>
-        <Flex direction="column" padding="20px" width="60%">
+        <Flex
+          direction="column"
+          padding="20px"
+          width="60%"
+          justifyContent="flex-start"
+        >
+          {availableSheets.length > 0 ? (
+            <Select
+              allowDeselect={false}
+              defaultValue={availableSheets[0]?.value}
+              label="Select dataset"
+              placeholder="Select dataset"
+              onChange={setSelectedSheet}
+              data={availableSheets}
+            />
+          ) : null}
           {stats?.length > 0 ? (
             <Flex direction="column" gap="20px">
               <span>{`Number of rows: ${filteredData.length}`}</span>
