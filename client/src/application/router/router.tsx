@@ -7,6 +7,7 @@ import { ThemeProvider } from '../context/Theme/ThemeProvider';
 import { ThemeWrapper } from '../context/Theme/ThemeWrapper';
 import { ExcelProvider } from '../context/Excel/ExcelProvider';
 import { createTheme, MantineProvider } from '@mantine/core';
+import { TabsProvider } from '../context/Tabs/TabsProvider';
 
 const theme = createTheme({
   /** Put your mantine theme override here */
@@ -21,7 +22,9 @@ const AppRouter = () => (
             <Nav />
             <Routes>
               <Route path={HOME_ROUTE} element={<Home />} />
-              <Route path={DASHBOARD_ROUTE} element={<Dashboard />} />
+              <TabsProvider>
+                <Route path={DASHBOARD_ROUTE} element={<Dashboard />} />
+              </TabsProvider>
               <Route path="*" element={<Home />} />
             </Routes>
           </Router>
