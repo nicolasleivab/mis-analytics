@@ -106,7 +106,6 @@ export default function Dashboard() {
         const filteredItem = { ...item };
         Object.keys(filteredItem).forEach((key) => {
           if (selectedBodyParts.includes(key)) {
-            const currentDataset = excelData[Number(selectedSheet)]?.data;
             const findPatient = currentDataset.find(
               (patient) => patient.id === item.id
             );
@@ -124,7 +123,7 @@ export default function Dashboard() {
     }
 
     setFilteredData(filtered);
-  }, [bodyPartSelection]);
+  }, [bodyPartSelection, currentDataset]);
 
   const data: TGetMappedData = {
     parsedData: filteredData,
