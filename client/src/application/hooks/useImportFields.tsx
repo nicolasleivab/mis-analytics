@@ -21,6 +21,18 @@ export const HEADERS = [
   'lower-abdomen and pelvis score',
 ];
 
+export const BODY_PARTS_MAPPING: Record<string, string> = {
+  'head score': 'Head',
+  'thorax score': 'Thorax',
+  'abdomen score': 'Abdomen',
+  'lower-abdomen and pelvis score': 'Lower-abdomen and Pelvis',
+};
+
+export const ALL_DATASETS_FIELD = {
+  value: 'All',
+  label: 'All',
+};
+
 export interface TField {
   label?: string;
   name: string;

@@ -17,8 +17,10 @@ import StatsTable from '../../components/StatsTable/StatsTable';
 import { RangeSlider, Flex, Box, Select } from '@mantine/core';
 import useBodyPartSelection from '../../../application/hooks/useBodyPartSelection';
 import {
+  ALL_DATASETS_FIELD,
   EXTRA_FIELDS,
-  HEADERS,
+  HEADERS as headers,
+  BODY_PARTS_MAPPING as mapping,
 } from '../../../application/hooks/useImportFields';
 
 const DEFAULT_GENDER_VALUES = [
@@ -29,6 +31,7 @@ const DEFAULT_GENDER_VALUES = [
 
 export default function Dashboard() {
   const [selectedSheet, setSelectedSheet] = useState<string>('0');
+  const [currentDataset, setCurrentDataset] = useState<any[]>([]);
   const [availableSheets, setAvailableSheets] = useState<any[]>([]);
   const { bodyPartSelection, handleBodyPartSelection } = useBodyPartSelection();
   const [sexFilter, setSexFilter] = useState<string>('All');
@@ -39,23 +42,27 @@ export default function Dashboard() {
   const { excelData } = useExcelContext();
   const [filteredData, setFilteredData] = useState(excelData);
 
-  const mapping: Record<string, string> = {
-    'head score': 'Head',
-    'thorax score': 'Thorax',
-    'abdomen score': 'Abdomen',
-    'lower-abdomen and pelvis score': 'Lower-abdomen and Pelvis',
-  };
-  console.log(excelData);
   useEffect(() => {
     if (!excelData?.length) return;
+
+    if (selectedSheet === 'All') {
+      const mergedDataSets = excelData.map((sheet) => sheet.data).flat();
+      setCurrentDataset(mergedDataSets);
+    } else {
+      const currentDataset = excelData[Number(selectedSheet)]?.data;
+      setCurrentDataset(currentDataset);
+    }
+  }, [selectedSheet, excelData]);
+
+  useEffect(() => {
+    if (currentDataset?.length === 0) return;
 
     const mappedSheets = excelData.map((sheet, index) => ({
       value: index.toString(),
       label: sheet.name,
     }));
-    setAvailableSheets(mappedSheets);
+    setAvailableSheets([...mappedSheets, ALL_DATASETS_FIELD]);
 
-    const currentDataset = excelData[Number(selectedSheet)]?.data;
     const currentHeightRange = currentDataset?.map((item: any) =>
       parseFloat(item.height)
     );
@@ -67,12 +74,12 @@ export default function Dashboard() {
       Math.min(...currentHeightRange),
       Math.max(...currentHeightRange),
     ]);
-  }, [excelData, selectedSheet]);
+  }, [currentDataset]);
 
   // Apply sex and height filters
   useEffect(() => {
-    if (!excelData?.length) return;
-    let filtered = excelData[Number(selectedSheet)]?.data;
+    if (currentDataset?.length === 0) return;
+    let filtered = currentDataset;
 
     if (sexFilter !== 'All') {
       filtered = filtered.filter((item) => item.sex === sexFilter);
@@ -84,7 +91,7 @@ export default function Dashboard() {
     });
 
     setFilteredData(filtered);
-  }, [sexFilter, heightRange, excelData, selectedSheet]);
+  }, [sexFilter, heightRange, currentDataset]);
 
   // Apply body part selection filter
   useEffect(() => {
@@ -121,7 +128,7 @@ export default function Dashboard() {
 
   const data: TGetMappedData = {
     parsedData: filteredData,
-    headers: HEADERS,
+    headers,
     mapping,
     selectedBodyParts: bodyPartSelection,
   };
