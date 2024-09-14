@@ -28,7 +28,7 @@ export const BODY_PARTS_MAPPING: Record<string, string> = {
   'lower-abdomen and pelvis score': 'Lower-abdomen and Pelvis',
 };
 
-export const ALL_DATASETS_FIELD = {
+export const DEFAUT_ALL_FIELD = {
   value: 'All',
   label: 'All',
 };

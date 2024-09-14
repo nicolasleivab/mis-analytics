@@ -17,14 +17,14 @@ import StatsTable from '../../components/StatsTable/StatsTable';
 import { RangeSlider, Flex, Box, Select } from '@mantine/core';
 import useBodyPartSelection from '../../../application/hooks/useBodyPartSelection';
 import {
-  ALL_DATASETS_FIELD,
+  DEFAUT_ALL_FIELD,
   EXTRA_FIELDS,
   HEADERS as headers,
   BODY_PARTS_MAPPING as mapping,
 } from '../../../application/hooks/useImportFields';
 
 const DEFAULT_GENDER_VALUES = [
-  { value: 'All', label: 'All' },
+  DEFAUT_ALL_FIELD,
   { value: 'M', label: 'Male' },
   { value: 'F', label: 'Female' },
 ];
@@ -45,7 +45,7 @@ export default function Dashboard() {
   useEffect(() => {
     if (!excelData?.length) return;
 
-    if (selectedSheet === 'All') {
+    if (selectedSheet === DEFAUT_ALL_FIELD.value) {
       const mergedDataSets = excelData.map((sheet) => sheet.data).flat();
       setCurrentDataset(mergedDataSets);
     } else {
@@ -61,7 +61,7 @@ export default function Dashboard() {
       value: index.toString(),
       label: sheet.name,
     }));
-    setAvailableSheets([...mappedSheets, ALL_DATASETS_FIELD]);
+    setAvailableSheets([...mappedSheets, DEFAUT_ALL_FIELD]);
 
     const currentHeightRange = currentDataset?.map((item: any) =>
       parseFloat(item.height)
@@ -81,7 +81,7 @@ export default function Dashboard() {
     if (currentDataset?.length === 0) return;
     let filtered = currentDataset;
 
-    if (sexFilter !== 'All') {
+    if (sexFilter !== DEFAUT_ALL_FIELD.value) {
       filtered = filtered.filter((item) => item.sex === sexFilter);
     }
 
