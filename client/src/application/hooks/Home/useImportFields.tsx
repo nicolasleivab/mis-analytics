@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { BODY_PARTS } from '../constants/body-parts';
+import { BODY_PARTS } from '../../constants/body-parts';
 
 export const EXTRA_FIELDS = [
   { name: 'id', example: '001' },

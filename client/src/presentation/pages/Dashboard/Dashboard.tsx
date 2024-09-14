@@ -15,13 +15,13 @@ import {
 } from '../../../application/data-handlers/get-table-stats';
 import StatsTable from '../../components/StatsTable/StatsTable';
 import { RangeSlider, Flex, Box, Select } from '@mantine/core';
-import useBodyPartSelection from '../../../application/hooks/useBodyPartSelection';
+import { useBodyPartSelection } from '../../../application/hooks';
 import {
   DEFAUT_ALL_FIELD,
   EXTRA_FIELDS,
   HEADERS as headers,
   BODY_PARTS_MAPPING as mapping,
-} from '../../../application/hooks/useImportFields';
+} from '../../../application/hooks/Home/useImportFields';
 
 const DEFAULT_GENDER_VALUES = [
   DEFAUT_ALL_FIELD,
