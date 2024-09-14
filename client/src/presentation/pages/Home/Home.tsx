@@ -7,8 +7,11 @@ import {
 import { ReactSpreadsheetImport } from 'react-spreadsheet-import';
 import { useState } from 'react';
 import { Flex } from '../../layout';
-import { Button, Group, Modal, Text, TextInput } from '@mantine/core';
+import { Button, Group, Modal, Text, TextInput, Alert } from '@mantine/core';
+import { IconAlertCircle } from '@tabler/icons-react'; // Import Mantine icon
 import useImportFields from '../../../application/hooks/useImportFields';
+
+const MODAL_OFFSET = 150;
 
 export default function Home() {
   const navigate = useNavigate();
@@ -18,6 +21,7 @@ export default function Home() {
   const [customSheetName, setCustomSheetName] = useState<string>(''); // Custom sheet name state
   const [importedSheets, setImportedSheets] = useState<TExcelData>([]);
   const [parsedData, setParsedData] = useState<any[][]>([]); // Store the imported data temporarily
+  const [showAlert, setShowAlert] = useState<boolean>(false); // State to control the alert visibility
   const { setExcelData } = useExcelContext();
 
   const { importFields: fields } = useImportFields();
@@ -31,7 +35,8 @@ export default function Home() {
   // Triggered after naming the sheet
   const handleSaveSheetName = () => {
     if (customSheetName.trim() === '') {
-      alert('Please provide a valid sheet name.');
+      // Show alert instead of default alert
+      setShowAlert(true);
       return;
     }
 
@@ -42,6 +47,7 @@ export default function Home() {
     setCustomSheetName(''); // Clear the input after saving the sheet
     setOpenNameModal(false); // Close the name modal
     setOpenActionModal(true); // Open the action modal
+    setShowAlert(false); // Reset alert visibility
   };
 
   const handleConfirmClick = () => {
@@ -93,10 +99,25 @@ export default function Home() {
 
       {/* Sheet Naming Modal */}
       <Modal
+        yOffset={MODAL_OFFSET}
         opened={openNameModal}
         onClose={() => setOpenNameModal(false)}
         title="Name your sheet"
       >
+        {/* Display the alert if no sheet name is entered */}
+        {showAlert && (
+          <Alert
+            icon={<IconAlertCircle size={16} />}
+            title="Error!"
+            color="red"
+            withCloseButton
+            onClose={() => setShowAlert(false)}
+            mb="md"
+          >
+            Please provide a valid sheet name.
+          </Alert>
+        )}
+
         <TextInput
           label="Enter a name for the sheet"
           placeholder="Sheet name"
@@ -111,6 +132,7 @@ export default function Home() {
 
       {/* Action Modal */}
       <Modal
+        yOffset={MODAL_OFFSET}
         opened={openActionModal}
         onClose={() => setOpenActionModal(false)}
         title="What would you like to do next?"
