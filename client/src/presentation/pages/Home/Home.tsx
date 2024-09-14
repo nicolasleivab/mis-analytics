@@ -13,26 +13,35 @@ import useImportFields from '../../../application/hooks/useImportFields';
 export default function Home() {
   const navigate = useNavigate();
   const [openModal, setOpenImportModal] = useState<boolean>(false);
-  const [openActionModal, setOpenActionModal] = useState<boolean>(false);
-  const [customSheetName, setCustomSheetName] = useState<string>(''); // New state for custom sheet name
+  const [openNameModal, setOpenNameModal] = useState<boolean>(false); // Modal for naming the sheet
+  const [openActionModal, setOpenActionModal] = useState<boolean>(false); // Modal for confirm/import another
+  const [customSheetName, setCustomSheetName] = useState<string>(''); // Custom sheet name state
   const [importedSheets, setImportedSheets] = useState<TExcelData>([]);
+  const [parsedData, setParsedData] = useState<any[][]>([]); // Store the imported data temporarily
   const { setExcelData } = useExcelContext();
 
   const { importFields: fields } = useImportFields();
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const handleImportClick = (parsedData: any[][]) => {
+  // Triggered after importing the sheet
+  const handleImportClick = (data: any[][]) => {
+    setParsedData(data); // Save the parsed data temporarily
+    setOpenNameModal(true); // Open modal to name the sheet
+  };
+
+  // Triggered after naming the sheet
+  const handleSaveSheetName = () => {
     if (customSheetName.trim() === '') {
-      // You can add validation if needed
       alert('Please provide a valid sheet name.');
       return;
     }
+
     setImportedSheets([
       ...importedSheets,
-      { name: customSheetName, data: parsedData },
+      { name: customSheetName, data: parsedData }, // Use the custom name and saved data
     ]);
-    setOpenActionModal(true); // Show action modal with two options
     setCustomSheetName(''); // Clear the input after saving the sheet
+    setOpenNameModal(false); // Close the name modal
+    setOpenActionModal(true); // Open the action modal
   };
 
   const handleConfirmClick = () => {
@@ -82,13 +91,12 @@ export default function Home() {
         fields={fields}
       />
 
-      {/* Action Modal */}
+      {/* Sheet Naming Modal */}
       <Modal
-        opened={openActionModal}
-        onClose={() => setOpenActionModal(false)}
-        title="What would you like to do next?"
+        opened={openNameModal}
+        onClose={() => setOpenNameModal(false)}
+        title="Name your sheet"
       >
-        {/* Input for custom sheet name */}
         <TextInput
           label="Enter a name for the sheet"
           placeholder="Sheet name"
@@ -96,14 +104,22 @@ export default function Home() {
           onChange={(e) => setCustomSheetName(e.currentTarget.value)}
           required
         />
+        <Group mt="xl">
+          <Button onClick={handleSaveSheetName}>Save and Continue</Button>
+        </Group>
+      </Modal>
 
-        {/* Display imported sheet */}
-        <Text mt="md">
+      {/* Action Modal */}
+      <Modal
+        opened={openActionModal}
+        onClose={() => setOpenActionModal(false)}
+        title="What would you like to do next?"
+      >
+        <Text>
           You have successfully imported the sheet:{' '}
           {importedSheets.length > 0 &&
             importedSheets[importedSheets.length - 1].name}
         </Text>
-
         <Group mt="xl">
           <Button onClick={handleConfirmClick}>
             Confirm and Go to Dashboard
