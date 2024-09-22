@@ -15,6 +15,7 @@ import { MultiSelect, Flex, Box } from '@mantine/core';
 import { useExcelContext } from '../../../../application/context/Excel/ExcelProvider';
 import { BarChart } from '@mantine/charts';
 import { BODY_PARTS_MAPPING } from '../../../../application/hooks/Home/useImportFields';
+import { darkColorPalette1 } from '../../../styles/colors';
 
 export default function ModelComparison() {
   const { excelData } = useExcelContext();
@@ -60,14 +61,14 @@ export default function ModelComparison() {
       </Box>
 
       {selectedModels.length > 0 ? (
-        <Box style={{ width: '80%' }}>
+        <Box style={{ width: '80%', marginTop: '100px' }}>
           <BarChart
             h={300}
             data={chartData}
             dataKey="part" // 'part' is the key representing body parts (x-axis)
-            series={selectedModels.map((model) => ({
+            series={selectedModels.map((model, index) => ({
               name: model,
-              color: `#${Math.floor(Math.random() * 16777215).toString(16)}`, // Random color for each model
+              color: darkColorPalette1[index] ?? darkColorPalette1[0],
               dataKey: model,
             }))}
             tickLine="y"
