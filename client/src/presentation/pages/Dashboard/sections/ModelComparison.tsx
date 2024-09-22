@@ -4,81 +4,80 @@
 // @ts-nocheck
 /* eslint-disable */
 
+// disable all ts eslint rule for this file and ts errors
+// disable ts checks for this file
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
+/* eslint-disable */
+
 import { useState, useEffect } from 'react';
-import { Select, Flex, Box } from '@mantine/core';
+import { MultiSelect, Flex, Box } from '@mantine/core';
 import { useExcelContext } from '../../../../application/context/Excel/ExcelProvider';
 import { BarChart } from '@mantine/charts';
 import { BODY_PARTS_MAPPING } from '../../../../application/hooks/Home/useImportFields';
 
 export default function ModelComparison() {
   const { excelData } = useExcelContext();
-  const [model1, setModel1] = useState<string | null>(null);
-  const [model2, setModel2] = useState<string | null>(null);
+  const [selectedModels, setSelectedModels] = useState<string[]>([]);
   const [chartData, setChartData] = useState<any[]>([]);
 
   useEffect(() => {
-    if (model1 && model2 && excelData.length > 0) {
-      const data1 = excelData.find((dataSet) => dataSet.name === model1)?.data;
-      const data2 = excelData.find((dataSet) => dataSet.name === model2)?.data;
+    if (selectedModels.length > 0 && excelData.length > 0) {
+      const datasets = selectedModels.map(
+        (modelName) =>
+          excelData.find((dataSet) => dataSet.name === modelName)?.data
+      );
 
-      if (data1 && data2) {
-        const comparisonData = Object.keys(BODY_PARTS_MAPPING).map((part) => ({
-          part: BODY_PARTS_MAPPING[part], // Map the key to human-readable part names
-          [model1]: parseFloat(data1[0][part]) || 0,
-          [model2]: parseFloat(data2[0][part]) || 0,
-        }));
+      if (datasets.every((data) => data)) {
+        const comparisonData = Object.keys(BODY_PARTS_MAPPING).map((part) => {
+          const entry = { part: BODY_PARTS_MAPPING[part] };
+          selectedModels.forEach((modelName, index) => {
+            const dataset = datasets[index];
+            entry[modelName] = parseFloat(dataset[0][part]) || 0;
+          });
+          return entry;
+        });
 
         setChartData(comparisonData);
       }
     }
-  }, [model1, model2, excelData]);
-  console.log(chartData, model1, model2, [
-    { name: model1, color: '#4A90E2' }, // Use hexadecimal colors
-    { name: model2, color: '#50E3C2' },
-  ]);
+  }, [selectedModels, excelData]);
+
   return (
-    <Flex direction="column" gap="lg" padding="20px" align={'center'}>
-      <Box>
-        <Select
-          label="Select Model 1"
-          placeholder="Pick a model"
+    <Flex direction="column" gap="lg" padding="20px" align="center">
+      <Box style={{ width: '80%' }}>
+        <MultiSelect
+          label="Select Models"
+          placeholder="Pick one or more models"
           data={excelData.map((dataset) => ({
             value: dataset.name,
             label: dataset.name,
           }))}
-          value={model1}
-          onChange={setModel1}
+          value={selectedModels}
+          onChange={setSelectedModels}
+          clearable
         />
       </Box>
 
-      <Box>
-        <Select
-          label="Select Model 2"
-          placeholder="Pick a model"
-          data={excelData.map((dataset) => ({
-            value: dataset.name,
-            label: dataset.name,
-          }))}
-          value={model2}
-          onChange={setModel2}
-        />
-      </Box>
-
-      {chartData.length > 0 ? (
+      {selectedModels.length > 0 ? (
         <Box style={{ width: '80%' }}>
           <BarChart
             h={300}
             data={chartData}
             dataKey="part" // 'part' is the key representing body parts (x-axis)
-            series={[
-              { name: model1, color: '#4A90E2' }, // Use hexadecimal colors
-              { name: model2, color: '#50E3C2' },
-            ]}
+            series={selectedModels.map((model) => ({
+              name: model,
+              color: `#${Math.floor(Math.random() * 16777215).toString(16)}`, // Random color for each model
+              dataKey: model,
+            }))}
             tickLine="y"
           />
         </Box>
       ) : (
-        <p>Please select two models to compare</p>
+        <p>
+          Please select at least one model to visualize the chart. Keep
+          selecting/removing models to update the chart on the fly.
+        </p>
       )}
     </Flex>
   );
