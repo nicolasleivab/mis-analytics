@@ -7,7 +7,7 @@
 
 import { useEffect, useState } from 'react';
 import { Stats } from '../../../application/data-handlers/get-table-stats';
-import useTheme from '../../../application/hooks/useTheme';
+import useTheme from '../../../application/hooks/Base/useTheme';
 import BodyPart from './BodyPart/BodyPart';
 import { BODY_PARTS } from '../../../application/constants/body-parts';
 import { Flex } from '../../layout';

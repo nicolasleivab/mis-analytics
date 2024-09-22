@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { ThemeContext } from '../context/Theme/ThemeProvider';
+import { ThemeContext } from '../../context/Theme/ThemeProvider';
 import { useMantineColorScheme } from '@mantine/core';
 
 function useTheme() {

@@ -9,7 +9,7 @@ import { useState } from 'react';
 import { Flex } from '../../layout';
 import { Button, Group, Modal, Text, TextInput, Alert } from '@mantine/core';
 import { IconAlertCircle } from '@tabler/icons-react'; // Import Mantine icon
-import useImportFields from '../../../application/hooks/useImportFields';
+import useImportFields from '../../../application/hooks/Home/useImportFields';
 
 const MODAL_OFFSET = 150;
 

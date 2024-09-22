@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { BODY_PARTS } from '../constants/body-parts';
+import { BODY_PARTS } from '../../constants/body-parts';
 
 export const EXTRA_FIELDS = [
   { name: 'id', example: '001' },
@@ -20,6 +20,18 @@ export const HEADERS = [
   'abdomen score',
   'lower-abdomen and pelvis score',
 ];
+
+export const BODY_PARTS_MAPPING: Record<string, string> = {
+  'head score': 'Head',
+  'thorax score': 'Thorax',
+  'abdomen score': 'Abdomen',
+  'lower-abdomen and pelvis score': 'Lower-abdomen and Pelvis',
+};
+
+export const DEFAUT_ALL_FIELD = {
+  value: 'All',
+  label: 'All',
+};
 
 export interface TField {
   label?: string;
