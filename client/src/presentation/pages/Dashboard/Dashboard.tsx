@@ -7,6 +7,7 @@ import Overview from './sections/Overview';
 import { CustomTabs } from '../../components';
 import { TabsContext } from '../../../application/context/Tabs/TabsProvider';
 import { useContext } from 'react';
+import ModelComparison from './sections/ModelComparison';
 
 export default function Dashboard() {
   const { activeTab } = useContext(TabsContext);
@@ -14,7 +15,7 @@ export default function Dashboard() {
   return (
     <div className={styles.Dashboard}>
       <CustomTabs tabs={TABS} />
-      {activeTab === OVERVIEW_TAB ? <Overview /> : null}
+      {activeTab === OVERVIEW_TAB ? <Overview /> : <ModelComparison />}
     </div>
   );
 }

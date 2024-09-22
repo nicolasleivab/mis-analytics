@@ -132,7 +132,7 @@ export default function Overview() {
     selectedBodyParts: bodyPartSelection,
   };
   const stats: Stats[] = getTableStats(data);
-
+  console.log(excelData);
   return (
     <Flex height="100%" gap="md">
       <Flex direction="column" align="center" style={{ flex: 1 }}>
