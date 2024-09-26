@@ -19,6 +19,7 @@ import { useBodyPartSelection } from '../../../../application/hooks';
 import {
   DEFAUT_ALL_FIELD,
   EXTRA_FIELDS,
+  EXTRA_STATS,
   HEADERS as headers,
   BODY_PARTS_MAPPING as mapping,
 } from '../../../../application/hooks/Home/useImportFields';
@@ -130,6 +131,7 @@ export default function Overview() {
     headers,
     mapping,
     selectedBodyParts: bodyPartSelection,
+    extraStats: EXTRA_STATS.map((item) => item.name),
   };
   const stats: Stats[] = getTableStats(data);
   console.log(excelData);

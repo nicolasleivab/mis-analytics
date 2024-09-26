@@ -1,6 +1,10 @@
 import { useMemo } from 'react';
 import { BODY_PARTS } from '../../constants/body-parts';
-
+export const EXTRA_STATS = [
+  { name: 'dice', example: '0.76' },
+  { name: 'hd', example: '45.32' },
+  { name: 'hd95', example: '4.81' },
+];
 export const EXTRA_FIELDS = [
   { name: 'id', example: '001' },
   { name: 'name', example: 'John Doe' },
@@ -8,6 +12,7 @@ export const EXTRA_FIELDS = [
   { name: 'height', example: '181' },
   { name: 'weight', example: '120' },
   { name: 'age', example: '25' },
+  ...EXTRA_STATS,
 ];
 
 export const HEADERS = [
@@ -19,6 +24,9 @@ export const HEADERS = [
   'thorax score',
   'abdomen score',
   'lower-abdomen and pelvis score',
+  'dice',
+  'hd',
+  'hd95',
 ];
 
 export const BODY_PARTS_MAPPING: Record<string, string> = {

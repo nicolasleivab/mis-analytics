@@ -3,6 +3,7 @@ export interface TGetMappedData {
   headers: string[];
   mapping: Record<string, string>;
   selectedBodyParts: string[];
+  extraStats: string[];
 }
 
 export interface Stats {
@@ -19,6 +20,7 @@ export function getTableStats({
   headers,
   mapping,
   selectedBodyParts,
+  extraStats,
 }: TGetMappedData): Stats[] {
   const bodyParts = selectedBodyParts.map((part) => `${part} score`);
 
@@ -28,7 +30,7 @@ export function getTableStats({
   // console.log('Headers:', headers);
   // console.log('Mapping:', mapping);
 
-  bodyParts.forEach((part) => {
+  [...bodyParts, ...extraStats].forEach((part) => {
     const scores = parsedData
       .map((row) => parseFloat(row[part]))
       .filter((score) => !isNaN(score));
