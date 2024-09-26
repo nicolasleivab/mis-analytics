@@ -8,3 +8,9 @@
   color: var(--color); */
   padding: var(--page-padding);
 }
+
+.View {
+  margin-top: 5px;
+  padding: 20px;
+  box-shadow: 0 0 10px 5px rgba(0, 0, 0, 0.1);
+}

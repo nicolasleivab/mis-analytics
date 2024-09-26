@@ -32,7 +32,7 @@ const StatsTable: React.FC<StatsTableProps> = ({ stats }) => {
         <Table.Caption>Medical Image Segmentation Dice Scores</Table.Caption>
         <Table.Thead>
           <Table.Tr>
-            <Table.Th>Body Part</Table.Th>
+            <Table.Th>Body Part/Indicator</Table.Th>
             <Table.Th>Mean</Table.Th>
             <Table.Th>Median</Table.Th>
             <Table.Th>Standard Deviation</Table.Th>
