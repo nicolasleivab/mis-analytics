@@ -9,7 +9,7 @@ interface TCustomTabsProps {
   tabs: TTab[];
 }
 
-const TABS_MARGIN = 50;
+const TABS_MARGIN = 30;
 export default function CustomTabs({ tabs }: TCustomTabsProps) {
   const { activeTab, setActiveTab } = useContext(TabsContext);
 
