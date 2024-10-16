@@ -2,7 +2,7 @@ import { MultiSelect, Select, Flex, Box } from '@mantine/core';
 import { useExcelContext } from '../../../../application/context/Excel/ExcelProvider';
 import { BarChart } from '@mantine/charts';
 import { darkColorPalette1 } from '../../../styles/colors';
-import { useModelComparison } from '../../../../application/hooks/Dashboard';
+import { useModelComparison } from '../../../../application/hooks';
 
 export default function ModelComparison() {
   const { excelData } = useExcelContext();
