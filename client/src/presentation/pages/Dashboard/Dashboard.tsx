@@ -6,7 +6,7 @@ import {
 import Overview from './sections/Overview';
 import { CustomTabs } from '../../components';
 import { TabsContext } from '../../../application/context/Tabs/TabsProvider';
-import { useContext, useState } from 'react';
+import { useContext, useState, useCallback } from 'react';
 import ModelComparison from './sections/ModelComparison';
 import { Box, Button, CloseButton, Flex, Text } from '@mantine/core';
 
@@ -22,50 +22,43 @@ export default function Dashboard() {
   const { activeTab } = useContext(TabsContext);
   const [views, setViews] = useState<TView[]>([FIRST_MODEL]);
 
-  const renderViews = () => {
-    return views.map((view) => {
-      const removeCurrentView = () => {
-        setViews((prevViews) =>
-          prevViews.filter((currentView) => currentView.id !== view.id)
-        );
-      };
 
-      return (
-        <Box key={view.id} className={styles.View}>
-          <CloseButton onClick={() => removeCurrentView()} />
-          <Overview />
-        </Box>
-      );
-    });
+  const removeCurrentView = useCallback((viewId: string) => {
+    setViews((prevViews) => prevViews.filter((view) => view.id !== viewId));
+  }, []);
+
+  const addView = () => {
+    setViews((prevViews) => [...prevViews, { id: `${views.length + 1}` }]);
   };
+
+  const renderViews = () =>
+    views.map((view) => (
+      <Box key={view.id} className={styles.View}>
+        <CloseButton onClick={() => removeCurrentView(view.id)} />
+        <Overview />
+      </Box>
+    ));
+
+ 
+  if (activeTab !== OVERVIEW_TAB) {
+    return (
+      <div className={styles.Dashboard}>
+        <CustomTabs tabs={TABS} />
+        <ModelComparison />
+      </div>
+    );
+  }
 
   return (
     <div className={styles.Dashboard}>
       <CustomTabs tabs={TABS} />
-      {activeTab === OVERVIEW_TAB ? (
-        <Flex direction="column">
-          <Flex align="baseline">
-            <Box style={{ marginRight: 10 }}>
-              <Button
-                onClick={() =>
-                  setViews((prevViews) => [
-                    ...prevViews,
-                    { id: `${views.length + 1}` },
-                  ])
-                }
-              >
-                Add view
-              </Button>
-            </Box>
-            <Box>
-              <Text>{`Active views: ${views.length}`}</Text>
-            </Box>
-          </Flex>
-          {renderViews()}
+      <Flex direction="column">
+        <Flex align="center" gap="sm">
+          <Button onClick={addView}>Add view</Button>
+          <Text>{`Active views: ${views.length}`}</Text>
         </Flex>
-      ) : (
-        <ModelComparison />
-      )}
+        {renderViews()}
+      </Flex>
     </div>
   );
 }
