@@ -3,7 +3,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 // Absolute path to your project root
-const PROJECT_ROOT = path.resolve(__dirname, '..', '..'); // Adjust the '..' based on your directory structure
+const PROJECT_ROOT = path.resolve(__dirname, '..', '..');
 
 module.exports = {
   entry: path.resolve(PROJECT_ROOT, 'application', 'index.tsx'),

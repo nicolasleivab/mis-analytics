@@ -1,5 +1,5 @@
 import { createRoot } from 'react-dom/client';
-import AppRouter from './router/router';
+import AppRouter from './router/AppRouter';
 import '../presentation/styles/reset.css';
 import '../presentation/styles/body-parts.css';
 import '../presentation/styles/variables.css';

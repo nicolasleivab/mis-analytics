@@ -44,5 +44,7 @@ module.exports = {
         endOfLine: 'auto',
       },
     ],
+    // Change if you want to use interfaces
+    '@typescript-eslint/consistent-type-definitions': ['error', 'type'],
   },
 };
