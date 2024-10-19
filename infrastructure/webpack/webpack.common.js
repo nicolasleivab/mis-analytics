@@ -2,10 +2,13 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 
+// Absolute path to your project root
+const PROJECT_ROOT = path.resolve(__dirname, '..', '..'); // Adjust the '..' based on your directory structure
+
 module.exports = {
-  entry: path.resolve(__dirname, '..', './src/index.tsx'),
+  entry: path.resolve(PROJECT_ROOT, 'src', 'index.tsx'),
   output: {
-    path: path.resolve(__dirname, '..', 'dist'),
+    path: path.resolve(PROJECT_ROOT, 'dist'),
     filename: 'bundle.js',
   },
   resolve: {
@@ -15,8 +18,13 @@ module.exports = {
     rules: [
       {
         test: /\.(ts|js)x?$/,
-        use: 'ts-loader',
         exclude: /node_modules/,
+        use: {
+          loader: 'ts-loader',
+          options: {
+            configFile: path.resolve(PROJECT_ROOT, 'tsconfig.json'),
+          },
+        },
       },
       {
         test: /\.css$/,
@@ -26,16 +34,19 @@ module.exports = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: path.resolve(__dirname, '..', './public/index.html'),
+      template: path.resolve(PROJECT_ROOT, 'infrastructure', 'public', 'index.html'),
     }),
     new CopyWebpackPlugin({
       patterns: [
-        { from: path.resolve(__dirname, '..', 'public'), to: 'public' },
+        {
+          from: path.resolve(PROJECT_ROOT, 'infrastructure', 'public'),
+          to: 'public',
+        },
       ],
     }),
   ],
   devServer: {
-    static: './dist',
+    static: path.resolve(PROJECT_ROOT, 'dist'),
     historyApiFallback: true,
     host: '0.0.0.0',
     port: '3000',
