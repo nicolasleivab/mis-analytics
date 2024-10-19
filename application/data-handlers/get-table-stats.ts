@@ -22,7 +22,7 @@ export function getTableStats({
   [...bodyParts, ...extraStats].forEach((part: string) => {
     const scores = (parsedData as Record<string, string>[])
       .map((row) => parseFloat(row[part]))
-      .filter((score) => !isNaN(score));
+      ?.filter((score) => !isNaN(score));
 
     if (scores.length === 0) return;
 

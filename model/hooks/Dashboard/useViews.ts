@@ -11,7 +11,7 @@ export default function useViews() {
   };
 
   const removeView = useCallback((viewId: string) => {
-    setViews((prevViews) => prevViews.filter((view) => view.id !== viewId));
+    setViews((prevViews) => prevViews?.filter((view) => view.id !== viewId));
   }, []);
 
   const isOverviewTabActive = activeTab === OVERVIEW_TAB;

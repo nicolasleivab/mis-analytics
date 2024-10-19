@@ -10,7 +10,7 @@ export default function useBodyPartSelection() {
   const handleBodyPartSelection = (selected: string) => {
     if (bodyPartSelection.includes(selected)) {
       setBodyPartSelection(
-        bodyPartSelection.filter((part) => part !== selected)
+        bodyPartSelection?.filter((part) => part !== selected)
       );
     } else {
       setBodyPartSelection([...bodyPartSelection, selected]);

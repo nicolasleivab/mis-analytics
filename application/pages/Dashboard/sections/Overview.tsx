@@ -81,10 +81,10 @@ export default function Overview() {
     let filtered = currentDataset;
 
     if (sexFilter !== DEFAUT_ALL_FIELD.value) {
-      filtered = filtered.filter((item) => item.sex === sexFilter);
+      filtered = filtered?.filter((item) => item.sex === sexFilter);
     }
 
-    filtered = filtered.filter((item) => {
+    filtered = filtered?.filter((item) => {
       const height = parseFloat(item.height);
       return height >= heightRange[0] && height <= heightRange[1];
     });
