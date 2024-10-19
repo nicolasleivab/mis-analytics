@@ -5,6 +5,11 @@
     "lint": "eslint . --ext .ts,.tsx --fix"
   },
   "dependencies": {
+    "@chakra-ui/icons": "^2.2.4",
+    "@chakra-ui/popper": "^3.1.0",
+    "@chakra-ui/react": "^2.10.3",
+    "@chakra-ui/react-context": "^2.1.0",
+    "@chakra-ui/shared-utils": "^2.0.5",
     "@emotion/react": "^11.13.0",
     "@emotion/styled": "^11.13.0",
     "@mantine/charts": "^7.12.2",
