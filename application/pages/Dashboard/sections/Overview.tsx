@@ -7,19 +7,20 @@
 import { useEffect, useState } from 'react';
 import { BodyViz } from '../../../../presentation/components';
 import { Card } from '../../../../presentation/layout';
-import { useExcelContext } from '../../../../application/context/Excel/ExcelProvider';
+import { useExcelContext } from '../../../../model/context';
 import { getTableStats } from '../../../data-handlers';
-import { Stats, TGetMappedData } from '../../../data-handlers/get-table-stats';
+import { TGetMappedData } from '../../../data-handlers/get-table-stats';
 import StatsTable from '../../../../presentation/components/StatsTable/StatsTable';
 import { RangeSlider, Flex, Box, Select } from '@mantine/core';
-import { useBodyPartSelection } from '../../../../application/hooks';
+import { useBodyPartSelection } from '../../../../model/hooks';
+import { TStats } from '../../../../model/definitions/Stats';
 import {
-  DEFAUT_ALL_FIELD,
   EXTRA_FIELDS,
   EXTRA_STATS,
   HEADERS as headers,
   BODY_PARTS_MAPPING as mapping,
-} from '../../../../application/hooks/Home/useImportFields';
+  DEFAUT_ALL_FIELD,
+} from '../../../../model/definitions/ImportFields';
 
 const DEFAULT_GENDER_VALUES = [
   DEFAUT_ALL_FIELD,
@@ -130,7 +131,7 @@ export default function Overview() {
     selectedBodyParts: bodyPartSelection,
     extraStats: EXTRA_STATS.map((item) => item.name),
   };
-  const stats: Stats[] = getTableStats(data);
+  const stats: TStats[] = getTableStats(data);
   console.log(excelData);
   return (
     <Flex height="100%" gap="md">

@@ -1,8 +1,9 @@
 import { MultiSelect, Select, Flex, Box } from '@mantine/core';
-import { useExcelContext } from '../../../../application/context/Excel/ExcelProvider';
+import { useExcelContext } from '../../../../model/context';
 import { BarChart } from '@mantine/charts';
 import { darkColorPalette1 } from '../../../../presentation/styles/colors';
-import { useModelComparison } from '../../../../application/hooks';
+import { useModelComparison } from '../../../../model/hooks';
+import { TStat } from '../../../../model/definitions/Stats';
 
 export default function ModelComparison() {
   const { excelData } = useExcelContext();
@@ -37,7 +38,10 @@ export default function ModelComparison() {
           placeholder="Pick a statistic"
           data={['Mean', 'Median', 'Min', 'Max']}
           value={selectedStat}
-          onChange={(id) => setSelectedStat(id!)}
+          onChange={(id) => {
+            const statId = id as TStat;
+            setSelectedStat(statId);
+          }}
         />
       </Box>
 

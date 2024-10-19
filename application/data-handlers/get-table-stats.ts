@@ -1,37 +1,26 @@
-export interface TGetMappedData {
-  parsedData: any[];
+import { TStats } from '../../model/definitions/Stats';
+
+export type TGetMappedData = {
+  parsedData: unknown[];
   headers: string[];
   mapping: Record<string, string>;
   selectedBodyParts: string[];
   extraStats: string[];
-}
-
-export interface Stats {
-  bodyPart: string;
-  mean: number;
-  median: number;
-  stdDev: number;
-  min: number;
-  max: number;
-}
+};
 
 export function getTableStats({
   parsedData,
-  headers,
+  // headers,
   mapping,
   selectedBodyParts,
   extraStats,
-}: TGetMappedData): Stats[] {
+}: TGetMappedData): TStats[] {
   const bodyParts = selectedBodyParts.map((part) => `${part} score`);
 
-  const stats: Stats[] = [];
+  const stats: TStats[] = [];
 
-  // console.log('Parsed Data:', parsedData);
-  // console.log('Headers:', headers);
-  // console.log('Mapping:', mapping);
-
-  [...bodyParts, ...extraStats].forEach((part) => {
-    const scores = parsedData
+  [...bodyParts, ...extraStats].forEach((part: string) => {
+    const scores = (parsedData as Record<string, string>[])
       .map((row) => parseFloat(row[part]))
       .filter((score) => !isNaN(score));
 

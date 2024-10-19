@@ -3,8 +3,8 @@ import Overview from './sections/Overview';
 import { CustomTabs } from '../../../presentation/components';
 import ModelComparison from './sections/ModelComparison';
 import { Box, Button, CloseButton, Flex, Text } from '@mantine/core';
-import { useViews } from '../../../application/hooks';
-import { TABS } from '../../../application/constants/config-values';
+import { useViews } from '../../../model/hooks';
+import { TABS } from '../../../model/definitions/Tabs';
 
 export default function Dashboard() {
   const { views, addView, removeView, isOverviewTabActive } = useViews();

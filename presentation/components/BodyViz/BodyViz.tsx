@@ -1,17 +1,10 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-// disable all ts eslint rule for this file and ts errors
-// disable ts checks for this file
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-nocheck
-/* eslint-disable */
-
 import { useEffect, useState } from 'react';
-import { Stats } from '../../../application/data-handlers/get-table-stats';
-import useTheme from '../../../application/hooks/Base/useTheme';
+import { useTheme } from '../../../model/hooks';
 import BodyPart from './BodyPart/BodyPart';
-import { BODY_PARTS } from '../../../application/constants/body-parts';
+import { BODY_PARTS } from '../../../model/definitions/BodyParts';
 import { Flex } from '../../layout';
 import { Box } from '@chakra-ui/react';
+import { TStats } from '../../../model/definitions/Stats';
 
 export default function BodySvg({
   onPartClick: makeClickHandler,
@@ -22,10 +15,24 @@ export default function BodySvg({
   onPartClick: (part: string) => void;
   selected: string[];
   style?: React.CSSProperties;
-  stats: Stats[];
+  stats: TStats[];
 }) {
   const { theme } = useTheme();
-  const initialColors = {
+
+  type TBodyColorPart =
+    | 'head'
+    | 'thorax'
+    | 'abdomen'
+    | 'lower-abdomen and pelvis'
+    | 'legs'
+    | 'arms';
+
+  type TBodyPartsInitialColors = Record<
+    TBodyColorPart,
+    { active: string; inactive: string }
+  >;
+
+  const initialColors: TBodyPartsInitialColors = {
     head: {
       active: theme === 'light' ? '#4f5f77' : '#00aaff',
       inactive: '#c4d8fc',
@@ -51,10 +58,11 @@ export default function BodySvg({
       inactive: '#c4d8fc',
     },
   };
-  const [bodyPartColors, setBodyPartsColors] = useState<any>(initialColors);
+  const [bodyPartColors, setBodyPartsColors] =
+    useState<TBodyPartsInitialColors>(initialColors);
 
   useEffect(() => {
-    const newColors = { ...initialColors };
+    const newColors: TBodyPartsInitialColors = { ...initialColors };
     stats.forEach((stat) => {
       let color;
       if (stat.median < 0.7) {
@@ -65,7 +73,7 @@ export default function BodySvg({
         color = '#006400'; // Dark Green
       }
 
-      const partName = stat.bodyPart.toLowerCase();
+      const partName = stat.bodyPart.toLowerCase() as TBodyColorPart;
 
       if (newColors[partName]) {
         newColors[partName].active = color;
@@ -74,6 +82,7 @@ export default function BodySvg({
     });
 
     setBodyPartsColors(newColors);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [stats, theme]);
 
   return (
@@ -255,7 +264,7 @@ export default function BodySvg({
               onClick={() => makeClickHandler(part.name)}
               selected={selected.includes(part.name)}
               // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-              bodyPartColors={bodyPartColors[part.name]}
+              bodyPartColors={bodyPartColors[part.name as TBodyColorPart]}
               partTransform={part.partTransform}
             />
           );
