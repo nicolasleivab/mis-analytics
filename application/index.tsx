@@ -1,8 +1,8 @@
 import { createRoot } from 'react-dom/client';
-import AppRouter from './application/router/router';
-import './presentation/styles/reset.css';
-import './presentation/styles/body-parts.css';
-import './presentation/styles/variables.css';
+import AppRouter from './router/router';
+import '../presentation/styles/reset.css';
+import '../presentation/styles/body-parts.css';
+import '../presentation/styles/variables.css';
 import '@mantine/core/styles.css';
 import '@mantine/charts/styles.css';
 

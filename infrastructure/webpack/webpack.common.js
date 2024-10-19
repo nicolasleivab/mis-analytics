@@ -6,7 +6,7 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 const PROJECT_ROOT = path.resolve(__dirname, '..', '..'); // Adjust the '..' based on your directory structure
 
 module.exports = {
-  entry: path.resolve(PROJECT_ROOT, 'src', 'index.tsx'),
+  entry: path.resolve(PROJECT_ROOT, 'application', 'index.tsx'),
   output: {
     path: path.resolve(PROJECT_ROOT, 'dist'),
     filename: 'bundle.js',
@@ -34,7 +34,12 @@ module.exports = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: path.resolve(PROJECT_ROOT, 'infrastructure', 'public', 'index.html'),
+      template: path.resolve(
+        PROJECT_ROOT,
+        'infrastructure',
+        'public',
+        'index.html'
+      ),
     }),
     new CopyWebpackPlugin({
       patterns: [
