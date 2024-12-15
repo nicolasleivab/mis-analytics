@@ -8,7 +8,7 @@ import { useEffect, useState } from 'react';
 import { BodyViz } from '../../../../presentation/components';
 import { Card } from '../../../../presentation/layout';
 import { useExcelContext } from '../../../../model/context';
-import { getTableStats } from '../../../data-handlers';
+import { getTableStats } from '../../../../model/data-handlers';
 import { TGetMappedData } from '../../../data-handlers/get-table-stats';
 import StatsTable from '../../../../presentation/components/StatsTable/StatsTable';
 import { RangeSlider, Flex, Box, Select } from '@mantine/core';

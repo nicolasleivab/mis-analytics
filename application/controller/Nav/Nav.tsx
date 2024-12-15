@@ -4,16 +4,13 @@
 // @ts-nocheck
 /* eslint-disable */
 
-import { Flex } from '../../layout';
 import * as styles from './Nav.module.css';
-import { Logo } from '../../assets/icons';
+import { Logo } from '../../../presentation/assets/icons';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useCallback } from 'react';
-import {
-  DASHBOARD_ROUTE,
-  HOME_ROUTE,
-} from '../../../application/router/routes';
+import { DASHBOARD_ROUTE, HOME_ROUTE } from '../Router/routes.tsx';
 import ThemeToggle from '../ThemeToggle/ThemeToggle';
+import { Flex } from '../../../presentation/layout';
 
 export default function Nav() {
   const location = useLocation();
