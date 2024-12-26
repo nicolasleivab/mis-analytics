@@ -2,7 +2,7 @@ import { Home, Dashboard, Login } from '../../views';
 
 export const HOME_ROUTE = '/home';
 export const DASHBOARD_ROUTE = '/dashboard';
-export const LOGIN_ROUTE = '/login';
+export const LOGIN_ROUTE = '/';
 
 export const HOME_LABEL = 'Home';
 export const DASHBOARD_LABEL = 'Dashboard';
