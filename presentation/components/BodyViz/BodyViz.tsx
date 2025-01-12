@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
 import { useTheme } from '../../../model/hooks';
 import BodyPart from './BodyPart/BodyPart';
-import { BODY_PARTS } from '../../../model/definitions/BodyParts';
 import { Flex } from '../../layout';
 import { Box } from '@chakra-ui/react';
 import { TStats } from '../../../model/definitions/Stats';
+import { selectAllSvgParts, useAppSelector } from '../../../model';
 
 export default function BodySvg({
   onPartClick: makeClickHandler,
@@ -18,7 +18,8 @@ export default function BodySvg({
   stats: TStats[];
 }) {
   const { theme } = useTheme();
-
+  const svgParts = useAppSelector(selectAllSvgParts);
+  console.log('svgParts', svgParts);
   type TBodyColorPart =
     | 'head'
     | 'thorax'
@@ -251,7 +252,7 @@ export default function BodySvg({
             />
           </clipPath>
         </defs>
-        {BODY_PARTS.map((part) => {
+        {svgParts.map((part) => {
           return (
             <BodyPart
               key={part.id}

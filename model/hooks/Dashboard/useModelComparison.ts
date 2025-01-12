@@ -3,7 +3,7 @@ import { BODY_PARTS_MAPPING } from '../../definitions/ImportFields';
 import { TStat } from '../../definitions/Stats';
 import { useAppSelector } from '../../store';
 import { selectAllSheets } from '../../Excel/excelSelectors';
-// import { TExcelSheet } from '../../Excel/definitions';
+import { TExcelSheet } from '../../Excel/definitions';
 
 type ChartEntry = {
   part: string;
@@ -21,7 +21,9 @@ export default function useModelComparison() {
     if (selectedModels.length > 0 && excelData.length > 0) {
       // Map selected models to their corresponding datasets
       const datasets = selectedModels.map((modelName) => {
-        const dataSet = excelData.find((dataSet) => dataSet.name === modelName);
+        const dataSet = excelData.find(
+          (dataSet: TExcelSheet) => dataSet.name === modelName
+        );
         return dataSet?.data;
       });
 

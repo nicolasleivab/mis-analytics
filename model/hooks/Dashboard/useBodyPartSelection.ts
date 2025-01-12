@@ -1,19 +1,23 @@
-import { useState } from 'react';
-import { BODY_PARTS } from '../../definitions/BodyParts';
-
-const uniqueBodyParts = [...new Set(BODY_PARTS.map((part) => part.name))];
+import { useState, useEffect } from 'react';
+import { useAppSelector } from '../../store';
+import { selectUniqueSvgParts } from '../../SvgViz/svgVizSelectors';
 
 export default function useBodyPartSelection() {
-  const [bodyPartSelection, setBodyPartSelection] =
-    useState<string[]>(uniqueBodyParts);
+  // Pull unique body parts from Redux
+  const reduxUniqueParts = useAppSelector(selectUniqueSvgParts);
 
+  const [bodyPartSelection, setBodyPartSelection] = useState<string[]>([]);
+
+  useEffect(() => {
+    setBodyPartSelection(reduxUniqueParts);
+  }, [reduxUniqueParts]);
+
+  // Toggle logic
   const handleBodyPartSelection = (selected: string) => {
     if (bodyPartSelection.includes(selected)) {
-      setBodyPartSelection(
-        bodyPartSelection?.filter((part) => part !== selected)
-      );
+      setBodyPartSelection((prev) => prev.filter((part) => part !== selected));
     } else {
-      setBodyPartSelection([...bodyPartSelection, selected]);
+      setBodyPartSelection((prev) => [...prev, selected]);
     }
   };
 

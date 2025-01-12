@@ -1,18 +1,29 @@
 import * as styles from './Home.module.css';
 import { useNavigate } from 'react-router-dom';
 import { ReactSpreadsheetImport } from 'react-spreadsheet-import';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Flex } from '../../../presentation/layout';
 import { Button, Group, Modal, Text, TextInput, Alert } from '@mantine/core';
 import { IconAlertCircle } from '@tabler/icons-react'; // Import Mantine icon
 import { useImportFields } from '../../../model/hooks';
-import { useAppDispatch, TExcelData, setExcelData } from '../../../model';
+import {
+  useAppDispatch,
+  TExcelData,
+  setExcelData,
+  fetchSvgParts,
+} from '../../../model';
 
 const MODAL_OFFSET = 150;
 
 export default function Home() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch(); // 2) Use your Redux dispatch
+
+  useEffect(() => {
+    dispatch(fetchSvgParts()).catch((error) => {
+      console.error('Failed to fetch SVG parts:', error);
+    });
+  }, [dispatch]);
 
   const [openModal, setOpenImportModal] = useState<boolean>(false);
   const [openNameModal, setOpenNameModal] = useState<boolean>(false); // Modal for naming the sheet

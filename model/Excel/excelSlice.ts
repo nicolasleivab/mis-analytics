@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import type { TExcelData, TExcelSheet } from '../definitions/ExcelData';
+import type { TExcelData, TExcelSheet } from './definitions';
 
 type ExcelState = {
   sheets: TExcelData;

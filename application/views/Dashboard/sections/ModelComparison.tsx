@@ -3,7 +3,11 @@ import { BarChart } from '@mantine/charts';
 import { darkColorPalette1 } from '../../../../presentation/styles/colors';
 import { useModelComparison } from '../../../../model/hooks';
 import { TStat } from '../../../../model/definitions/Stats';
-import { selectAllSheets, useAppSelector } from '../../../../model';
+import {
+  selectAllSheets,
+  TExcelSheet,
+  useAppSelector,
+} from '../../../../model';
 
 export default function ModelComparison() {
   const excelData = useAppSelector(selectAllSheets);
@@ -21,7 +25,7 @@ export default function ModelComparison() {
         <MultiSelect
           label="Select Models"
           placeholder="Pick one or more models"
-          data={excelData.map((dataset) => ({
+          data={excelData.map((dataset: TExcelSheet) => ({
             value: dataset.name,
             label: dataset.name,
           }))}

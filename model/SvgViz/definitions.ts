@@ -1,7 +1,8 @@
-// adapted from Nan Montaño's code:
+// Body parts default viz adapted from Nan Montaño's code:
 // https://codesandbox.io/s/body-diagram-svg-spike-58g6d?file=/src/BodySvg.js:0-24179
 
-export type TBodyPart = {
+// Building block for the svg visualization
+export type TSvgPart = {
   name: string;
   id: string;
   path: string;
@@ -13,6 +14,7 @@ export type TBodyPart = {
   partTransform: string;
 };
 
+// default svg viz based in body parts
 export const BODY_PARTS = [
   {
     name: 'head',
