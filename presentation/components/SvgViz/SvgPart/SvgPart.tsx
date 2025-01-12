@@ -8,7 +8,7 @@ const SvgPart = ({
   partTransform,
   onClick,
   selected,
-  svgPartColors: { active, inactive },
+  svgPartColors: { activeColor, inactiveColor },
   className,
   innerClass,
 }: TSvgPartProps) => (
@@ -18,7 +18,7 @@ const SvgPart = ({
         className="b"
         d={path}
         onClick={onClick}
-        style={{ fill: selected ? active : inactive }}
+        style={{ fill: selected ? activeColor : inactiveColor }}
         transform={partTransform}
       />
     </g>

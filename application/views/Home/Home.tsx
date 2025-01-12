@@ -17,7 +17,7 @@ const MODAL_OFFSET = 150;
 
 export default function Home() {
   const navigate = useNavigate();
-  const dispatch = useAppDispatch(); // 2) Use your Redux dispatch
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     dispatch(fetchSvgParts()).catch((error) => {

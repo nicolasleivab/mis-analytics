@@ -9,7 +9,7 @@ export type TSvgPartProps = {
   innerClass: string;
   selected: boolean;
   svgPartColors: {
-    active: string;
-    inactive: string;
+    activeColor: string;
+    inactiveColor: string;
   };
 };

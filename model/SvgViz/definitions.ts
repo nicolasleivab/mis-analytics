@@ -12,6 +12,8 @@ export type TSvgPart = {
   outerTransform: string;
   innerTransform: string;
   partTransform: string;
+  activeColor?: string;
+  inactiveColor?: string;
 };
 
 // default svg viz based in body parts

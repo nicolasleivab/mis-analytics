@@ -5,6 +5,12 @@ import { Flex } from '../../layout';
 import { Box } from '@chakra-ui/react';
 import { TStats } from '../../../model/definitions/Stats';
 import { selectAllSvgParts, useAppSelector } from '../../../model';
+import { selectUniqueSvgParts } from '../../../model/SvgViz/svgVizSelectors';
+
+const DEFAULT_COLORS = {
+  activeColor: '#4f5f77',
+  inactiveColor: '#c4d8fc',
+};
 
 export default function SvgSvg({
   onPartClick: makeClickHandler,
@@ -19,46 +25,23 @@ export default function SvgSvg({
 }) {
   const { theme } = useTheme();
   const svgParts = useAppSelector(selectAllSvgParts);
-  console.log('svgParts', svgParts);
-  type TSvgColorPart =
-    | 'head'
-    | 'thorax'
-    | 'abdomen'
-    | 'lower-abdomen and pelvis'
-    | 'legs'
-    | 'arms';
+  const reduxUniqueParts = useAppSelector(selectUniqueSvgParts);
+
+  type TSvgColorPart = string;
 
   type TSvgPartsInitialColors = Record<
     TSvgColorPart,
-    { active: string; inactive: string }
+    { activeColor: string; inactiveColor: string }
   >;
 
-  const initialColors: TSvgPartsInitialColors = {
-    head: {
-      active: theme === 'light' ? '#4f5f77' : '#00aaff',
-      inactive: '#c4d8fc',
-    },
-    thorax: {
-      active: theme === 'light' ? '#4f5f77' : '#00aaff',
-      inactive: '#c4d8fc',
-    },
-    abdomen: {
-      active: theme === 'light' ? '#4f5f77' : '#00aaff',
-      inactive: '#c4d8fc',
-    },
-    'lower-abdomen and pelvis': {
-      active: theme === 'light' ? '#4f5f77' : '#00aaff',
-      inactive: '#c4d8fc',
-    },
-    legs: {
-      active: theme === 'light' ? '#4f5f77' : '#00aaff',
-      inactive: '#c4d8fc',
-    },
-    arms: {
-      active: theme === 'light' ? '#4f5f77' : '#00aaff',
-      inactive: '#c4d8fc',
-    },
-  };
+  const initialColors = reduxUniqueParts.reduce((acc, part) => {
+    acc[part] = {
+      activeColor: DEFAULT_COLORS.activeColor,
+      inactiveColor: DEFAULT_COLORS.inactiveColor,
+    };
+    return acc;
+  }, {} as TSvgPartsInitialColors);
+
   const [svgPartColors, setSvgPartsColors] =
     useState<TSvgPartsInitialColors>(initialColors);
 
@@ -74,11 +57,11 @@ export default function SvgSvg({
         color = '#006400'; // Dark Green
       }
 
-      const partName = stat.svgPart.toLowerCase() as TSvgColorPart;
+      const partName = stat.svgPart.toLowerCase();
 
       if (newColors[partName]) {
-        newColors[partName].active = color;
-        newColors[partName].inactive = `${color}80`; // 50% transparency
+        newColors[partName].activeColor = color;
+        newColors[partName].inactiveColor = `${color}80`; // 50% transparency
       }
     });
 
@@ -265,7 +248,7 @@ export default function SvgSvg({
               onClick={() => makeClickHandler(part.name)}
               selected={selected.includes(part.name)}
               // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-              svgPartColors={svgPartColors[part.name as TSvgColorPart]}
+              svgPartColors={svgPartColors[part.name]}
               partTransform={part.partTransform}
             />
           );
