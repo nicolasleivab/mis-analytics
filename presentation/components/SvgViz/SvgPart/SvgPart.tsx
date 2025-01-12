@@ -1,6 +1,6 @@
-import { TBodyPartProps } from '../types';
+import { TSvgPartProps } from '../types';
 
-const BodyPart = ({
+const SvgPart = ({
   name,
   path,
   outerTransform,
@@ -8,10 +8,10 @@ const BodyPart = ({
   partTransform,
   onClick,
   selected,
-  bodyPartColors: { active, inactive },
+  svgPartColors: { active, inactive },
   className,
   innerClass,
-}: TBodyPartProps) => (
+}: TSvgPartProps) => (
   <g className={className} transform={outerTransform} id={name}>
     <g className={innerClass} transform={innerTransform}>
       <path
@@ -25,4 +25,4 @@ const BodyPart = ({
   </g>
 );
 
-export default BodyPart;
+export default SvgPart;

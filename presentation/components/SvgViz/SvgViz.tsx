@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
 import { useTheme } from '../../../model/hooks';
-import BodyPart from './BodyPart/BodyPart';
+import SvgPart from './SvgPart/SvgPart';
 import { Flex } from '../../layout';
 import { Box } from '@chakra-ui/react';
 import { TStats } from '../../../model/definitions/Stats';
 import { selectAllSvgParts, useAppSelector } from '../../../model';
 
-export default function BodySvg({
+export default function SvgSvg({
   onPartClick: makeClickHandler,
   selected,
   style,
@@ -20,7 +20,7 @@ export default function BodySvg({
   const { theme } = useTheme();
   const svgParts = useAppSelector(selectAllSvgParts);
   console.log('svgParts', svgParts);
-  type TBodyColorPart =
+  type TSvgColorPart =
     | 'head'
     | 'thorax'
     | 'abdomen'
@@ -28,12 +28,12 @@ export default function BodySvg({
     | 'legs'
     | 'arms';
 
-  type TBodyPartsInitialColors = Record<
-    TBodyColorPart,
+  type TSvgPartsInitialColors = Record<
+    TSvgColorPart,
     { active: string; inactive: string }
   >;
 
-  const initialColors: TBodyPartsInitialColors = {
+  const initialColors: TSvgPartsInitialColors = {
     head: {
       active: theme === 'light' ? '#4f5f77' : '#00aaff',
       inactive: '#c4d8fc',
@@ -59,11 +59,11 @@ export default function BodySvg({
       inactive: '#c4d8fc',
     },
   };
-  const [bodyPartColors, setBodyPartsColors] =
-    useState<TBodyPartsInitialColors>(initialColors);
+  const [svgPartColors, setSvgPartsColors] =
+    useState<TSvgPartsInitialColors>(initialColors);
 
   useEffect(() => {
-    const newColors: TBodyPartsInitialColors = { ...initialColors };
+    const newColors: TSvgPartsInitialColors = { ...initialColors };
     stats.forEach((stat) => {
       let color;
       if (stat.median < 0.7) {
@@ -74,7 +74,7 @@ export default function BodySvg({
         color = '#006400'; // Dark Green
       }
 
-      const partName = stat.bodyPart.toLowerCase() as TBodyColorPart;
+      const partName = stat.svgPart.toLowerCase() as TSvgColorPart;
 
       if (newColors[partName]) {
         newColors[partName].active = color;
@@ -82,7 +82,7 @@ export default function BodySvg({
       }
     });
 
-    setBodyPartsColors(newColors);
+    setSvgPartsColors(newColors);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [stats, theme]);
 
@@ -254,7 +254,7 @@ export default function BodySvg({
         </defs>
         {svgParts.map((part) => {
           return (
-            <BodyPart
+            <SvgPart
               key={part.id}
               name={part.name}
               path={part.path}
@@ -265,7 +265,7 @@ export default function BodySvg({
               onClick={() => makeClickHandler(part.name)}
               selected={selected.includes(part.name)}
               // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-              bodyPartColors={bodyPartColors[part.name as TBodyColorPart]}
+              svgPartColors={svgPartColors[part.name as TSvgColorPart]}
               partTransform={part.partTransform}
             />
           );

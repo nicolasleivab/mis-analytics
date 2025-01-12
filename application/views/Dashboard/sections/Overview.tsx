@@ -5,13 +5,13 @@
 /* eslint-disable */
 
 import { useEffect, useState } from 'react';
-import { BodyViz } from '../../../../presentation/components';
+import { SvgViz } from '../../../../presentation/components';
 import { Card } from '../../../../presentation/layout';
 import { getTableStats } from '../../../../model/data-handlers';
 import { TGetMappedData } from '../../../data-handlers/get-table-stats';
 import StatsTable from '../../../../presentation/components/StatsTable/StatsTable';
 import { RangeSlider, Flex, Box, Select } from '@mantine/core';
-import { useBodyPartSelection } from '../../../../model/hooks';
+import { useSvgPartSelection } from '../../../../model/hooks';
 import { TStats } from '../../../../model/definitions/Stats';
 import {
   EXTRA_FIELDS,
@@ -32,7 +32,7 @@ export default function Overview() {
   const [selectedSheet, setSelectedSheet] = useState<string>('0');
   const [currentDataset, setCurrentDataset] = useState<any[]>([]);
   const [availableSheets, setAvailableSheets] = useState<any[]>([]);
-  const { bodyPartSelection, handleBodyPartSelection } = useBodyPartSelection();
+  const { svgPartSelection, handleSvgPartSelection } = useSvgPartSelection();
   const [sexFilter, setSexFilter] = useState<string>('All');
   const [heightRange, setHeightRange] = useState<[number, number]>([0, 500]);
   const [minMaxRanges, setMinMaxRanges] = useState<[number, number] | null>(
@@ -93,19 +93,17 @@ export default function Overview() {
     setFilteredData(filtered);
   }, [sexFilter, heightRange, currentDataset]);
 
-  // Apply body part selection filter
+  // Apply svg part selection filter
   useEffect(() => {
     let filtered = filteredData;
 
-    if (bodyPartSelection.length > 0) {
-      const selectedBodyParts = bodyPartSelection.map(
-        (part) => `${part} score`
-      );
+    if (svgPartSelection.length > 0) {
+      const selectedSvgParts = svgPartSelection.map((part) => `${part} score`);
 
       filtered = filtered.map((item) => {
         const filteredItem = { ...item };
         Object.keys(filteredItem).forEach((key) => {
-          if (selectedBodyParts.includes(key)) {
+          if (selectedSvgParts.includes(key)) {
             const findPatient = currentDataset.find(
               (patient) => patient.id === item.id
             );
@@ -123,13 +121,13 @@ export default function Overview() {
     }
 
     setFilteredData(filtered);
-  }, [bodyPartSelection, currentDataset]);
+  }, [svgPartSelection, currentDataset]);
 
   const data: TGetMappedData = {
     parsedData: filteredData,
     headers,
     mapping,
-    selectedBodyParts: bodyPartSelection,
+    selectedSvgParts: svgPartSelection,
     extraStats: EXTRA_STATS.map((item) => item.name),
   };
   const stats: TStats[] = getTableStats(data);
@@ -171,9 +169,9 @@ export default function Overview() {
         </Flex>
 
         <Flex direction="column" padding="20px">
-          <BodyViz
-            selected={bodyPartSelection}
-            onPartClick={(part) => handleBodyPartSelection(part)}
+          <SvgViz
+            selected={svgPartSelection}
+            onPartClick={(part) => handleSvgPartSelection(part)}
             stats={stats}
           />
         </Flex>

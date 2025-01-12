@@ -1,4 +1,4 @@
-export interface TBodyPartProps {
+export type TSvgPartProps = {
   name: string;
   path: string;
   outerTransform: string;
@@ -8,8 +8,8 @@ export interface TBodyPartProps {
   onClick: () => void;
   innerClass: string;
   selected: boolean;
-  bodyPartColors: {
+  svgPartColors: {
     active: string;
     inactive: string;
   };
-}
+};
