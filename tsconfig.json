@@ -6,7 +6,7 @@
     "module": "ESNext",
     "plugins": [{ "name": "typescript-plugin-css-modules" }],
     "moduleResolution": "Node",
-    "types": ["react", "react-dom", "@types/react", "@types/react-dom"],
+    "types": ["react", "react-dom", "node", "@types/react", "@types/react-dom"],
     "resolveJsonModule": true,
     "isolatedModules": true,
     "esModuleInterop": true,

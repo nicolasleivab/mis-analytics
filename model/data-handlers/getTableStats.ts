@@ -1,4 +1,4 @@
-import { TStats } from '../../model/definitions/Stats';
+import { TStats } from '../definitions/Stats';
 
 export type TGetMappedData = {
   parsedData: unknown[];

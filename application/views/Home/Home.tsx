@@ -1,31 +1,31 @@
 import * as styles from './Home.module.css';
 import { useNavigate } from 'react-router-dom';
-import { useExcelContext } from '../../../model/context';
 import { ReactSpreadsheetImport } from 'react-spreadsheet-import';
 import { useState } from 'react';
 import { Flex } from '../../../presentation/layout';
 import { Button, Group, Modal, Text, TextInput, Alert } from '@mantine/core';
 import { IconAlertCircle } from '@tabler/icons-react'; // Import Mantine icon
 import { useImportFields } from '../../../model/hooks';
-import { TExcelData } from '../../../model/definitions/ExcelData';
+import { useAppDispatch, TExcelData, setExcelData } from '../../../model';
 
 const MODAL_OFFSET = 150;
 
 export default function Home() {
   const navigate = useNavigate();
+  const dispatch = useAppDispatch(); // 2) Use your Redux dispatch
+
   const [openModal, setOpenImportModal] = useState<boolean>(false);
   const [openNameModal, setOpenNameModal] = useState<boolean>(false); // Modal for naming the sheet
   const [openActionModal, setOpenActionModal] = useState<boolean>(false); // Modal for confirm/import another
   const [customSheetName, setCustomSheetName] = useState<string>(''); // Custom sheet name state
   const [importedSheets, setImportedSheets] = useState<TExcelData>([]);
-  const [parsedData, setParsedData] = useState<any[][]>([]); // Store the imported data temporarily
+  const [parsedData, setParsedData] = useState<TExcelData>([]); // Store the imported data temporarily
   const [showAlert, setShowAlert] = useState<boolean>(false); // State to control the alert visibility
-  const { setExcelData } = useExcelContext();
 
   const { importFields: fields } = useImportFields();
 
   // Triggered after importing the sheet
-  const handleImportClick = (data: any[][]) => {
+  const handleImportClick = (data: TExcelData) => {
     setParsedData(data); // Save the parsed data temporarily
     setOpenActionModal(false); // Ensure action modal is closed
     setOpenNameModal(true); // Open modal to name the sheet
@@ -39,10 +39,12 @@ export default function Home() {
       return;
     }
 
-    setImportedSheets([
+    const currentSheets = [
       ...importedSheets,
       { name: customSheetName, data: parsedData }, // Use the custom name and saved data
-    ]);
+    ] as TExcelData;
+
+    setImportedSheets(currentSheets);
 
     // Reset the state after saving the sheet name
     setCustomSheetName(''); // Clear the input after saving the sheet
@@ -52,7 +54,7 @@ export default function Home() {
   };
 
   const handleConfirmClick = () => {
-    setExcelData(importedSheets);
+    dispatch(setExcelData(importedSheets));
     navigate('/dashboard');
   };
 
@@ -91,7 +93,7 @@ export default function Home() {
         isOpen={openModal}
         onClose={() => setOpenImportModal(false)}
         onSubmit={(data) => {
-          const typedData = data?.validData as unknown as any[][];
+          const typedData = data?.validData as unknown as TExcelData;
           handleImportClick(typedData);
           setOpenImportModal(false); // Close import modal after submission
         }}

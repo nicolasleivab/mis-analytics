@@ -1,1 +1,1 @@
-export { getTableStats } from './get-table-stats';
+export { getTableStats } from './getTableStats';
