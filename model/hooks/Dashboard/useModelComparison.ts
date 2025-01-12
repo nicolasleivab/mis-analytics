@@ -1,14 +1,9 @@
 import { useEffect, useState } from 'react';
 import { BODY_PARTS_MAPPING } from '../../definitions/ImportFields';
-import { useExcelContext } from '../../context/Excel/ExcelProvider';
 import { TStat } from '../../definitions/Stats';
-
-type ExcelRow = Record<string, string>;
-
-type ExcelDataItem = {
-  name: string;
-  data: ExcelRow[];
-};
+import { useAppSelector } from '../../store';
+import { selectAllSheets } from '../../Excel/excelSelectors';
+// import { TExcelSheet } from '../../Excel/definitions';
 
 type ChartEntry = {
   part: string;
@@ -16,10 +11,7 @@ type ChartEntry = {
 };
 
 export default function useModelComparison() {
-  // Assuming useExcelContext returns an object with excelData of type ExcelDataItem[]
-  const { excelData } = useExcelContext() as unknown as {
-    excelData: ExcelDataItem[];
-  };
+  const excelData = useAppSelector(selectAllSheets);
 
   const [selectedModels, setSelectedModels] = useState<string[]>([]);
   const [chartData, setChartData] = useState<ChartEntry[]>([]);
@@ -33,8 +25,7 @@ export default function useModelComparison() {
         return dataSet?.data;
       });
 
-      // Type guard to ensure all datasets are defined
-      if (datasets.every((data): data is ExcelRow[] => !!data)) {
+      if (datasets.every((data) => !!data)) {
         const comparisonData = Object.keys(BODY_PARTS_MAPPING).map(
           (partKey) => {
             const partName = BODY_PARTS_MAPPING[partKey] || partKey;
@@ -43,9 +34,9 @@ export default function useModelComparison() {
             selectedModels.forEach((modelName, index) => {
               const dataset = datasets[index];
               // Map rows to numeric values for the current body part
-              const values = dataset.map(
-                (row) => parseFloat(row[partKey]) || 0
-              );
+              const values = (
+                dataset as unknown as Record<string, unknown>[]
+              ).map((row) => parseFloat(row[partKey] as string) || 0);
 
               let calculatedValue: number;
 

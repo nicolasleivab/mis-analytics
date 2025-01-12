@@ -1,12 +1,12 @@
 import { MultiSelect, Select, Flex, Box } from '@mantine/core';
-import { useExcelContext } from '../../../../model/context';
 import { BarChart } from '@mantine/charts';
 import { darkColorPalette1 } from '../../../../presentation/styles/colors';
 import { useModelComparison } from '../../../../model/hooks';
 import { TStat } from '../../../../model/definitions/Stats';
+import { selectAllSheets, useAppSelector } from '../../../../model';
 
 export default function ModelComparison() {
-  const { excelData } = useExcelContext();
+  const excelData = useAppSelector(selectAllSheets);
   const {
     selectedModels,
     setSelectedModels,

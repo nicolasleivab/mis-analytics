@@ -7,7 +7,6 @@
 import { useEffect, useState } from 'react';
 import { BodyViz } from '../../../../presentation/components';
 import { Card } from '../../../../presentation/layout';
-import { useExcelContext } from '../../../../model/context';
 import { getTableStats } from '../../../../model/data-handlers';
 import { TGetMappedData } from '../../../data-handlers/get-table-stats';
 import StatsTable from '../../../../presentation/components/StatsTable/StatsTable';
@@ -21,6 +20,7 @@ import {
   BODY_PARTS_MAPPING as mapping,
   DEFAUT_ALL_FIELD,
 } from '../../../../model/definitions/ImportFields';
+import { selectAllSheets, useAppSelector } from '../../../../model';
 
 const DEFAULT_GENDER_VALUES = [
   DEFAUT_ALL_FIELD,
@@ -38,7 +38,8 @@ export default function Overview() {
   const [minMaxRanges, setMinMaxRanges] = useState<[number, number] | null>(
     null
   );
-  const { excelData } = useExcelContext();
+
+  const excelData = useAppSelector(selectAllSheets);
   const [filteredData, setFilteredData] = useState(excelData);
 
   useEffect(() => {
