@@ -14,7 +14,6 @@ import { RangeSlider, Flex, Box, Select } from '@mantine/core';
 import { useSvgPartSelection } from '../../../../model/hooks';
 import { TStats } from '../../../../model/definitions/Stats';
 import {
-  EXTRA_FIELDS,
   EXTRA_STATS,
   DEFAUT_ALL_FIELD,
 } from '../../../../model/definitions/ImportFields';
@@ -107,7 +106,7 @@ export default function Overview() {
             filteredItem[key] = findPatient[key];
             return;
           }
-          if (EXTRA_FIELDS.map((item) => item.name).includes(key)) {
+          if (!svgPartSelection.includes(key)) {
             return;
           }
           filteredItem[key] = 0;

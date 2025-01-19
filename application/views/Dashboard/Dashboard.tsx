@@ -2,26 +2,16 @@ import * as styles from './Dashboard.module.css';
 import Overview from './sections/Overview';
 import { Box, Button, CloseButton, Flex, Text } from '@mantine/core';
 import { useViews } from '../../../model/hooks';
-import { useEffect } from 'react';
 import {
-  fetchSvgParts,
   selectAllSvgParts,
   selectSvgLoading,
-  useAppDispatch,
   useAppSelector,
 } from '../../../model';
 
 export default function Dashboard() {
   const { views, addView, removeView } = useViews();
-  const dispatch = useAppDispatch();
   const svgPartsLoading = useAppSelector(selectSvgLoading);
   const svgParts = useAppSelector(selectAllSvgParts);
-
-  useEffect(() => {
-    dispatch(fetchSvgParts()).catch((error) => {
-      console.error('Failed to fetch SVG parts:', error);
-    });
-  }, [dispatch]);
 
   if (svgPartsLoading) {
     return (

@@ -3,6 +3,7 @@ export const EXTRA_STATS = [
   { name: 'hd', example: '45.32' },
   { name: 'hd95', example: '4.81' },
 ];
+
 export const EXTRA_FIELDS = [
   { name: 'id', example: '001' },
   { name: 'name', example: 'John Doe' },

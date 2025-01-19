@@ -1,18 +1,31 @@
 import * as styles from './Home.module.css';
 import { useNavigate } from 'react-router-dom';
 import { ReactSpreadsheetImport } from 'react-spreadsheet-import';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Flex } from '../../../presentation/layout';
-import { Button, Group, Modal, Text, TextInput, Alert } from '@mantine/core';
+import {
+  Button,
+  Group,
+  Modal,
+  Text,
+  TextInput,
+  Alert,
+  FileInput,
+} from '@mantine/core';
 import { IconAlertCircle } from '@tabler/icons-react'; // Import Mantine icon
 import { useImportFields } from '../../../model/hooks';
 import {
   useAppDispatch,
   TExcelData,
   setExcelData,
-  fetchSvgParts,
+  // fetchSvgParts,
+  setSvgParts,
+  TSvgPart,
+  TClipPath,
 } from '../../../model';
 import { DASHBOARD_ROUTE } from '../../controller/Router/routes';
+import demoViz from '../../../services/api/SvgViz/demoViz.json';
+import demoClipPaths from '../../../services/api/SvgViz/demoClipPaths.json';
 
 const MODAL_OFFSET = 150;
 
@@ -20,19 +33,22 @@ export default function Home() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
-  useEffect(() => {
-    dispatch(fetchSvgParts()).catch((error) => {
-      console.error('Failed to fetch SVG parts:', error);
-    });
-  }, [dispatch]);
+  // useEffect(() => {
+  //   dispatch(fetchSvgParts()).catch((error) => {
+  //     console.error('Failed to fetch SVG parts:', error);
+  //   });
+  // }, [dispatch]);
 
+  const [openSvgModal, setOpenSvgModal] = useState<boolean>(false);
   const [openModal, setOpenImportModal] = useState<boolean>(false);
-  const [openNameModal, setOpenNameModal] = useState<boolean>(false); // Modal for naming the sheet
-  const [openActionModal, setOpenActionModal] = useState<boolean>(false); // Modal for confirm/import another
-  const [customSheetName, setCustomSheetName] = useState<string>(''); // Custom sheet name state
+  const [openNameModal, setOpenNameModal] = useState<boolean>(false);
+  const [openActionModal, setOpenActionModal] = useState<boolean>(false);
+  const [customSheetName, setCustomSheetName] = useState<string>('');
   const [importedSheets, setImportedSheets] = useState<TExcelData>([]);
-  const [parsedData, setParsedData] = useState<TExcelData>([]); // Store the imported data temporarily
-  const [showAlert, setShowAlert] = useState<boolean>(false); // State to control the alert visibility
+  const [parsedData, setParsedData] = useState<TExcelData>([]);
+  const [showAlert, setShowAlert] = useState<boolean>(false);
+  const [svgPartsFile, setSvgPartsFile] = useState<File | null>(null);
+  const [clipPathsFile, setClipPathsFile] = useState<File | null>(null);
 
   const { importFields: fields } = useImportFields();
 
@@ -70,6 +86,42 @@ export default function Home() {
     navigate(DASHBOARD_ROUTE);
   };
 
+  const handleSvgPartsSubmit = async (): Promise<void> => {
+    if (!svgPartsFile) {
+      setShowAlert(true);
+      return;
+    }
+
+    try {
+      const svgPartsText = await svgPartsFile.text();
+      const svgPartsJson: TSvgPart[] = JSON.parse(svgPartsText) as TSvgPart[];
+
+      const clipPathsText = clipPathsFile ? await clipPathsFile.text() : '';
+      const clipPathsJson: TClipPath[] = clipPathsFile
+        ? (JSON.parse(clipPathsText) as TClipPath[])
+        : [];
+
+      dispatch(
+        setSvgParts({ svgParts: svgPartsJson, clipPaths: clipPathsJson })
+      );
+      setOpenSvgModal(false);
+      setOpenImportModal(true);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        console.error('Error parsing JSON files:', error.message);
+      } else {
+        console.error('Unexpected error:', error);
+      }
+      setOpenSvgModal(false);
+    }
+  };
+
+  const handleUseDefaultSvg = () => {
+    dispatch(setSvgParts({ svgParts: demoViz, clipPaths: demoClipPaths }));
+    setOpenSvgModal(false);
+    setOpenImportModal(true);
+  };
+
   return (
     <div className={styles.Home}>
       <Flex gap="20px" padding="50px" direction="column">
@@ -97,8 +149,47 @@ export default function Home() {
         </div>
       </Flex>
       <Flex>
-        <Button onClick={() => setOpenImportModal(true)}>Import Excel</Button>
+        <Button onClick={() => setOpenSvgModal(true)}>Import Excel</Button>
       </Flex>
+
+      {/* SVG Parts Modal */}
+      <Modal
+        yOffset={MODAL_OFFSET}
+        opened={openSvgModal}
+        onClose={() => setOpenSvgModal(false)}
+        title="Upload SVG JSON Files for the Visualization"
+      >
+        {showAlert && (
+          <Alert
+            icon={<IconAlertCircle size={16} />}
+            title="Error!"
+            color="red"
+            withCloseButton
+            onClose={() => setShowAlert(false)}
+            mb="md"
+          >
+            Please upload the required SVG Parts JSON.
+          </Alert>
+        )}
+        <FileInput
+          label="SVG Parts JSON (required)"
+          onChange={setSvgPartsFile}
+          required
+          accept="application/json"
+        />
+        <FileInput
+          label="Clip Paths JSON (optional)"
+          onChange={setClipPathsFile}
+          accept="application/json"
+        />
+        <Group mt="xl">
+          {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
+          <Button onClick={handleSvgPartsSubmit}>Upload</Button>
+          <Button variant="outline" onClick={handleUseDefaultSvg}>
+            Use Default SVG
+          </Button>
+        </Group>
+      </Modal>
 
       {/* Import Modal */}
       <ReactSpreadsheetImport

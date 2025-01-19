@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { TClipPath, TSvgPart } from './definitions';
 import { fetchSvgParts, postSvgParts } from './svgVizThunks';
+import { TSvgPartsData } from '../../services/api/SvgViz/getSvgVizParts';
 
 type SvgVizState = {
   svgParts: TSvgPart[];
@@ -22,12 +23,13 @@ export const svgVizSlice = createSlice({
   name: 'svgViz',
   initialState,
   reducers: {
-    setSvgParts: (state, action: PayloadAction<TSvgPart[]>) => {
-      state.svgParts = action.payload;
+    setSvgParts: (state, action: PayloadAction<TSvgPartsData>) => {
+      const { svgParts, clipPaths } = action.payload;
+      // Assign the parts
+      state.svgParts = svgParts;
+      state.clipPaths = clipPaths;
       // Also update uniqueSvgParts whenever we set svgParts:
-      state.uniqueSvgParts = Array.from(
-        new Set(action.payload.map((p) => p.name))
-      );
+      state.uniqueSvgParts = Array.from(new Set(svgParts.map((p) => p.name)));
     },
     addSvgPart: (state, action: PayloadAction<TSvgPart>) => {
       state.svgParts.push(action.payload);
