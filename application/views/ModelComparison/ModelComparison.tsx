@@ -1,4 +1,4 @@
-import { MultiSelect, Select, Flex, Box } from '@mantine/core';
+import { MultiSelect, Select, Flex, Box, Text } from '@mantine/core';
 import { BarChart } from '@mantine/charts';
 import { darkColorPalette1 } from '../../../presentation/styles/colors';
 import { useModelComparison } from '../../../model/hooks';
@@ -15,6 +15,16 @@ export default function ModelComparison() {
     selectedStat,
     setSelectedStat,
   } = useModelComparison();
+
+  if (excelData?.length === 0) {
+    return (
+      <div className={styles.ModelComparison}>
+        <Flex justify="center" align="center" style={{ height: '100%' }}>
+          <Text>No data, please import a sheet first.</Text>
+        </Flex>
+      </div>
+    );
+  }
 
   return (
     <div className={styles.ModelComparison}>

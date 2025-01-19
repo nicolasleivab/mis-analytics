@@ -30,8 +30,8 @@ export default function Home() {
     setOpenActionModal,
     customSheetName,
     setCustomSheetName,
-    // showAlert: showSheetAlert,
-    // setShowAlert: setShowSheetShowAlert,
+    showAlert: showSheetAlert,
+    setShowAlert: setShowSheetAlert,
     handleImportClick,
     handleSaveSheetName,
     handleConfirmClick,
@@ -40,7 +40,6 @@ export default function Home() {
 
   const {
     setSvgPartsFile,
-
     setClipPathsFile,
     showAlert,
     setShowAlert,
@@ -141,13 +140,13 @@ export default function Home() {
         title="Name your sheet"
       >
         {/* Display the alert if no sheet name is entered */}
-        {showAlert && (
+        {showSheetAlert && (
           <Alert
             icon={<IconAlertCircle size={16} />}
             title="Error!"
             color="red"
             withCloseButton
-            onClose={() => setShowAlert(false)}
+            onClose={() => setShowSheetAlert(false)}
             mb="md"
           >
             Please provide a valid sheet name.
