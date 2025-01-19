@@ -17,7 +17,6 @@ import {
   EXTRA_FIELDS,
   EXTRA_STATS,
   HEADERS as headers,
-  BODY_PARTS_MAPPING as mapping,
   DEFAUT_ALL_FIELD,
 } from '../../../../model/definitions/ImportFields';
 import { selectAllSheets, useAppSelector } from '../../../../model';
@@ -98,12 +97,10 @@ export default function Overview() {
     let filtered = filteredData;
 
     if (svgPartSelection.length > 0) {
-      const selectedSvgParts = svgPartSelection.map((part) => `${part} score`);
-
       filtered = filtered.map((item) => {
         const filteredItem = { ...item };
         Object.keys(filteredItem).forEach((key) => {
-          if (selectedSvgParts.includes(key)) {
+          if (svgPartSelection.includes(key)) {
             const findPatient = currentDataset.find(
               (patient) => patient.id === item.id
             );
@@ -126,12 +123,11 @@ export default function Overview() {
   const data: TGetMappedData = {
     parsedData: filteredData,
     headers,
-    mapping,
     selectedSvgParts: svgPartSelection,
     extraStats: EXTRA_STATS.map((item) => item.name),
   };
   const stats: TStats[] = getTableStats(data);
-  console.log(excelData);
+
   return (
     <Flex height="100%" gap="md">
       <Flex direction="column" align="center" style={{ flex: 1 }}>

@@ -21,7 +21,7 @@ const DEFAULT_VIEW_BOX = '0 0 200 200';
 
 const DEFAULT_MARGIN = 20;
 
-export default function SvgSvg({
+export default function SvgViz({
   onPartClick: makeClickHandler,
   selected,
   style,
@@ -62,6 +62,7 @@ export default function SvgSvg({
 
   useEffect(() => {
     const newColors: TSvgPartsInitialColors = { ...initialColors };
+
     stats.forEach((stat) => {
       let color;
       if (stat.median < 0.7) {

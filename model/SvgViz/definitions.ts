@@ -1,5 +1,7 @@
-// Body parts default viz adapted from Nan Montaño's code:
+// Body parts default viz adapted from Nan Montaño's codesandbox:
 // https://codesandbox.io/s/body-diagram-svg-spike-58g6d?file=/src/BodySvg.js:0-24179
+// and Sam Chahine's codepen:
+// https://codepen.io/kingmeers/pen/xdPOWL
 
 // Building block for the svg visualization
 export type TSvgPart = {

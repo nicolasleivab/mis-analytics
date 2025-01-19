@@ -11,15 +11,12 @@ export type TGetMappedData = {
 export function getTableStats({
   parsedData,
   // headers,
-  mapping,
   selectedSvgParts,
   extraStats,
 }: TGetMappedData): TStats[] {
-  const svgParts = selectedSvgParts.map((part) => `${part} score`);
-
   const stats: TStats[] = [];
 
-  [...svgParts, ...extraStats].forEach((part: string) => {
+  [...selectedSvgParts, ...extraStats].forEach((part: string) => {
     const scores = (parsedData as Record<string, string>[])
       .map((row) => parseFloat(row[part]))
       ?.filter((score) => !isNaN(score));
@@ -35,10 +32,8 @@ export function getTableStats({
     const min = Math.min(...scores);
     const max = Math.max(...scores);
 
-    // console.log(`Stats for ${part} - Mean: ${mean}, Median: ${median}, StdDev: ${stdDev}, Min: ${min}, Max: ${max}`);
-
     stats.push({
-      svgPart: mapping[part] || part,
+      svgPart: part,
       mean,
       median,
       stdDev,

@@ -15,7 +15,7 @@ export default function useImportFields() {
   // Build your raw fields
   const rawFields: TField[] = useMemo(
     () => [
-      ...reduxUniqueParts.map((name) => ({ name: `${name} score` })),
+      ...reduxUniqueParts.map((name) => ({ name })),
       ...EXTRA_FIELDS, // any other fields defined in the ImportFields file
     ],
     [reduxUniqueParts]

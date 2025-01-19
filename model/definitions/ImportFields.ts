@@ -27,13 +27,6 @@ export const HEADERS = [
   'hd95',
 ];
 
-export const BODY_PARTS_MAPPING: Record<string, string> = {
-  'head score': 'Head',
-  'thorax score': 'Thorax',
-  'abdomen score': 'Abdomen',
-  'lower-abdomen and pelvis score': 'Lower-abdomen and Pelvis',
-};
-
 export const DEFAUT_ALL_FIELD = {
   value: 'All',
   label: 'All',
