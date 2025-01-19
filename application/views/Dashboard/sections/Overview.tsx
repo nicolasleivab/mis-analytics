@@ -16,7 +16,6 @@ import { TStats } from '../../../../model/definitions/Stats';
 import {
   EXTRA_FIELDS,
   EXTRA_STATS,
-  HEADERS as headers,
   DEFAUT_ALL_FIELD,
 } from '../../../../model/definitions/ImportFields';
 import { selectAllSheets, useAppSelector } from '../../../../model';
@@ -122,7 +121,6 @@ export default function Overview() {
 
   const data: TGetMappedData = {
     parsedData: filteredData,
-    headers,
     selectedSvgParts: svgPartSelection,
     extraStats: EXTRA_STATS.map((item) => item.name),
   };

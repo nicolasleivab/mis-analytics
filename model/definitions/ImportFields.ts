@@ -13,20 +13,6 @@ export const EXTRA_FIELDS = [
   ...EXTRA_STATS,
 ];
 
-export const HEADERS = [
-  'name',
-  'id',
-  'sex',
-  'height',
-  'head score',
-  'thorax score',
-  'abdomen score',
-  'lower-abdomen and pelvis score',
-  'dice',
-  'hd',
-  'hd95',
-];
-
 export const DEFAUT_ALL_FIELD = {
   value: 'All',
   label: 'All',

@@ -2,7 +2,6 @@ import { TStats } from '../definitions/Stats';
 
 export type TGetMappedData = {
   parsedData: unknown[];
-  headers: string[];
   mapping: Record<string, string>;
   selectedSvgParts: string[];
   extraStats: string[];
@@ -10,7 +9,6 @@ export type TGetMappedData = {
 
 export function getTableStats({
   parsedData,
-  // headers,
   selectedSvgParts,
   extraStats,
 }: TGetMappedData): TStats[] {
