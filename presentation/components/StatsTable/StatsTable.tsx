@@ -1,23 +1,23 @@
 import React from 'react';
 import { Table } from '@mantine/core';
 
-interface Stats {
-  bodyPart: string;
+type Stats = {
+  svgPart: string;
   mean: number;
   median: number;
   stdDev: number;
   min: number;
   max: number;
-}
+};
 
-interface StatsTableProps {
+type StatsTableProps = {
   stats: Stats[];
-}
+};
 
 const StatsTable: React.FC<StatsTableProps> = ({ stats }) => {
   const rows = stats.map((stat, index) => (
     <Table.Tr key={index}>
-      <Table.Td>{stat.bodyPart}</Table.Td>
+      <Table.Td>{stat.svgPart}</Table.Td>
       <Table.Td>{stat.mean.toFixed(4)}</Table.Td>
       <Table.Td>{stat.median.toFixed(4)}</Table.Td>
       <Table.Td>{stat.stdDev.toFixed(4)}</Table.Td>
@@ -32,7 +32,7 @@ const StatsTable: React.FC<StatsTableProps> = ({ stats }) => {
         <Table.Caption>Medical Image Segmentation Dice Scores</Table.Caption>
         <Table.Thead>
           <Table.Tr>
-            <Table.Th>Body Part/Indicator</Table.Th>
+            <Table.Th>Svg Part/Indicator</Table.Th>
             <Table.Th>Mean</Table.Th>
             <Table.Th>Median</Table.Th>
             <Table.Th>Standard Deviation</Table.Th>

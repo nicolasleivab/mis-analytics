@@ -1,0 +1,1 @@
+export { getTableStats } from './getTableStats';
