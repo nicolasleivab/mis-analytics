@@ -3,6 +3,7 @@ import { TSvgPartProps } from '../types';
 const SvgPart = ({
   name,
   path,
+  clipPath,
   outerTransform,
   innerTransform,
   partTransform,
@@ -17,6 +18,7 @@ const SvgPart = ({
       <path
         className="b"
         d={path}
+        clipPath={clipPath}
         onClick={onClick}
         style={{ fill: selected ? activeColor : inactiveColor }}
         transform={partTransform}

@@ -1,9 +1,10 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { TSvgPart } from './definitions';
+import { TClipPath, TSvgPart } from './definitions';
 import { fetchSvgParts, postSvgParts } from './svgVizThunks';
 
 type SvgVizState = {
   svgParts: TSvgPart[];
+  clipPaths: TClipPath[];
   uniqueSvgParts: string[];
   loading: boolean;
   error: string | null;
@@ -11,6 +12,7 @@ type SvgVizState = {
 
 const initialState: SvgVizState = {
   svgParts: [],
+  clipPaths: [],
   uniqueSvgParts: [],
   loading: false,
   error: null,
@@ -64,12 +66,12 @@ export const svgVizSlice = createSlice({
     });
     builder.addCase(fetchSvgParts.fulfilled, (state, action) => {
       state.loading = false;
+      const { svgParts, clipPaths } = action.payload;
       // Assign the parts
-      state.svgParts = action.payload;
+      state.svgParts = svgParts;
+      state.clipPaths = clipPaths;
       // Then compute the unique names
-      state.uniqueSvgParts = Array.from(
-        new Set(action.payload.map((p) => p.name))
-      );
+      state.uniqueSvgParts = Array.from(new Set(svgParts.map((p) => p.name)));
     });
     builder.addCase(fetchSvgParts.rejected, (state, action) => {
       state.loading = false;

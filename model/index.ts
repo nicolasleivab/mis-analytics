@@ -10,8 +10,9 @@ export type { TExcelData, TExcelSheet } from './Excel/definitions';
 export { setSvgParts } from './SvgViz/svgVizSlice';
 export {
   selectAllSvgParts,
+  selectAllClipPaths,
   selectSvgLoading,
   selectSvgError,
 } from './SvgViz/svgVizSelectors';
 export { fetchSvgParts, postSvgParts } from './SvgViz/svgVizThunks';
-export type { TSvgPart } from './SvgViz/definitions';
+export type { TSvgPart, TClipPath } from './SvgViz/definitions';

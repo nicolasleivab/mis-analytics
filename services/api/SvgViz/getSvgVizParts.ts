@@ -1,11 +1,23 @@
-import { TSvgPart } from '../../../model';
+import { TSvgPart, TClipPath } from '../../../model';
 import demoViz from './demoViz.json'; // DEMO DATA
+import demoClipPaths from './demoClipPaths.json'; // DEMO CLIP PATHS
+
+export type TSvgPartsData = {
+  svgParts: TSvgPart[];
+  clipPaths: TClipPath[];
+};
 
 /** Simulated fetch from the imported JSON file */
-export async function getSvgVizParts(): Promise<TSvgPart[]> {
+export async function getSvgVizParts(): Promise<{
+  svgParts: TSvgPart[];
+  clipPaths: TClipPath[];
+}> {
   return new Promise((resolve) => {
     setTimeout(() => {
-      resolve(demoViz as TSvgPart[]);
+      resolve({
+        svgParts: demoViz,
+        clipPaths: demoClipPaths,
+      });
     }, 1000); // 1 second delay to simulate async behavior
   });
 }

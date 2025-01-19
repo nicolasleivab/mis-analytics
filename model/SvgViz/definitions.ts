@@ -16,6 +16,12 @@ export type TSvgPart = {
   inactiveColor?: string;
 };
 
+export type TClipPath = {
+  id: string;
+  className: string;
+  d: string;
+};
+
 // default svg viz based in body parts
 export const BODY_PARTS = [
   {

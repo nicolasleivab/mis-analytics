@@ -1,6 +1,7 @@
 import { RootState } from '../store';
 
 export const selectAllSvgParts = (state: RootState) => state.svgViz.svgParts;
+export const selectAllClipPaths = (state: RootState) => state.svgViz.clipPaths;
 
 export const selectUniqueSvgParts = (state: RootState) =>
   state.svgViz.uniqueSvgParts;

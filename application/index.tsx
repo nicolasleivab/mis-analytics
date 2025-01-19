@@ -1,6 +1,5 @@
 import { createRoot } from 'react-dom/client';
 import '../presentation/styles/reset.css';
-import '../presentation/styles/body-parts.css';
 import '../presentation/styles/variables.css';
 import '@mantine/core/styles.css';
 import '@mantine/charts/styles.css';

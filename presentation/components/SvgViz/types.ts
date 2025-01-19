@@ -1,6 +1,7 @@
 export type TSvgPartProps = {
   name: string;
   path: string;
+  clipPath: string;
   outerTransform: string;
   innerTransform: string;
   partTransform: string;
