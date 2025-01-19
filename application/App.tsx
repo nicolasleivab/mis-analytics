@@ -3,7 +3,7 @@ import { Provider as ReduxProvider } from 'react-redux';
 import { store } from '../model/store';
 import { MantineProvider, createTheme } from '@mantine/core';
 import { ChakraProvider } from '@chakra-ui/react';
-import { TabsProvider, ThemeProvider, ThemeWrapper } from '../model/context';
+import { ThemeProvider, ThemeWrapper } from '../presentation/theme';
 
 const theme = createTheme({
   // Mantine theme overrides
@@ -15,9 +15,7 @@ export default function App() {
       <ThemeProvider>
         <MantineProvider theme={theme}>
           <ChakraProvider>
-            <ThemeWrapper>
-              <TabsProvider>{createAppRouter()}</TabsProvider>
-            </ThemeWrapper>
+            <ThemeWrapper>{createAppRouter()}</ThemeWrapper>
           </ChakraProvider>
         </MantineProvider>
       </ThemeProvider>

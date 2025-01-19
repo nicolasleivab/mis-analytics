@@ -1,10 +1,7 @@
 import * as styles from './Dashboard.module.css';
 import Overview from './sections/Overview';
-import { CustomTabs } from '../../../presentation/components';
-import ModelComparison from './sections/ModelComparison';
 import { Box, Button, CloseButton, Flex, Text } from '@mantine/core';
 import { useViews } from '../../../model/hooks';
-import { TABS } from '../../../model/definitions/Tabs';
 import { useEffect } from 'react';
 import {
   fetchSvgParts,
@@ -15,7 +12,7 @@ import {
 } from '../../../model';
 
 export default function Dashboard() {
-  const { views, addView, removeView, isOverviewTabActive } = useViews();
+  const { views, addView, removeView } = useViews();
   const dispatch = useAppDispatch();
   const svgPartsLoading = useAppSelector(selectSvgLoading);
   const svgParts = useAppSelector(selectAllSvgParts);
@@ -29,7 +26,6 @@ export default function Dashboard() {
   if (svgPartsLoading) {
     return (
       <div className={styles.Dashboard}>
-        <CustomTabs tabs={TABS} />
         <Flex justify="center" align="center" style={{ height: '100%' }}>
           <Text>Loading SVG parts...</Text>
         </Flex>
@@ -40,7 +36,6 @@ export default function Dashboard() {
   if (svgParts.length === 0 && !svgPartsLoading) {
     return (
       <div className={styles.Dashboard}>
-        <CustomTabs tabs={TABS} />
         <Flex justify="center" align="center" style={{ height: '100%' }}>
           <Text>No SVG parts found. Please import an SVG file first.</Text>
         </Flex>
@@ -56,18 +51,8 @@ export default function Dashboard() {
       </Box>
     ));
 
-  if (!isOverviewTabActive) {
-    return (
-      <div className={styles.Dashboard}>
-        <CustomTabs tabs={TABS} />
-        <ModelComparison />
-      </div>
-    );
-  }
-
   return (
     <div className={styles.Dashboard}>
-      <CustomTabs tabs={TABS} />
       <Flex direction="column">
         <Flex align="center" gap="sm">
           <Button onClick={addView}>Add view</Button>

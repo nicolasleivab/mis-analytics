@@ -1,4 +1,4 @@
-import { useTheme } from '../../hooks';
+import useTheme from './useTheme';
 
 export const ThemeWrapper = ({ children }: { children: React.ReactNode }) => {
   const { theme } = useTheme();

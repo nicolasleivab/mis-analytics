@@ -1,15 +1,9 @@
-// disable all ts eslint rule for this file and ts errors
-// disable ts checks for this file
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-nocheck
-/* eslint-disable */
-
 import * as styles from './Nav.module.css';
 import { Logo } from '../../../presentation/assets/icons';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useCallback } from 'react';
-import { DASHBOARD_ROUTE, HOME_ROUTE } from '../Router/routes.tsx';
-import ThemeToggle from '../ThemeToggle/ThemeToggle';
+import { APP_ROUTES as routes, HOME_ROUTE } from '../Router/routes';
+// import ThemeToggle from '../ThemeToggle/ThemeToggle';
 import { Flex } from '../../../presentation/layout';
 
 export default function Nav() {
@@ -17,7 +11,7 @@ export default function Nav() {
   const navigate = useNavigate();
 
   const activeLink = useCallback(
-    (link) => {
+    (link: string): string => {
       if (location.pathname === '/' && link === HOME_ROUTE) {
         return styles.activeLink;
       }
@@ -29,8 +23,12 @@ export default function Nav() {
     [location.pathname]
   );
 
+  type KeyPressEvent = {
+    key: string;
+  };
+
   const handleKeyPress = useCallback(
-    (event, route) => {
+    (event: KeyPressEvent, route: string): void => {
       if (event?.key === 'Enter') {
         navigate(route);
       }
@@ -44,20 +42,16 @@ export default function Nav() {
         <Flex padding="20px" justifyContent="flex-start" alignItems="center">
           <Logo />
           <h2 className={styles.title}>MIS Analytics</h2>
-          <Link
-            to={HOME_ROUTE}
-            className={activeLink(HOME_ROUTE)}
-            onKeyDown={(e) => handleKeyPress(e, HOME_ROUTE)}
-          >
-            Home
-          </Link>
-          <Link
-            to={DASHBOARD_ROUTE}
-            className={activeLink(DASHBOARD_ROUTE)}
-            onKeyDown={(e) => handleKeyPress(e, DASHBOARD_ROUTE)}
-          >
-            Dashboard
-          </Link>
+          {routes.map((route) => (
+            <Link
+              key={route.id}
+              to={route.path}
+              className={activeLink(route.path)}
+              onKeyDown={(e) => handleKeyPress(e, route.path)}
+            >
+              {route.label}
+            </Link>
+          ))}
         </Flex>
         {/* TODO: Fix theme conflicts */}
         {/* <ThemeToggle /> */}

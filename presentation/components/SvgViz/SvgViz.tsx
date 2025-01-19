@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useTheme } from '../../../model/hooks';
+import { useTheme } from '../../../presentation/theme';
 import SvgPart from './SvgPart/SvgPart';
 import { Flex } from '../../layout';
 import { Box } from '@chakra-ui/react';

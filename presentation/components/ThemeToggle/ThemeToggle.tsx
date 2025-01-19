@@ -1,5 +1,5 @@
 import React from 'react';
-import { useTheme } from '../../../model/hooks';
+import { useTheme } from '../../../presentation/theme';
 import * as styles from './ThemeToggle.module.css';
 import { ActionIcon, Group } from '@mantine/core';
 import { IconSun, IconMoon } from '@tabler/icons-react';
