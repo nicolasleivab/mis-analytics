@@ -12,6 +12,7 @@ import {
   setExcelData,
   fetchSvgParts,
 } from '../../../model';
+import { DASHBOARD_ROUTE } from '../../controller/Router/routes';
 
 const MODAL_OFFSET = 150;
 
@@ -66,7 +67,7 @@ export default function Home() {
 
   const handleConfirmClick = () => {
     dispatch(setExcelData(importedSheets));
-    navigate('/dashboard');
+    navigate(DASHBOARD_ROUTE);
   };
 
   return (
