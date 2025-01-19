@@ -1,7 +1,4 @@
-import * as styles from './Home.module.css';
-import { useNavigate } from 'react-router-dom';
 import { ReactSpreadsheetImport } from 'react-spreadsheet-import';
-import { useState } from 'react';
 import { Flex } from '../../../presentation/layout';
 import {
   Button,
@@ -13,114 +10,47 @@ import {
   FileInput,
 } from '@mantine/core';
 import { IconAlertCircle } from '@tabler/icons-react'; // Import Mantine icon
-import { useImportFields } from '../../../model/hooks';
 import {
-  useAppDispatch,
+  useImportFields,
   TExcelData,
-  setExcelData,
-  // fetchSvgParts,
-  setSvgParts,
-  TSvgPart,
-  TClipPath,
+  useSvgUpload,
+  useImportSheet,
 } from '../../../model';
-import { DASHBOARD_ROUTE } from '../../controller/Router/routes';
-import demoViz from '../../../services/api/SvgViz/demoViz.json';
-import demoClipPaths from '../../../services/api/SvgViz/demoClipPaths.json';
+import * as styles from './Home.module.css';
 
 const MODAL_OFFSET = 150;
 
 export default function Home() {
-  const navigate = useNavigate();
-  const dispatch = useAppDispatch();
+  const {
+    openModal,
+    setOpenImportModal,
+    openNameModal,
+    setOpenNameModal,
+    openActionModal,
+    setOpenActionModal,
+    customSheetName,
+    setCustomSheetName,
+    // showAlert: showSheetAlert,
+    // setShowAlert: setShowSheetShowAlert,
+    handleImportClick,
+    handleSaveSheetName,
+    handleConfirmClick,
+    importedSheets,
+  } = useImportSheet();
 
-  // useEffect(() => {
-  //   dispatch(fetchSvgParts()).catch((error) => {
-  //     console.error('Failed to fetch SVG parts:', error);
-  //   });
-  // }, [dispatch]);
+  const {
+    setSvgPartsFile,
 
-  const [openSvgModal, setOpenSvgModal] = useState<boolean>(false);
-  const [openModal, setOpenImportModal] = useState<boolean>(false);
-  const [openNameModal, setOpenNameModal] = useState<boolean>(false);
-  const [openActionModal, setOpenActionModal] = useState<boolean>(false);
-  const [customSheetName, setCustomSheetName] = useState<string>('');
-  const [importedSheets, setImportedSheets] = useState<TExcelData>([]);
-  const [parsedData, setParsedData] = useState<TExcelData>([]);
-  const [showAlert, setShowAlert] = useState<boolean>(false);
-  const [svgPartsFile, setSvgPartsFile] = useState<File | null>(null);
-  const [clipPathsFile, setClipPathsFile] = useState<File | null>(null);
+    setClipPathsFile,
+    showAlert,
+    setShowAlert,
+    openSvgModal,
+    setOpenSvgModal,
+    handleSvgPartsSubmit,
+    handleUseDefaultSvg,
+  } = useSvgUpload(setOpenImportModal);
 
   const { importFields: fields } = useImportFields();
-
-  // Triggered after importing the sheet
-  const handleImportClick = (data: TExcelData) => {
-    setParsedData(data); // Save the parsed data temporarily
-    setOpenActionModal(false); // Ensure action modal is closed
-    setOpenNameModal(true); // Open modal to name the sheet
-  };
-
-  // Triggered after naming the sheet
-  const handleSaveSheetName = () => {
-    if (customSheetName.trim() === '') {
-      // Show alert if no sheet name is provided
-      setShowAlert(true);
-      return;
-    }
-
-    const currentSheets = [
-      ...importedSheets,
-      { name: customSheetName, data: parsedData }, // Use the custom name and saved data
-    ] as TExcelData;
-
-    setImportedSheets(currentSheets);
-
-    // Reset the state after saving the sheet name
-    setCustomSheetName(''); // Clear the input after saving the sheet
-    setOpenNameModal(false); // Close the name modal
-    setShowAlert(false); // Reset alert visibility
-    setOpenActionModal(true); // Open the action modal
-  };
-
-  const handleConfirmClick = () => {
-    dispatch(setExcelData(importedSheets));
-    navigate(DASHBOARD_ROUTE);
-  };
-
-  const handleSvgPartsSubmit = async (): Promise<void> => {
-    if (!svgPartsFile) {
-      setShowAlert(true);
-      return;
-    }
-
-    try {
-      const svgPartsText = await svgPartsFile.text();
-      const svgPartsJson: TSvgPart[] = JSON.parse(svgPartsText) as TSvgPart[];
-
-      const clipPathsText = clipPathsFile ? await clipPathsFile.text() : '';
-      const clipPathsJson: TClipPath[] = clipPathsFile
-        ? (JSON.parse(clipPathsText) as TClipPath[])
-        : [];
-
-      dispatch(
-        setSvgParts({ svgParts: svgPartsJson, clipPaths: clipPathsJson })
-      );
-      setOpenSvgModal(false);
-      setOpenImportModal(true);
-    } catch (error: unknown) {
-      if (error instanceof Error) {
-        console.error('Error parsing JSON files:', error.message);
-      } else {
-        console.error('Unexpected error:', error);
-      }
-      setOpenSvgModal(false);
-    }
-  };
-
-  const handleUseDefaultSvg = () => {
-    dispatch(setSvgParts({ svgParts: demoViz, clipPaths: demoClipPaths }));
-    setOpenSvgModal(false);
-    setOpenImportModal(true);
-  };
 
   return (
     <div className={styles.Home}>
