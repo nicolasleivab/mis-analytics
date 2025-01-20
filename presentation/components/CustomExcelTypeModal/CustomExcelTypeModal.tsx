@@ -2,7 +2,12 @@ import { useState, useEffect } from 'react';
 import { Modal, Button, FileInput, Select, Alert } from '@mantine/core';
 import Papa, { ParseResult } from 'papaparse';
 import ExcelJS, { CellValue } from 'exceljs';
-import { setIdField, useAppDispatch } from '../../../model';
+import {
+  selectUniqueSvgParts,
+  setIdField,
+  useAppDispatch,
+  useAppSelector,
+} from '../../../model';
 
 /** Possible “types” the user can assign to a column. */
 type TColumnType = 'numeric' | 'category' | 'id';
@@ -101,6 +106,7 @@ export default function CustomExcelTypeModal({
   modalOffset,
 }: CustomExcelTypeModalProps) {
   const dispatch = useAppDispatch();
+  const uniqueSvgParts = useAppSelector(selectUniqueSvgParts);
   // Local file selected by user (could come from props or from user input).
   const [localFile, setLocalFile] = useState<File | null>(file);
 
@@ -117,6 +123,12 @@ export default function CustomExcelTypeModal({
   const handleFilePick = (f: File) => {
     setLocalFile(f);
     onFileSelected(f); // notify parent
+  };
+
+  const onCloseHandler = () => {
+    setLocalFile(null);
+    setIdError(null);
+    onClose();
   };
 
   /**
@@ -205,6 +217,26 @@ export default function CustomExcelTypeModal({
       setIdError('Please ensure exactly one column is designated as ID.');
       return;
     }
+
+    const areAllSvgPartsIncluded = uniqueSvgParts.every((part) =>
+      columnTypes.some((col) => col.name.toLowerCase() === part.toLowerCase())
+    );
+
+    const listOfMissingSvgParts = uniqueSvgParts.filter(
+      (part) =>
+        !columnTypes.some(
+          (col) => col.name.toLowerCase() === part.toLowerCase()
+        )
+    );
+
+    if (!areAllSvgPartsIncluded) {
+      setIdError(
+        'Please ensure the excel headers match the ids in the svg json, the mismatching parts are: ' +
+          listOfMissingSvgParts.join(', ')
+      );
+      return;
+    }
+
     // No error => proceed
     setIdError(null);
 
@@ -215,7 +247,7 @@ export default function CustomExcelTypeModal({
     <Modal
       yOffset={modalOffset}
       opened={isOpen}
-      onClose={onClose}
+      onClose={onCloseHandler}
       title="Select file and review column types"
     >
       {/* If user hasn't selected a file yet, show a FileInput */}
