@@ -4,19 +4,54 @@ import { TVariableField } from '../Excel/definitions';
 export type TGetMappedData = {
   parsedData: unknown[];
   variableFields: TVariableField[];
+  svgPartSelection: string[];
+  svgParts: string[];
 };
 
 export function getTableStats({
   parsedData,
   variableFields,
+  svgPartSelection,
+  svgParts,
 }: TGetMappedData): TStats[] {
   const stats: TStats[] = [];
+  const lowerCaseSvgPartSelection = svgPartSelection.map((part) =>
+    part.toLowerCase()
+  );
 
-  variableFields.forEach((part: TVariableField) => {
+  const lowerCaseVariableFields = variableFields.map((part) =>
+    part.name.toLowerCase()
+  );
+
+  const onlySvgParts = lowerCaseVariableFields.filter((part) =>
+    svgParts.includes(part.toLowerCase())
+  );
+
+  const fieldVariablesThatAreNotSvgParts = variableFields.filter(
+    (part) => !onlySvgParts.includes(part.name.toLowerCase())
+  );
+  const fieldVariablesThatAreSvgParts = variableFields.filter((part) =>
+    onlySvgParts.includes(part.name.toLowerCase())
+  );
+
+  const filteredVariableByType = fieldVariablesThatAreNotSvgParts.filter(
+    (part) => part.type === 'numeric'
+  );
+
+  const filteredSvgVariableFields = fieldVariablesThatAreSvgParts.filter(
+    (part) => lowerCaseSvgPartSelection.includes(part.name.toLowerCase())
+  );
+
+  const filteredVariableFields =
+    svgPartSelection.length > 0
+      ? [...filteredSvgVariableFields, ...filteredVariableByType]
+      : filteredVariableByType;
+
+  filteredVariableFields.forEach((part: TVariableField) => {
     const scores = (parsedData as Record<string, string>[])
       .map((row) => parseFloat(row[part.name]))
       ?.filter((score) => !isNaN(score));
-    console.log('scores', parsedData, part.name);
+
     if (scores.length === 0) return;
 
     const mean = scores.reduce((a, b) => a + b, 0) / scores.length;
@@ -37,6 +72,6 @@ export function getTableStats({
       max,
     });
   });
-  console.log('stats', stats, variableFields);
+
   return stats;
 }

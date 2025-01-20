@@ -63,7 +63,6 @@ export default function useImportSheet() {
    * Saves all imported sheets to Redux and navigates to the dashboard.
    */
   const handleConfirmClick = () => {
-    console.log('importedSheets', importedSheets);
     dispatch(setExcelData(importedSheets));
     navigate(DASHBOARD_ROUTE);
   };

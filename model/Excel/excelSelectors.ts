@@ -7,3 +7,5 @@ export const selectSheetByIndex = (index: number) => (state: RootState) =>
 
 export const selectAllVariableFields = (state: RootState) =>
   state.excelData.variableFields;
+
+export const selectIdField = (state: RootState) => state.excelData.idField;

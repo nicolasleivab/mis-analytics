@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Modal, Button, FileInput, Select, Alert } from '@mantine/core';
 import Papa, { ParseResult } from 'papaparse';
 import ExcelJS, { CellValue } from 'exceljs';
+import { setIdField, useAppDispatch } from '../../../model';
 
 /** Possible “types” the user can assign to a column. */
 type TColumnType = 'numeric' | 'category' | 'id';
@@ -99,6 +100,7 @@ export default function CustomExcelTypeModal({
   onConfirm,
   modalOffset,
 }: CustomExcelTypeModalProps) {
+  const dispatch = useAppDispatch();
   // Local file selected by user (could come from props or from user input).
   const [localFile, setLocalFile] = useState<File | null>(file);
 
@@ -147,6 +149,7 @@ export default function CustomExcelTypeModal({
 
                 // If column name has 'id' anywhere => guess 'id'
                 if (lowerHeader.includes('id')) {
+                  dispatch(setIdField(header));
                   return { name: header, type: 'id' };
                 }
 
@@ -204,12 +207,8 @@ export default function CustomExcelTypeModal({
     }
     // No error => proceed
     setIdError(null);
-    const mappedLowerCase = columnTypes.map((col) => ({
-      name: col.name.toLowerCase(),
-      type: col.type,
-    }));
 
-    onConfirm(mappedLowerCase);
+    onConfirm(columnTypes);
   };
 
   return (

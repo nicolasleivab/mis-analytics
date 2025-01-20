@@ -63,7 +63,6 @@ export default function useImportFields(
     }
   }, [variableFields, dispatch]);
 
-  console.log('variableFields', variableFields);
   return {
     importFields,
     rawFields,

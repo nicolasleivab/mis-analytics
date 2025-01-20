@@ -17,6 +17,7 @@ import { DEFAUT_ALL_FIELD } from '../../../../model/definitions/ImportFields';
 import {
   selectAllSheets,
   selectAllVariableFields,
+  selectUniqueSvgParts,
   useAppSelector,
 } from '../../../../model';
 
@@ -39,6 +40,7 @@ export default function Overview() {
 
   const excelData = useAppSelector(selectAllSheets);
   const variableFields = useAppSelector(selectAllVariableFields);
+  const svgParts = useAppSelector(selectUniqueSvgParts);
   const [filteredData, setFilteredData] = useState(excelData);
 
   useEffect(() => {
@@ -63,7 +65,7 @@ export default function Overview() {
     setAvailableSheets([...mappedSheets, DEFAUT_ALL_FIELD]);
 
     const currentHeightRange = currentDataset?.map((item: any) =>
-      parseFloat(item.height)
+      parseFloat(item.Height)
     );
     setMinMaxRanges([
       Math.min(...currentHeightRange),
@@ -79,13 +81,13 @@ export default function Overview() {
   useEffect(() => {
     if (currentDataset?.length === 0) return;
     let filtered = currentDataset;
-
+    // TODO add dynamic filters
     if (sexFilter !== DEFAUT_ALL_FIELD.value) {
-      filtered = filtered?.filter((item) => item.sex === sexFilter);
+      filtered = filtered?.filter((item) => item.Sex === sexFilter);
     }
 
     filtered = filtered?.filter((item) => {
-      const height = parseFloat(item.height);
+      const height = parseFloat(item.Height);
       return height >= heightRange[0] && height <= heightRange[1];
     });
 
@@ -99,16 +101,23 @@ export default function Overview() {
     if (svgPartSelection.length > 0) {
       filtered = filtered.map((item) => {
         const filteredItem = { ...item };
-        Object.keys(filteredItem).forEach((key) => {
-          if (svgPartSelection.includes(key)) {
+        const lowerCaseKeys = Object.keys(filteredItem).map((key) =>
+          key.toLowerCase()
+        );
+        const lowerCaseSvgPartSelection = svgPartSelection.map((key) =>
+          key.toLowerCase()
+        );
+
+        lowerCaseKeys.forEach((key) => {
+          if (lowerCaseSvgPartSelection.includes(key)) {
             const findPatient = currentDataset.find(
-              (patient) => patient.id === item.id
+              (patient) => patient.Id === item.Id
             );
 
             filteredItem[key] = findPatient[key];
             return;
           }
-          if (!svgPartSelection.includes(key)) {
+          if (!lowerCaseSvgPartSelection.includes(key)) {
             return;
           }
           filteredItem[key] = 0;
@@ -123,6 +132,8 @@ export default function Overview() {
   const data: TGetMappedData = {
     parsedData: filteredData,
     variableFields,
+    svgPartSelection,
+    svgParts,
   };
   const stats: TStats[] = getTableStats(data);
 
