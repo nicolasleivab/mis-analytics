@@ -1,24 +1,22 @@
 import { TStats } from '../definitions/Stats';
+import { TVariableField } from '../Excel/definitions';
 
 export type TGetMappedData = {
   parsedData: unknown[];
-  mapping: Record<string, string>;
-  selectedSvgParts: string[];
-  extraStats: string[];
+  variableFields: TVariableField[];
 };
 
 export function getTableStats({
   parsedData,
-  selectedSvgParts,
-  extraStats,
+  variableFields,
 }: TGetMappedData): TStats[] {
   const stats: TStats[] = [];
 
-  [...selectedSvgParts, ...extraStats].forEach((part: string) => {
+  variableFields.forEach((part: TVariableField) => {
     const scores = (parsedData as Record<string, string>[])
-      .map((row) => parseFloat(row[part]))
+      .map((row) => parseFloat(row[part.name]))
       ?.filter((score) => !isNaN(score));
-
+    console.log('scores', parsedData, part.name);
     if (scores.length === 0) return;
 
     const mean = scores.reduce((a, b) => a + b, 0) / scores.length;
@@ -31,7 +29,7 @@ export function getTableStats({
     const max = Math.max(...scores);
 
     stats.push({
-      svgPart: part,
+      svgPart: part.name,
       mean,
       median,
       stdDev,
@@ -39,6 +37,6 @@ export function getTableStats({
       max,
     });
   });
-
+  console.log('stats', stats, variableFields);
   return stats;
 }

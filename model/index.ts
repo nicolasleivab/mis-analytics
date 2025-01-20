@@ -2,9 +2,18 @@
 export { useAppDispatch, useAppSelector } from './store';
 
 // Excel
-export { setExcelData } from './Excel/excelSlice';
-export { selectAllSheets, selectSheetByIndex } from './Excel/excelSelectors';
-export type { TExcelData, TExcelSheet } from './Excel/definitions';
+export { setExcelData, setVariableFields } from './Excel/excelSlice';
+export {
+  selectAllSheets,
+  selectSheetByIndex,
+  selectAllVariableFields,
+} from './Excel/excelSelectors';
+export type {
+  TExcelData,
+  TExcelSheet,
+  TVariableField,
+  TVariableType,
+} from './Excel/definitions';
 
 // SvgViz
 export { setSvgParts } from './SvgViz/svgVizSlice';

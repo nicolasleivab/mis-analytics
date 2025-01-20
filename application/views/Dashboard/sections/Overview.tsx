@@ -13,11 +13,12 @@ import StatsTable from '../../../../presentation/components/StatsTable/StatsTabl
 import { RangeSlider, Flex, Box, Select } from '@mantine/core';
 import { useSvgPartSelection } from '../../../../model/hooks';
 import { TStats } from '../../../../model/definitions/Stats';
+import { DEFAUT_ALL_FIELD } from '../../../../model/definitions/ImportFields';
 import {
-  EXTRA_STATS,
-  DEFAUT_ALL_FIELD,
-} from '../../../../model/definitions/ImportFields';
-import { selectAllSheets, useAppSelector } from '../../../../model';
+  selectAllSheets,
+  selectAllVariableFields,
+  useAppSelector,
+} from '../../../../model';
 
 const DEFAULT_GENDER_VALUES = [
   DEFAUT_ALL_FIELD,
@@ -37,6 +38,7 @@ export default function Overview() {
   );
 
   const excelData = useAppSelector(selectAllSheets);
+  const variableFields = useAppSelector(selectAllVariableFields);
   const [filteredData, setFilteredData] = useState(excelData);
 
   useEffect(() => {
@@ -120,8 +122,7 @@ export default function Overview() {
 
   const data: TGetMappedData = {
     parsedData: filteredData,
-    selectedSvgParts: svgPartSelection,
-    extraStats: EXTRA_STATS.map((item) => item.name),
+    variableFields,
   };
   const stats: TStats[] = getTableStats(data);
 

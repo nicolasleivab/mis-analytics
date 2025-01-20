@@ -1,12 +1,14 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import type { TExcelData, TExcelSheet } from './definitions';
+import type { TExcelData, TExcelSheet, TVariableField } from './definitions';
 
 type ExcelState = {
   sheets: TExcelData;
+  variableFields: TVariableField[];
 };
 
 const initialState: ExcelState = {
   sheets: [],
+  variableFields: [],
 };
 
 export const excelSlice = createSlice({
@@ -15,6 +17,9 @@ export const excelSlice = createSlice({
   reducers: {
     setExcelData: (state, action: PayloadAction<TExcelData>) => {
       state.sheets = action.payload;
+    },
+    setVariableFields: (state, action: PayloadAction<TVariableField[]>) => {
+      state.variableFields = action.payload;
     },
     addSheet: (state, action: PayloadAction<TExcelSheet>) => {
       state.sheets.push(action.payload);
@@ -37,7 +42,12 @@ export const excelSlice = createSlice({
   },
 });
 
-export const { setExcelData, addSheet, updateSheet, removeSheet } =
-  excelSlice.actions;
+export const {
+  setExcelData,
+  setVariableFields,
+  addSheet,
+  updateSheet,
+  removeSheet,
+} = excelSlice.actions;
 
 export default excelSlice.reducer;

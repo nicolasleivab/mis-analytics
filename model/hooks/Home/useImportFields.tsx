@@ -1,24 +1,33 @@
-import { useMemo } from 'react';
-import { EXTRA_FIELDS, TField } from '../../definitions/ImportFields';
-import { useAppSelector } from '../../store';
+import { useEffect, useMemo, useState } from 'react';
+import { TField } from '../../definitions/ImportFields';
+import { useAppDispatch, useAppSelector } from '../../store';
 import {
-  selectUniqueSvgParts,
+  // selectUniqueSvgParts,
   selectSvgError,
   selectSvgLoading,
 } from '../../SvgViz/svgVizSelectors';
+import { setVariableFields as setVariableFieldsRedux } from '../../Excel/excelSlice';
+import { TVariableField } from '../../Excel/definitions';
 
-export default function useImportFields() {
-  const reduxUniqueParts = useAppSelector(selectUniqueSvgParts);
+export default function useImportFields(
+  setOpenImportModal: React.Dispatch<React.SetStateAction<boolean>>
+) {
+  const dispatch = useAppDispatch();
+  // const reduxUniqueParts = useAppSelector(selectUniqueSvgParts);
   const loading = useAppSelector(selectSvgLoading);
   const error = useAppSelector(selectSvgError);
+
+  const [variableFields, setVariableFields] = useState<TVariableField[]>([]);
+  const [excelFile, setExcelFile] = useState<File | null>(null);
+  const [isTypeModalOpen, setTypeModalOpen] = useState<boolean>(false);
 
   // Build your raw fields
   const rawFields: TField[] = useMemo(
     () => [
-      ...reduxUniqueParts.map((name): TField => ({ name })),
-      ...(EXTRA_FIELDS as TField[]), // any other fields defined in the ImportFields file
+      // ...reduxUniqueParts.map((name): TField => ({ name })), TODO: Add description requirements excel headers must match id in svg json
+      ...variableFields,
     ],
-    [reduxUniqueParts]
+    [variableFields]
   );
 
   const importFields = useMemo(
@@ -32,5 +41,39 @@ export default function useImportFields() {
     [rawFields]
   );
 
-  return { importFields, rawFields, loading, error };
+  // triggered by "Upload Excel" button
+  const handleOpenExcelTypeModal = (file: File) => {
+    setExcelFile(file);
+    setTypeModalOpen(true);
+  };
+
+  // after user finalizes column types in "CustomExcelTypeModal"
+  const handleTypeConfirm = (finalVariableFields: TVariableField[]) => {
+    // stash them in your store or local state so useImportFields can build final fields
+    setVariableFields(finalVariableFields);
+    setTypeModalOpen(false);
+
+    // open the react-spreadsheet-import wizard
+    setOpenImportModal(true);
+  };
+
+  useEffect(() => {
+    if (variableFields.length > 0) {
+      dispatch(setVariableFieldsRedux(variableFields));
+    }
+  }, [variableFields, dispatch]);
+
+  console.log('variableFields', variableFields);
+  return {
+    importFields,
+    rawFields,
+    loading,
+    error,
+    setVariableFields,
+    handleOpenExcelTypeModal,
+    handleTypeConfirm,
+    isTypeModalOpen,
+    setTypeModalOpen,
+    excelFile,
+  };
 }
