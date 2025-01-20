@@ -13,11 +13,14 @@ import StatsTable from '../../../../presentation/components/StatsTable/StatsTabl
 import { RangeSlider, Flex, Box, Select } from '@mantine/core';
 import { useSvgPartSelection } from '../../../../model/hooks';
 import { TStats } from '../../../../model/definitions/Stats';
+import { DEFAUT_ALL_FIELD } from '../../../../model/definitions/ImportFields';
 import {
-  EXTRA_STATS,
-  DEFAUT_ALL_FIELD,
-} from '../../../../model/definitions/ImportFields';
-import { selectAllSheets, useAppSelector } from '../../../../model';
+  selectAllSheets,
+  selectAllVariableFields,
+  selectIdField,
+  selectUniqueSvgParts,
+  useAppSelector,
+} from '../../../../model';
 
 const DEFAULT_GENDER_VALUES = [
   DEFAUT_ALL_FIELD,
@@ -37,6 +40,9 @@ export default function Overview() {
   );
 
   const excelData = useAppSelector(selectAllSheets);
+  const variableFields = useAppSelector(selectAllVariableFields);
+  const idField = useAppSelector(selectIdField);
+  const svgParts = useAppSelector(selectUniqueSvgParts);
   const [filteredData, setFilteredData] = useState(excelData);
 
   useEffect(() => {
@@ -61,7 +67,7 @@ export default function Overview() {
     setAvailableSheets([...mappedSheets, DEFAUT_ALL_FIELD]);
 
     const currentHeightRange = currentDataset?.map((item: any) =>
-      parseFloat(item.height)
+      parseFloat(item.Height)
     );
     setMinMaxRanges([
       Math.min(...currentHeightRange),
@@ -77,13 +83,13 @@ export default function Overview() {
   useEffect(() => {
     if (currentDataset?.length === 0) return;
     let filtered = currentDataset;
-
+    // TODO add dynamic filters
     if (sexFilter !== DEFAUT_ALL_FIELD.value) {
-      filtered = filtered?.filter((item) => item.sex === sexFilter);
+      filtered = filtered?.filter((item) => item.Sex === sexFilter);
     }
 
     filtered = filtered?.filter((item) => {
-      const height = parseFloat(item.height);
+      const height = parseFloat(item.Height);
       return height >= heightRange[0] && height <= heightRange[1];
     });
 
@@ -97,16 +103,23 @@ export default function Overview() {
     if (svgPartSelection.length > 0) {
       filtered = filtered.map((item) => {
         const filteredItem = { ...item };
-        Object.keys(filteredItem).forEach((key) => {
-          if (svgPartSelection.includes(key)) {
+        const lowerCaseKeys = Object.keys(filteredItem).map((key) =>
+          key.toLowerCase()
+        );
+        const lowerCaseSvgPartSelection = svgPartSelection.map((key) =>
+          key.toLowerCase()
+        );
+
+        lowerCaseKeys.forEach((key) => {
+          if (lowerCaseSvgPartSelection.includes(key)) {
             const findPatient = currentDataset.find(
-              (patient) => patient.id === item.id
+              (patient) => patient[idField] === item[idField]
             );
 
             filteredItem[key] = findPatient[key];
             return;
           }
-          if (!svgPartSelection.includes(key)) {
+          if (!lowerCaseSvgPartSelection.includes(key)) {
             return;
           }
           filteredItem[key] = 0;
@@ -116,12 +129,13 @@ export default function Overview() {
     }
 
     setFilteredData(filtered);
-  }, [svgPartSelection, currentDataset]);
+  }, [svgPartSelection, currentDataset, idField]);
 
   const data: TGetMappedData = {
     parsedData: filteredData,
-    selectedSvgParts: svgPartSelection,
-    extraStats: EXTRA_STATS.map((item) => item.name),
+    variableFields,
+    svgPartSelection,
+    svgParts,
   };
   const stats: TStats[] = getTableStats(data);
 

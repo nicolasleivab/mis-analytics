@@ -1,22 +1,55 @@
 import { TStats } from '../definitions/Stats';
+import { TVariableField } from '../Excel/definitions';
 
 export type TGetMappedData = {
   parsedData: unknown[];
-  mapping: Record<string, string>;
-  selectedSvgParts: string[];
-  extraStats: string[];
+  variableFields: TVariableField[];
+  svgPartSelection: string[];
+  svgParts: string[];
 };
 
 export function getTableStats({
   parsedData,
-  selectedSvgParts,
-  extraStats,
+  variableFields,
+  svgPartSelection,
+  svgParts,
 }: TGetMappedData): TStats[] {
   const stats: TStats[] = [];
+  const lowerCaseSvgPartSelection = svgPartSelection.map((part) =>
+    part.toLowerCase()
+  );
 
-  [...selectedSvgParts, ...extraStats].forEach((part: string) => {
+  const lowerCaseVariableFields = variableFields.map((part) =>
+    part.name.toLowerCase()
+  );
+
+  const onlySvgParts = lowerCaseVariableFields.filter((part) =>
+    svgParts.includes(part.toLowerCase())
+  );
+
+  const fieldVariablesThatAreNotSvgParts = variableFields.filter(
+    (part) => !onlySvgParts.includes(part.name.toLowerCase())
+  );
+  const fieldVariablesThatAreSvgParts = variableFields.filter((part) =>
+    onlySvgParts.includes(part.name.toLowerCase())
+  );
+
+  const filteredVariableByType = fieldVariablesThatAreNotSvgParts.filter(
+    (part) => part.type === 'numeric'
+  );
+
+  const filteredSvgVariableFields = fieldVariablesThatAreSvgParts.filter(
+    (part) => lowerCaseSvgPartSelection.includes(part.name.toLowerCase())
+  );
+
+  const filteredVariableFields =
+    svgPartSelection.length > 0
+      ? [...filteredSvgVariableFields, ...filteredVariableByType]
+      : filteredVariableByType;
+
+  filteredVariableFields.forEach((part: TVariableField) => {
     const scores = (parsedData as Record<string, string>[])
-      .map((row) => parseFloat(row[part]))
+      .map((row) => parseFloat(row[part.name]))
       ?.filter((score) => !isNaN(score));
 
     if (scores.length === 0) return;
@@ -31,7 +64,7 @@ export function getTableStats({
     const max = Math.max(...scores);
 
     stats.push({
-      svgPart: part,
+      svgPart: part.name,
       mean,
       median,
       stdDev,

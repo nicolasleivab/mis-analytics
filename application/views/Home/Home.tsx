@@ -9,7 +9,7 @@ import {
   Alert,
   FileInput,
 } from '@mantine/core';
-import { IconAlertCircle } from '@tabler/icons-react'; // Import Mantine icon
+import { IconAlertCircle } from '@tabler/icons-react';
 import {
   useImportFields,
   TExcelData,
@@ -17,6 +17,7 @@ import {
   useImportSheet,
 } from '../../../model';
 import * as styles from './Home.module.css';
+import { CustomExcelTypeModal } from '../../../presentation/components';
 
 const MODAL_OFFSET = 150;
 
@@ -39,6 +40,15 @@ export default function Home() {
   } = useImportSheet();
 
   const {
+    importFields: fields,
+    handleOpenExcelTypeModal,
+    handleTypeConfirm,
+    isTypeModalOpen,
+    setTypeModalOpen,
+    excelFile,
+  } = useImportFields(setOpenImportModal);
+
+  const {
     setSvgPartsFile,
     setClipPathsFile,
     showAlert,
@@ -47,9 +57,7 @@ export default function Home() {
     setOpenSvgModal,
     handleSvgPartsSubmit,
     handleUseDefaultSvg,
-  } = useSvgUpload(setOpenImportModal);
-
-  const { importFields: fields } = useImportFields();
+  } = useSvgUpload(setTypeModalOpen);
 
   return (
     <div className={styles.Home}>
@@ -120,14 +128,25 @@ export default function Home() {
         </Group>
       </Modal>
 
+      {/* Header types Import Modal */}
+      <CustomExcelTypeModal
+        file={excelFile}
+        modalOffset={MODAL_OFFSET}
+        isOpen={isTypeModalOpen}
+        onClose={() => setTypeModalOpen(false)}
+        onFileSelected={handleOpenExcelTypeModal}
+        onConfirm={handleTypeConfirm}
+      />
+
       {/* Import Modal */}
       <ReactSpreadsheetImport
         isOpen={openModal}
+        // initialStepState={{ data: excelFile! }} TODO: Find a solution for the excel upload flow to avoid repittions
         onClose={() => setOpenImportModal(false)}
         onSubmit={(data) => {
           const typedData = data?.validData as unknown as TExcelData;
           handleImportClick(typedData);
-          setOpenImportModal(false); // Close import modal after submission
+          setOpenImportModal(false);
         }}
         fields={fields}
       />
