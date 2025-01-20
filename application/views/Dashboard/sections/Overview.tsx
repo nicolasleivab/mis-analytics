@@ -17,6 +17,7 @@ import { DEFAUT_ALL_FIELD } from '../../../../model/definitions/ImportFields';
 import {
   selectAllSheets,
   selectAllVariableFields,
+  selectIdField,
   selectUniqueSvgParts,
   useAppSelector,
 } from '../../../../model';
@@ -40,6 +41,7 @@ export default function Overview() {
 
   const excelData = useAppSelector(selectAllSheets);
   const variableFields = useAppSelector(selectAllVariableFields);
+  const idField = useAppSelector(selectIdField);
   const svgParts = useAppSelector(selectUniqueSvgParts);
   const [filteredData, setFilteredData] = useState(excelData);
 
@@ -111,7 +113,7 @@ export default function Overview() {
         lowerCaseKeys.forEach((key) => {
           if (lowerCaseSvgPartSelection.includes(key)) {
             const findPatient = currentDataset.find(
-              (patient) => patient.Id === item.Id
+              (patient) => patient[idField] === item[idField]
             );
 
             filteredItem[key] = findPatient[key];
@@ -127,7 +129,7 @@ export default function Overview() {
     }
 
     setFilteredData(filtered);
-  }, [svgPartSelection, currentDataset]);
+  }, [svgPartSelection, currentDataset, idField]);
 
   const data: TGetMappedData = {
     parsedData: filteredData,
