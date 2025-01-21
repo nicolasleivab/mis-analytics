@@ -10,7 +10,6 @@ import { DEFAULT_ALL_FIELD } from '../../../../model/definitions/ImportFields';
 import {
   selectAllSheets,
   selectAllVariableFields,
-  selectIdField,
   selectUniqueSvgParts,
   useAppSelector,
 } from '../../../../model';
@@ -44,10 +43,10 @@ export default function Overview() {
   const [availableSheets, setAvailableSheets] = useState<TDropdownOption[]>([]);
   const { svgPartSelection, handleSvgPartSelection } = useSvgPartSelection();
   const [filterState, setFilterState] = useState<TFilterStateItem[]>([]);
+  // const [rangeStates, setRangeStates] = useState<TFilterStateItem[]>([]);
 
   const excelData = useAppSelector(selectAllSheets);
   const variableFields = useAppSelector(selectAllVariableFields);
-  const idField = useAppSelector(selectIdField);
   const svgParts = useAppSelector(selectUniqueSvgParts);
   const [filteredData, setFilteredData] =
     useState<TExcelSheetData>(currentDataset);
@@ -106,46 +105,6 @@ export default function Overview() {
     setFilteredData(filtered);
   }, [filterState, currentDataset]);
 
-  // Apply svg part selection filter
-  useEffect(() => {
-    let filtered = filteredData.length > 0 ? filteredData : currentDataset;
-
-    if (svgPartSelection.length > 0) {
-      filtered = filtered.map((item) => {
-        const filteredItem = { ...item };
-        const keys = Object.keys(filteredItem);
-
-        keys.forEach((key) => {
-          if (svgPartSelection.includes(key)) {
-            const typedKey = key as keyof typeof findPatient;
-            const findPatient = currentDataset.find((patient) => {
-              const typedPatient = patient as unknown as TPolymorphicRecord;
-              typedPatient[idField] === typedPatient[idField];
-            });
-
-            filteredItem[typedKey] = findPatient?.[typedKey] as
-              | string
-              | number
-              | boolean
-              | null
-              | undefined;
-            return;
-          }
-          if (!svgPartSelection.includes(key)) {
-            return;
-          }
-          const typedFileteredItem =
-            filteredItem as unknown as TPolymorphicRecord;
-          typedFileteredItem[key] = 0;
-        });
-        return filteredItem;
-      });
-    }
-
-    setFilteredData(filtered);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [svgPartSelection, currentDataset, idField]);
-
   const data: TGetMappedData = {
     parsedData: filteredData,
     variableFields,
@@ -177,11 +136,39 @@ export default function Overview() {
                       <RangeSlider
                         min={filter.range?.[0]}
                         max={filter.range?.[1]}
-                        step={0.0001}
+                        step={getStepValue(filter.range!)}
                         defaultValue={[
                           filter.range?.[0] ?? 0,
                           filter.range?.[1] ?? 1,
                         ]}
+                        // TODO: Add back with a debounce
+                        // onChange={(value) => {
+                        //   setRangeStates((prevState) => {
+                        //     // Find if we already have a filter with `filter.name`
+                        //     const idx = prevState.findIndex(
+                        //       (f) => f.name === filter.name
+                        //     );
+
+                        //     if (idx >= 0) {
+                        //       // Update the existing filter
+                        //       return prevState.map((item, i) =>
+                        //         i === idx
+                        //           ? { ...item, range: value as TNumericRange }
+                        //           : item
+                        //       );
+                        //     } else {
+                        //       // Create a new filter entry
+                        //       return [
+                        //         ...prevState,
+                        //         {
+                        //           name: filter.name,
+                        //           type: filter.type,
+                        //           range: value as TNumericRange, // The new range
+                        //         },
+                        //       ];
+                        //     }
+                        //   });
+                        // }}
                         onChangeEnd={(value) => {
                           setFilterState((prevState) => {
                             // Find if we already have a filter with `filter.name`
@@ -304,4 +291,11 @@ export default function Overview() {
       </Flex>
     </Flex>
   );
+}
+
+function getStepValue(range: TNumericRange): number {
+  if (range?.[1] > 100) return 1;
+  if (range?.[1] > 10) return 0.1;
+  if (range?.[1] > 1) return 0.001;
+  return 0.0001;
 }

@@ -33,7 +33,7 @@ export default function useImportFields(
   const importFields = useMemo(
     () =>
       rawFields.map((field) => ({
-        label: field.name.charAt(0).toUpperCase() + field.name.slice(1),
+        label: field.name,
         key: field.name,
         fieldType: { type: 'input' },
         example: field.example ?? '0.76',
