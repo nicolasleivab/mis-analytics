@@ -15,28 +15,21 @@ import {
   useAppSelector,
 } from '../../../../model';
 import {
+  TExcelSheet,
   TExcelSheetData,
+  // TFilter,
   TPolymorphicRecord,
 } from '../../../../model/Excel/definitions';
 import { TDropdownOption } from '../../../../model/definitions/Tabs';
 import { TGetMappedData } from '../../../../model/data-handlers/getTableStats';
 
-const DEFAULT_GENDER_VALUES = [
-  DEFAULT_ALL_FIELD,
-  { value: 'M', label: 'Male' },
-  { value: 'F', label: 'Female' },
-];
-
 export default function Overview() {
   const [selectedSheet, setSelectedSheet] = useState<string>('0');
   const [currentDataset, setCurrentDataset] = useState<TExcelSheetData>([]);
+  const [currentExcelSheet, setCurrentExcelSheet] = useState<TExcelSheet>();
   const [availableSheets, setAvailableSheets] = useState<TDropdownOption[]>([]);
   const { svgPartSelection, handleSvgPartSelection } = useSvgPartSelection();
-  const [sexFilter, setSexFilter] = useState<string>('All');
-  const [heightRange, setHeightRange] = useState<[number, number]>([0, 500]);
-  const [minMaxRanges, setMinMaxRanges] = useState<[number, number] | null>(
-    null
-  );
+  // const [filters, setFilters] = useState<TFilter[]>([]);
 
   const excelData = useAppSelector(selectAllSheets);
   const variableFields = useAppSelector(selectAllVariableFields);
@@ -56,6 +49,7 @@ export default function Overview() {
     } else {
       const currentDataset = excelData[Number(selectedSheet)]?.data;
       setCurrentDataset(currentDataset);
+      setCurrentExcelSheet(excelData[Number(selectedSheet)]);
     }
   }, [selectedSheet, excelData]);
 
@@ -68,45 +62,20 @@ export default function Overview() {
     }));
     setAvailableSheets([...mappedSheets, DEFAULT_ALL_FIELD]);
 
-    const currentHeightRange = currentDataset?.map((item) => {
-      const typedItem = item as unknown as TPolymorphicRecord;
-      return parseFloat(typedItem.Height as string);
-    });
-    setMinMaxRanges([
-      Math.min(...currentHeightRange),
-      Math.max(...currentHeightRange),
-    ]);
-    setHeightRange([
-      Math.min(...currentHeightRange),
-      Math.max(...currentHeightRange),
-    ]);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentDataset]);
 
-  // Apply sex and height filters
+  // HERE define filters in useEffect from excelData.filters which is of type export type TVariableType = 'id' | 'numeric' | 'category';
   useEffect(() => {
     if (currentDataset?.length === 0) return;
-    let filtered = currentDataset;
-    // TODO add dynamic filters
-    if (sexFilter !== DEFAULT_ALL_FIELD.value) {
-      filtered = filtered?.filter((item) => {
-        const typedItem = item as unknown as TPolymorphicRecord;
-        return typedItem.Sex === sexFilter;
-      });
-    }
-
-    filtered = filtered?.filter((item) => {
-      const typedItem = item as unknown as TPolymorphicRecord;
-      const height = parseFloat(typedItem.Height as string);
-      return height >= heightRange[0] && height <= heightRange[1];
-    });
-
-    setFilteredData(filtered);
-  }, [sexFilter, heightRange, currentDataset]);
+    console.log('currentDataset', currentDataset);
+    setFilteredData(currentDataset);
+  }, [currentDataset]);
 
   // Apply svg part selection filter
   useEffect(() => {
-    let filtered = filteredData;
+    console.log('filteredData', filteredData);
+    let filtered = filteredData.length > 0 ? filteredData : currentDataset;
 
     if (svgPartSelection.length > 0) {
       filtered = filtered.map((item) => {
@@ -161,35 +130,41 @@ export default function Overview() {
     <Flex gap="md">
       <Flex direction="column" align="center" style={{ flex: 1 }}>
         <Flex direction="column">
-          <h2>Filters</h2>
-          <Flex gap="40px">
-            <div style={{ width: '300px' }}>
-              <Select
-                allowDeselect={false}
-                defaultValue={DEFAULT_GENDER_VALUES[0].value}
-                label="Filter by sex"
-                placeholder="Select sex"
-                onChange={(val) => setSexFilter(val!)}
-                data={DEFAULT_GENDER_VALUES}
-              />
-            </div>
-            <div style={{ width: '300px' }}>
-              <label>Height Range</label>
-              <Flex align="center">
-                <Box mr="10px">{heightRange[0]}</Box>
-                {minMaxRanges ? (
-                  <RangeSlider
-                    min={minMaxRanges[0]}
-                    max={minMaxRanges[1]}
-                    step={1}
-                    defaultValue={minMaxRanges}
-                    onChangeEnd={(val) => setHeightRange([val[0], val[1]])}
-                    style={{ width: '100%' }}
+          {currentExcelSheet?.filters &&
+          currentExcelSheet.filters.length > 0 ? (
+            <h2>Filters</h2>
+          ) : null}
+          <Flex gap="40px" wrap="wrap">
+            {currentExcelSheet?.filters.map((filter) => (
+              <Box key={filter.name}>
+                {filter.type === 'numeric' ? (
+                  <div style={{ width: '300px' }}>
+                    <label>{filter.name}</label>
+                    <Flex align="center">
+                      <Box mr="10px">{filter.range?.[0]}</Box>
+                      <RangeSlider
+                        label={filter.name}
+                        min={filter.range?.[0]}
+                        max={filter.range?.[1]}
+                        step={filter.range ? filter.range?.[1] / 100 : 1}
+                        defaultValue={[filter.range![0], filter.range![1]]}
+                        onChangeEnd={(value) => console.log(value)}
+                        style={{ width: '100%' }}
+                      />
+                      <Box ml="10px">{filter.range?.[1]}</Box>
+                    </Flex>
+                  </div>
+                ) : (
+                  <Select
+                    data={filter.values}
+                    defaultValue={filter.values![0]}
+                    label={filter.name}
+                    placeholder="Select option"
+                    onChange={(value) => console.log(value)}
                   />
-                ) : null}
-                <Box ml="10px">{heightRange[1]}</Box>
-              </Flex>
-            </div>
+                )}
+              </Box>
+            ))}
           </Flex>
         </Flex>
 
