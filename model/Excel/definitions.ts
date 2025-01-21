@@ -21,6 +21,6 @@ export type TExcelData = TExcelSheet[];
 export type TVariableField = {
   name: string;
   type: TVariableType;
+  isFilter: boolean;
   label?: string;
-  isFilter?: boolean;
 };

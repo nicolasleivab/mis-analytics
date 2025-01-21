@@ -1,22 +1,34 @@
 import { useState, useEffect } from 'react';
-import { Modal, Button, FileInput, Select, Alert } from '@mantine/core';
+import {
+  Modal,
+  Button,
+  FileInput,
+  Select,
+  Alert,
+  Flex,
+  Text,
+} from '@mantine/core';
 import Papa, { ParseResult } from 'papaparse';
 import ExcelJS, { CellValue } from 'exceljs';
 import {
   selectUniqueSvgParts,
   setIdField,
+  TVariableField,
+  TVariableType,
   useAppDispatch,
   useAppSelector,
 } from '../../../model';
 
-/** Possible “types” the user can assign to a column. */
-type TColumnType = 'numeric' | 'category' | 'id';
+const DEFAULT_TYPE_OPTIONS = [
+  { label: 'Numeric', value: 'numeric' },
+  { label: 'Category', value: 'category' },
+  { label: 'Id', value: 'id' },
+];
 
-/** Defines a single column’s name and user-selected type. */
-type IColumnDef = {
-  name: string;
-  type: TColumnType;
-};
+const DEFAULT_FILTER_OPTIONS = [
+  { label: 'Yes', value: 'true' },
+  { label: 'No', value: 'false' },
+];
 
 /**
  * Props for the CustomExcelTypeModal component:
@@ -31,7 +43,7 @@ type CustomExcelTypeModalProps = {
   isOpen: boolean;
   onClose: () => void;
   onFileSelected: (file: File) => void;
-  onConfirm: (finalVariableFields: IColumnDef[]) => void;
+  onConfirm: (finalVariableFields: TVariableField[]) => void;
   modalOffset: number;
 };
 
@@ -114,7 +126,7 @@ export default function CustomExcelTypeModal({
   const [headers, setHeaders] = useState<string[]>([]);
 
   /** Holds the inferred or user-selected type for each header. */
-  const [columnTypes, setColumnTypes] = useState<IColumnDef[]>([]);
+  const [columnTypes, setColumnTypes] = useState<TVariableField[]>([]);
 
   /** Error message if the user tries to confirm with an invalid ID selection. */
   const [idError, setIdError] = useState<string | null>(null);
@@ -156,13 +168,13 @@ export default function CustomExcelTypeModal({
               const rowData = results.data;
 
               // Infer column types
-              const guessed: IColumnDef[] = foundHeaders.map((header) => {
+              const guessed: TVariableField[] = foundHeaders.map((header) => {
                 const lowerHeader = header.toLowerCase();
 
                 // If column name has 'id' anywhere => guess 'id'
                 if (lowerHeader.includes('id')) {
                   dispatch(setIdField(header));
-                  return { name: header, type: 'id' };
+                  return { name: header, type: 'id', isFilter: false };
                 }
 
                 // Otherwise check sample values => numeric or category
@@ -177,6 +189,7 @@ export default function CustomExcelTypeModal({
                 return {
                   name: header,
                   type: allNumbers ? 'numeric' : 'category',
+                  isFilter: false,
                 };
               });
 
@@ -191,13 +204,13 @@ export default function CustomExcelTypeModal({
     }
 
     parse().catch((error) => console.error('Error parsing file:', error));
-  }, [localFile]);
+  }, [localFile, dispatch]);
 
   /**
    * If the user overrides a column's type with the <Select />,
    * update that in our columnTypes state.
    */
-  const handleTypeChange = (headerName: string, newType: TColumnType) => {
+  const handleTypeChange = (headerName: string, newType: TVariableType) => {
     setColumnTypes((prev) =>
       prev.map((col) =>
         col.name === headerName ? { ...col, type: newType } : col
@@ -205,6 +218,12 @@ export default function CustomExcelTypeModal({
     );
     // Clear error if they change selection
     setIdError(null);
+  };
+
+  const handleIsFilterChange = (headerName: string, isFilter: boolean) => {
+    setColumnTypes((prev) =>
+      prev.map((col) => (col.name === headerName ? { ...col, isFilter } : col))
+    );
   };
 
   /**
@@ -245,10 +264,11 @@ export default function CustomExcelTypeModal({
 
   return (
     <Modal
+      size="lg"
       yOffset={modalOffset}
       opened={isOpen}
       onClose={onCloseHandler}
-      title="Select file and review column types"
+      title="Select file, review column types and filters"
     >
       {/* If user hasn't selected a file yet, show a FileInput */}
       {!localFile && (
@@ -263,7 +283,9 @@ export default function CustomExcelTypeModal({
       {/* If a file is selected, show its name and the inferred columns */}
       {localFile && (
         <>
-          <p>File: {localFile.name}</p>
+          <Flex mb={20}>
+            <Text fw={700}>File: {localFile.name}</Text>
+          </Flex>
 
           {headers.length > 0 ? (
             <>
@@ -272,42 +294,61 @@ export default function CustomExcelTypeModal({
                   {idError}
                 </Alert>
               )}
+              <Flex direction="column" gap="md">
+                {headers.map((hdr) => {
+                  const current = columnTypes.find((c) => c.name === hdr);
+                  return (
+                    <Flex
+                      key={hdr}
+                      align="baseline"
+                      justify="space-between"
+                      gap={'md'}
+                      style={{
+                        borderBottom: '1px solid #ccc',
+                        padding: '0px 10px 20px 10px',
+                      }}
+                    >
+                      <span style={{ flex: '1 1 auto', alignSelf: 'center' }}>
+                        {hdr}
+                      </span>
 
-              {headers.map((hdr) => {
-                const current = columnTypes.find((c) => c.name === hdr);
-                return (
-                  <div
-                    key={hdr}
-                    style={{
-                      display: 'flex',
-                      gap: '1rem',
-                      marginBottom: '8px',
-                      alignItems: 'center',
-                    }}
+                      <Flex direction={'column'} gap="sm">
+                        <Text>Type</Text>
+                        <Select
+                          value={current?.type}
+                          onChange={(val) =>
+                            handleTypeChange(hdr, val as TVariableType)
+                          }
+                          data={DEFAULT_TYPE_OPTIONS}
+                        />
+                      </Flex>
+                      {current?.type !== 'id' ? (
+                        <Flex direction={'column'} gap="sm">
+                          <Text>Filter</Text>
+                          <Select
+                            value={current?.isFilter.toString()}
+                            onChange={(val) =>
+                              handleIsFilterChange(hdr, Boolean(val))
+                            }
+                            data={DEFAULT_FILTER_OPTIONS}
+                          />
+                        </Flex>
+                      ) : null}
+                    </Flex>
+                  );
+                })}
+              </Flex>
+              <div style={{ width: '100%' }}>
+                <Flex justify={'flex-end'}>
+                  <Button
+                    onClick={handleConfirm}
+                    disabled={headers.length === 0}
+                    mt="md"
                   >
-                    <span style={{ flex: '1 1 auto' }}>{hdr}</span>
-                    <Select
-                      value={current?.type}
-                      onChange={(val) =>
-                        handleTypeChange(hdr, val as TColumnType)
-                      }
-                      data={[
-                        { label: 'Numeric', value: 'numeric' },
-                        { label: 'Category', value: 'category' },
-                        { label: 'Id', value: 'id' },
-                      ]}
-                    />
-                  </div>
-                );
-              })}
-
-              <Button
-                onClick={handleConfirm}
-                disabled={headers.length === 0}
-                mt="md"
-              >
-                Confirm
-              </Button>
+                    Confirm
+                  </Button>
+                </Flex>
+              </div>
             </>
           ) : (
             <p>Parsing file headers...</p>

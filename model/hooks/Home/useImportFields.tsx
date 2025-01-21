@@ -59,6 +59,7 @@ export default function useImportFields(
 
   useEffect(() => {
     if (variableFields.length > 0) {
+      console.log('variableFields', variableFields);
       dispatch(setVariableFieldsRedux(variableFields));
     }
   }, [variableFields, dispatch]);
