@@ -1,6 +1,6 @@
 export const ID_FIELD = 'id';
 
-export const DEFAUT_ALL_FIELD = {
+export const DEFAULT_ALL_FIELD = {
   value: 'All',
   label: 'All',
 };

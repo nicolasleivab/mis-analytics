@@ -1,7 +1,15 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAppDispatch, TExcelData, setExcelData } from '../..';
+import {
+  useAppDispatch,
+  TExcelData,
+  setExcelData,
+  useAppSelector,
+  selectAllVariableFields,
+} from '../..';
 import { DASHBOARD_ROUTE } from '../../../application/controller/Router/routes';
+import { TExcelSheetData } from '../../Excel/definitions';
+import { DEFAULT_ALL_FIELD } from '../../definitions/ImportFields';
 
 /**
  * Manages the flow for importing Excel sheets, naming them,
@@ -11,6 +19,8 @@ export default function useImportSheet() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
+  const varialbleFields = useAppSelector(selectAllVariableFields);
+
   // Modal states
   const [openModal, setOpenImportModal] = useState<boolean>(false);
   const [openNameModal, setOpenNameModal] = useState<boolean>(false);
@@ -18,7 +28,7 @@ export default function useImportSheet() {
 
   // Data states
   const [importedSheets, setImportedSheets] = useState<TExcelData>([]);
-  const [parsedData, setParsedData] = useState<TExcelData>([]);
+  const [parsedData, setParsedData] = useState<TExcelSheetData>([]);
 
   // Misc. states
   const [customSheetName, setCustomSheetName] = useState<string>('');
@@ -27,7 +37,7 @@ export default function useImportSheet() {
   /**
    * Triggered after receiving validated data from the spreadsheet import step.
    */
-  const handleImportClick = (data: TExcelData) => {
+  const handleImportClick = (data: TExcelSheetData) => {
     setParsedData(data);
     setOpenActionModal(false);
     setOpenNameModal(true);
@@ -42,10 +52,50 @@ export default function useImportSheet() {
       return;
     }
 
+    // check filters from variableFields
+    const filtersByIsFilterProp = varialbleFields.filter(
+      (field) => field.isFilter
+    );
+
+    const currentFilters = filtersByIsFilterProp.map((field) => {
+      return {
+        name: field.name,
+        type: field.type,
+        values:
+          field.type === 'category'
+            ? [
+                DEFAULT_ALL_FIELD.value,
+                ...new Set(
+                  parsedData.map((e) => e[field.name as keyof typeof e])
+                ),
+              ]
+            : undefined,
+        range:
+          field.type === 'numeric'
+            ? [
+                parseIfNotANumber(
+                  Math.min(
+                    ...parsedData.map(
+                      (e) => e[field.name as keyof typeof e] as number
+                    )
+                  )
+                ),
+                parseIfNotANumber(
+                  Math.max(
+                    ...parsedData.map(
+                      (e) => e[field.name as keyof typeof e] as number
+                    )
+                  )
+                ),
+              ]
+            : undefined,
+      };
+    });
+
     // Append the new sheet
     const currentSheets = [
       ...importedSheets,
-      { name: customSheetName, data: parsedData },
+      { name: customSheetName, data: parsedData, filters: currentFilters },
     ] as TExcelData;
 
     setImportedSheets(currentSheets);
@@ -95,4 +145,16 @@ export default function useImportSheet() {
     handleSaveSheetName,
     handleConfirmClick,
   };
+}
+
+function parseIfNotANumber(value: number | string) {
+  if (isNaN(Number(value))) {
+    return 0;
+  }
+
+  if (value === 'Infinity' || value === '-Infinity') {
+    return 0;
+  }
+
+  return Number(value) ?? 0;
 }

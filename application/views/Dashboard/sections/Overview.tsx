@@ -1,19 +1,12 @@
-// disable all ts eslint rule for this file and ts errors
-// disable ts checks for this file
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-nocheck
-/* eslint-disable */
-
 import { useEffect, useState } from 'react';
 import { SvgViz } from '../../../../presentation/components';
 import { Card } from '../../../../presentation/layout';
 import { getTableStats } from '../../../../model/data-handlers';
-import { TGetMappedData } from '../../../data-handlers/get-table-stats';
 import StatsTable from '../../../../presentation/components/StatsTable/StatsTable';
-import { RangeSlider, Flex, Box, Select } from '@mantine/core';
+import { Flex, Box, Select } from '@mantine/core';
 import { useSvgPartSelection } from '../../../../model/hooks';
 import { TStats } from '../../../../model/definitions/Stats';
-import { DEFAUT_ALL_FIELD } from '../../../../model/definitions/ImportFields';
+import { DEFAULT_ALL_FIELD } from '../../../../model/definitions/ImportFields';
 import {
   selectAllSheets,
   selectAllVariableFields,
@@ -21,39 +14,54 @@ import {
   selectUniqueSvgParts,
   useAppSelector,
 } from '../../../../model';
+import {
+  TExcelSheet,
+  TExcelSheetData,
+  TNumericRange,
+  TPolymorphicRecord,
+  TVariableType,
+} from '../../../../model/Excel/definitions';
+import { TDropdownOption } from '../../../../model/definitions/Tabs';
+import { TGetMappedData } from '../../../../model/data-handlers/getTableStats';
+import {
+  RangeSlider,
+  RangeSliderFilledTrack,
+  RangeSliderThumb,
+  RangeSliderTrack,
+} from '@chakra-ui/react';
 
-const DEFAULT_GENDER_VALUES = [
-  DEFAUT_ALL_FIELD,
-  { value: 'M', label: 'Male' },
-  { value: 'F', label: 'Female' },
-];
+export type TFilterStateItem = {
+  name: string;
+  type: TVariableType;
+  value?: string | null;
+  range?: TNumericRange;
+};
 
 export default function Overview() {
   const [selectedSheet, setSelectedSheet] = useState<string>('0');
-  const [currentDataset, setCurrentDataset] = useState<any[]>([]);
-  const [availableSheets, setAvailableSheets] = useState<any[]>([]);
+  const [currentDataset, setCurrentDataset] = useState<TExcelSheetData>([]);
+  const [currentExcelSheet, setCurrentExcelSheet] = useState<TExcelSheet>();
+  const [availableSheets, setAvailableSheets] = useState<TDropdownOption[]>([]);
   const { svgPartSelection, handleSvgPartSelection } = useSvgPartSelection();
-  const [sexFilter, setSexFilter] = useState<string>('All');
-  const [heightRange, setHeightRange] = useState<[number, number]>([0, 500]);
-  const [minMaxRanges, setMinMaxRanges] = useState<[number, number] | null>(
-    null
-  );
+  const [filterState, setFilterState] = useState<TFilterStateItem[]>([]);
 
   const excelData = useAppSelector(selectAllSheets);
   const variableFields = useAppSelector(selectAllVariableFields);
   const idField = useAppSelector(selectIdField);
   const svgParts = useAppSelector(selectUniqueSvgParts);
-  const [filteredData, setFilteredData] = useState(excelData);
+  const [filteredData, setFilteredData] =
+    useState<TExcelSheetData>(currentDataset);
 
   useEffect(() => {
     if (!excelData?.length) return;
 
-    if (selectedSheet === DEFAUT_ALL_FIELD.value) {
+    if (selectedSheet === DEFAULT_ALL_FIELD.value) {
       const mergedDataSets = excelData.map((sheet) => sheet.data).flat();
       setCurrentDataset(mergedDataSets);
     } else {
       const currentDataset = excelData[Number(selectedSheet)]?.data;
       setCurrentDataset(currentDataset);
+      setCurrentExcelSheet(excelData[Number(selectedSheet)]);
     }
   }, [selectedSheet, excelData]);
 
@@ -64,41 +72,43 @@ export default function Overview() {
       value: index.toString(),
       label: sheet.name,
     }));
-    setAvailableSheets([...mappedSheets, DEFAUT_ALL_FIELD]);
+    setAvailableSheets([...mappedSheets, DEFAULT_ALL_FIELD]);
 
-    const currentHeightRange = currentDataset?.map((item: any) =>
-      parseFloat(item.Height)
-    );
-    setMinMaxRanges([
-      Math.min(...currentHeightRange),
-      Math.max(...currentHeightRange),
-    ]);
-    setHeightRange([
-      Math.min(...currentHeightRange),
-      Math.max(...currentHeightRange),
-    ]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentDataset]);
 
+  // HERE define filters in useEffect from excelData.filters which is of type export type TVariableType = 'id' | 'numeric' | 'category';
   // Apply sex and height filters
   useEffect(() => {
     if (currentDataset?.length === 0) return;
+
     let filtered = currentDataset;
     // TODO add dynamic filters
-    if (sexFilter !== DEFAUT_ALL_FIELD.value) {
-      filtered = filtered?.filter((item) => item.Sex === sexFilter);
+    if (filterState?.length > 0) {
+      filterState.forEach((filter) => {
+        if (filter.type === 'numeric') {
+          filtered = filtered.filter((item) => {
+            const typedItem = item as unknown as TPolymorphicRecord;
+            const value = typedItem[filter.name] as number;
+            return value >= filter.range![0] && value <= filter.range![1];
+          });
+        } else {
+          filtered = filtered.filter((item) => {
+            if (filter.value === DEFAULT_ALL_FIELD.value) return true;
+            const typedItem = item as unknown as TPolymorphicRecord;
+            const value = typedItem[filter.name] as string;
+            return value === filter.value;
+          });
+        }
+      });
     }
 
-    filtered = filtered?.filter((item) => {
-      const height = parseFloat(item.Height);
-      return height >= heightRange[0] && height <= heightRange[1];
-    });
-
     setFilteredData(filtered);
-  }, [sexFilter, heightRange, currentDataset]);
+  }, [filterState, currentDataset]);
 
   // Apply svg part selection filter
   useEffect(() => {
-    let filtered = filteredData;
+    let filtered = filteredData.length > 0 ? filteredData : currentDataset;
 
     if (svgPartSelection.length > 0) {
       filtered = filtered.map((item) => {
@@ -112,23 +122,33 @@ export default function Overview() {
 
         lowerCaseKeys.forEach((key) => {
           if (lowerCaseSvgPartSelection.includes(key)) {
-            const findPatient = currentDataset.find(
-              (patient) => patient[idField] === item[idField]
-            );
+            const typedKey = key as keyof typeof findPatient;
+            const findPatient = currentDataset.find((patient) => {
+              const typedPatient = patient as unknown as TPolymorphicRecord;
+              typedPatient[idField] === typedPatient[idField];
+            });
 
-            filteredItem[key] = findPatient[key];
+            filteredItem[typedKey] = findPatient?.[typedKey] as
+              | string
+              | number
+              | boolean
+              | null
+              | undefined;
             return;
           }
           if (!lowerCaseSvgPartSelection.includes(key)) {
             return;
           }
-          filteredItem[key] = 0;
+          const typedFileteredItem =
+            filteredItem as unknown as TPolymorphicRecord;
+          typedFileteredItem[key] = 0;
         });
         return filteredItem;
       });
     }
 
     setFilteredData(filtered);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [svgPartSelection, currentDataset, idField]);
 
   const data: TGetMappedData = {
@@ -140,42 +160,119 @@ export default function Overview() {
   const stats: TStats[] = getTableStats(data);
 
   return (
-    <Flex height="100%" gap="md">
+    <Flex gap="md">
       <Flex direction="column" align="center" style={{ flex: 1 }}>
-        <Flex direction="column" padding="20px">
-          <h2>Filters</h2>
-          <Flex gap="40px">
-            <div style={{ width: '300px' }}>
-              <Select
-                allowDeselect={false}
-                defaultValue={DEFAULT_GENDER_VALUES[0].value}
-                label="Filter by sex"
-                placeholder="Select sex"
-                onChange={setSexFilter}
-                data={DEFAULT_GENDER_VALUES}
-              />
-            </div>
-            <div style={{ width: '300px' }}>
-              <label>Height Range</label>
-              <Flex align="center" width="100%">
-                <Box mr="10px">{heightRange[0]}</Box>
-                {minMaxRanges ? (
-                  <RangeSlider
-                    min={minMaxRanges[0]}
-                    max={minMaxRanges[1]}
-                    step={1}
-                    defaultValue={minMaxRanges}
-                    onChangeEnd={(val) => setHeightRange([val[0], val[1]])}
-                    style={{ width: '100%' }}
+        <Flex direction="column">
+          {currentExcelSheet?.filters &&
+          currentExcelSheet.filters.length > 0 ? (
+            <h2>Filters</h2>
+          ) : null}
+          <Flex gap="40px" wrap="wrap">
+            {currentExcelSheet?.filters.map((filter) => (
+              <Box key={filter.name}>
+                {filter.type === 'numeric' ? (
+                  <div style={{ width: '300px' }}>
+                    <label>{filter.name}</label>
+                    <Flex align="center">
+                      <Box mr="10px">
+                        {filterState.find(
+                          (stateFilter) => stateFilter.name === filter.name
+                        )?.range?.[0] ?? filter.range?.[0]}
+                      </Box>
+                      <RangeSlider
+                        min={filter.range?.[0]}
+                        max={filter.range?.[1]}
+                        step={0.0001}
+                        defaultValue={[
+                          filter.range?.[0] ?? 0,
+                          filter.range?.[1] ?? 1,
+                        ]}
+                        onChangeEnd={(value) => {
+                          setFilterState((prevState) => {
+                            // Find if we already have a filter with `filter.name`
+                            const idx = prevState.findIndex(
+                              (f) => f.name === filter.name
+                            );
+
+                            if (idx >= 0) {
+                              // Update the existing filter
+                              return prevState.map((item, i) =>
+                                i === idx
+                                  ? { ...item, range: value as TNumericRange }
+                                  : item
+                              );
+                            } else {
+                              // Create a new filter entry
+                              return [
+                                ...prevState,
+                                {
+                                  name: filter.name,
+                                  type: filter.type,
+                                  range: value as TNumericRange, // The new range
+                                },
+                              ];
+                            }
+                          });
+                        }}
+                        style={{ width: '100%' }}
+                      >
+                        {' '}
+                        <RangeSliderTrack bg="tomato">
+                          <RangeSliderFilledTrack bg="#3399ff" />
+                        </RangeSliderTrack>
+                        <RangeSliderThumb index={0} bg="#3399ff" />
+                        <RangeSliderThumb index={1} bg="#3399ff" />
+                      </RangeSlider>
+                      <Box ml="10px">
+                        {' '}
+                        {filterState.find(
+                          (stateFilter) => stateFilter.name === filter.name
+                        )?.range?.[1] ?? filter.range?.[1]}
+                      </Box>
+                    </Flex>
+                  </div>
+                ) : (
+                  <Select
+                    data={filter.values}
+                    defaultValue={filter.values![0]}
+                    label={filter.name}
+                    placeholder="Select option"
+                    onChange={(value) => {
+                      setFilterState((prevState) => {
+                        // Check if there's already a filter item for `filter.name`
+                        const idx = prevState.findIndex(
+                          (f) => f.name === filter.name
+                        );
+
+                        // If found, update it
+                        if (idx >= 0) {
+                          return prevState.map((item, i) => {
+                            if (i === idx) {
+                              return { ...item, value };
+                            }
+                            return item;
+                          });
+                        }
+
+                        // Otherwise, create a new one
+                        return [
+                          ...prevState,
+                          {
+                            name: filter.name,
+                            type: filter.type,
+                            value: value,
+                          },
+                        ];
+                      });
+                    }}
                   />
-                ) : null}
-                <Box ml="10px">{heightRange[1]}</Box>
-              </Flex>
-            </div>
+                )}
+              </Box>
+            ))}
           </Flex>
         </Flex>
 
-        <Flex direction="column" padding="20px">
+        <Flex direction="column">
           <SvgViz
             selected={svgPartSelection}
             onPartClick={(part) => handleSvgPartSelection(part)}
@@ -185,7 +282,6 @@ export default function Overview() {
       </Flex>
       <Flex
         direction="column"
-        padding="20px"
         style={{ flex: 1.5 }}
         justify="flex-start"
         align="center"
@@ -196,7 +292,7 @@ export default function Overview() {
             defaultValue={availableSheets[0]?.value}
             label="Select dataset"
             placeholder="Select dataset"
-            onChange={setSelectedSheet}
+            onChange={(val) => setSelectedSheet(val!)}
             data={availableSheets}
           />
         ) : null}

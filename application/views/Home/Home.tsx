@@ -10,14 +10,10 @@ import {
   FileInput,
 } from '@mantine/core';
 import { IconAlertCircle } from '@tabler/icons-react';
-import {
-  useImportFields,
-  TExcelData,
-  useSvgUpload,
-  useImportSheet,
-} from '../../../model';
+import { useImportFields, useSvgUpload, useImportSheet } from '../../../model';
 import * as styles from './Home.module.css';
 import { CustomExcelTypeModal } from '../../../presentation/components';
+import { TExcelSheetData } from '../../../model/Excel/definitions';
 
 const MODAL_OFFSET = 150;
 
@@ -144,7 +140,7 @@ export default function Home() {
         // initialStepState={{ data: excelFile! }} TODO: Find a solution for the excel upload flow to avoid repittions
         onClose={() => setOpenImportModal(false)}
         onSubmit={(data) => {
-          const typedData = data?.validData as unknown as TExcelData;
+          const typedData = data?.validData as unknown as TExcelSheetData;
           handleImportClick(typedData);
           setOpenImportModal(false);
         }}
