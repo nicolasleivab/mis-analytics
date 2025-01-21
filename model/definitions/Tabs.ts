@@ -5,3 +5,8 @@ export type TView = {
 export const FIRST_MODEL: TView = {
   id: '1',
 };
+
+export type TDropdownOption = {
+  value: string;
+  label: string;
+};

@@ -11,6 +11,11 @@ export type TFilter = {
   range?: TNumericRange;
 };
 
+export type TPolymorphicRecord = Record<
+  string | symbol | number,
+  string | number | boolean | null | undefined
+>;
+
 export type TExcelSheetData = unknown[][];
 
 export type TExcelSheet = {

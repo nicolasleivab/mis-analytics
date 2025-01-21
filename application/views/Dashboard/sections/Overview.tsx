@@ -1,19 +1,12 @@
-// disable all ts eslint rule for this file and ts errors
-// disable ts checks for this file
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-nocheck
-/* eslint-disable */
-
 import { useEffect, useState } from 'react';
 import { SvgViz } from '../../../../presentation/components';
 import { Card } from '../../../../presentation/layout';
 import { getTableStats } from '../../../../model/data-handlers';
-import { TGetMappedData } from '../../../data-handlers/get-table-stats';
 import StatsTable from '../../../../presentation/components/StatsTable/StatsTable';
 import { RangeSlider, Flex, Box, Select } from '@mantine/core';
 import { useSvgPartSelection } from '../../../../model/hooks';
 import { TStats } from '../../../../model/definitions/Stats';
-import { DEFAUT_ALL_FIELD } from '../../../../model/definitions/ImportFields';
+import { DEFAULT_ALL_FIELD } from '../../../../model/definitions/ImportFields';
 import {
   selectAllSheets,
   selectAllVariableFields,
@@ -21,17 +14,23 @@ import {
   selectUniqueSvgParts,
   useAppSelector,
 } from '../../../../model';
+import {
+  TExcelSheetData,
+  TPolymorphicRecord,
+} from '../../../../model/Excel/definitions';
+import { TDropdownOption } from '../../../../model/definitions/Tabs';
+import { TGetMappedData } from '../../../../model/data-handlers/getTableStats';
 
 const DEFAULT_GENDER_VALUES = [
-  DEFAUT_ALL_FIELD,
+  DEFAULT_ALL_FIELD,
   { value: 'M', label: 'Male' },
   { value: 'F', label: 'Female' },
 ];
 
 export default function Overview() {
   const [selectedSheet, setSelectedSheet] = useState<string>('0');
-  const [currentDataset, setCurrentDataset] = useState<any[]>([]);
-  const [availableSheets, setAvailableSheets] = useState<any[]>([]);
+  const [currentDataset, setCurrentDataset] = useState<TExcelSheetData>([]);
+  const [availableSheets, setAvailableSheets] = useState<TDropdownOption[]>([]);
   const { svgPartSelection, handleSvgPartSelection } = useSvgPartSelection();
   const [sexFilter, setSexFilter] = useState<string>('All');
   const [heightRange, setHeightRange] = useState<[number, number]>([0, 500]);
@@ -43,13 +42,13 @@ export default function Overview() {
   const variableFields = useAppSelector(selectAllVariableFields);
   const idField = useAppSelector(selectIdField);
   const svgParts = useAppSelector(selectUniqueSvgParts);
-  const [filteredData, setFilteredData] = useState(excelData);
+  const [filteredData, setFilteredData] =
+    useState<TExcelSheetData>(currentDataset);
 
-  console.log('exceldata', excelData);
   useEffect(() => {
     if (!excelData?.length) return;
 
-    if (selectedSheet === DEFAUT_ALL_FIELD.value) {
+    if (selectedSheet === DEFAULT_ALL_FIELD.value) {
       const mergedDataSets = excelData.map((sheet) => sheet.data).flat();
       setCurrentDataset(mergedDataSets);
     } else {
@@ -65,11 +64,12 @@ export default function Overview() {
       value: index.toString(),
       label: sheet.name,
     }));
-    setAvailableSheets([...mappedSheets, DEFAUT_ALL_FIELD]);
+    setAvailableSheets([...mappedSheets, DEFAULT_ALL_FIELD]);
 
-    const currentHeightRange = currentDataset?.map((item: any) =>
-      parseFloat(item.Height)
-    );
+    const currentHeightRange = currentDataset?.map((item) => {
+      const typedItem = item as unknown as TPolymorphicRecord;
+      return parseFloat(typedItem.Height as string);
+    });
     setMinMaxRanges([
       Math.min(...currentHeightRange),
       Math.max(...currentHeightRange),
@@ -78,6 +78,7 @@ export default function Overview() {
       Math.min(...currentHeightRange),
       Math.max(...currentHeightRange),
     ]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentDataset]);
 
   // Apply sex and height filters
@@ -85,12 +86,16 @@ export default function Overview() {
     if (currentDataset?.length === 0) return;
     let filtered = currentDataset;
     // TODO add dynamic filters
-    if (sexFilter !== DEFAUT_ALL_FIELD.value) {
-      filtered = filtered?.filter((item) => item.Sex === sexFilter);
+    if (sexFilter !== DEFAULT_ALL_FIELD.value) {
+      filtered = filtered?.filter((item) => {
+        const typedItem = item as unknown as TPolymorphicRecord;
+        return typedItem.Sex === sexFilter;
+      });
     }
 
     filtered = filtered?.filter((item) => {
-      const height = parseFloat(item.Height);
+      const typedItem = item as unknown as TPolymorphicRecord;
+      const height = parseFloat(typedItem.Height as string);
       return height >= heightRange[0] && height <= heightRange[1];
     });
 
@@ -113,23 +118,33 @@ export default function Overview() {
 
         lowerCaseKeys.forEach((key) => {
           if (lowerCaseSvgPartSelection.includes(key)) {
-            const findPatient = currentDataset.find(
-              (patient) => patient[idField] === item[idField]
-            );
+            const typedKey = key as keyof typeof findPatient;
+            const findPatient = currentDataset.find((patient) => {
+              const typedPatient = patient as unknown as TPolymorphicRecord;
+              typedPatient[idField] === typedPatient[idField];
+            });
 
-            filteredItem[key] = findPatient[key];
+            filteredItem[typedKey] = findPatient?.[typedKey] as
+              | string
+              | number
+              | boolean
+              | null
+              | undefined;
             return;
           }
           if (!lowerCaseSvgPartSelection.includes(key)) {
             return;
           }
-          filteredItem[key] = 0;
+          const typedFileteredItem =
+            filteredItem as unknown as TPolymorphicRecord;
+          typedFileteredItem[key] = 0;
         });
         return filteredItem;
       });
     }
 
     setFilteredData(filtered);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [svgPartSelection, currentDataset, idField]);
 
   const data: TGetMappedData = {
@@ -141,9 +156,9 @@ export default function Overview() {
   const stats: TStats[] = getTableStats(data);
 
   return (
-    <Flex height="100%" gap="md">
+    <Flex gap="md">
       <Flex direction="column" align="center" style={{ flex: 1 }}>
-        <Flex direction="column" padding="20px">
+        <Flex direction="column">
           <h2>Filters</h2>
           <Flex gap="40px">
             <div style={{ width: '300px' }}>
@@ -152,13 +167,13 @@ export default function Overview() {
                 defaultValue={DEFAULT_GENDER_VALUES[0].value}
                 label="Filter by sex"
                 placeholder="Select sex"
-                onChange={setSexFilter}
+                onChange={(val) => setSexFilter(val!)}
                 data={DEFAULT_GENDER_VALUES}
               />
             </div>
             <div style={{ width: '300px' }}>
               <label>Height Range</label>
-              <Flex align="center" width="100%">
+              <Flex align="center">
                 <Box mr="10px">{heightRange[0]}</Box>
                 {minMaxRanges ? (
                   <RangeSlider
@@ -176,7 +191,7 @@ export default function Overview() {
           </Flex>
         </Flex>
 
-        <Flex direction="column" padding="20px">
+        <Flex direction="column">
           <SvgViz
             selected={svgPartSelection}
             onPartClick={(part) => handleSvgPartSelection(part)}
@@ -186,7 +201,6 @@ export default function Overview() {
       </Flex>
       <Flex
         direction="column"
-        padding="20px"
         style={{ flex: 1.5 }}
         justify="flex-start"
         align="center"
@@ -197,7 +211,7 @@ export default function Overview() {
             defaultValue={availableSheets[0]?.value}
             label="Select dataset"
             placeholder="Select dataset"
-            onChange={setSelectedSheet}
+            onChange={(val) => setSelectedSheet(val!)}
             data={availableSheets}
           />
         ) : null}

@@ -9,6 +9,7 @@ import {
 } from '../..';
 import { DASHBOARD_ROUTE } from '../../../application/controller/Router/routes';
 import { TExcelSheetData } from '../../Excel/definitions';
+import { DEFAULT_ALL_FIELD } from '../../definitions/ImportFields';
 
 /**
  * Manages the flow for importing Excel sheets, naming them,
@@ -63,6 +64,7 @@ export default function useImportSheet() {
         values:
           field.type === 'category'
             ? [
+                DEFAULT_ALL_FIELD.value,
                 ...new Set(
                   parsedData.map((e) => e[field.name as keyof typeof e])
                 ),
