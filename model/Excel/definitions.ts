@@ -5,14 +5,17 @@ export type TCategoricalValues = string[];
 export type TNumericRange = [number, number];
 
 export type TFilter = {
+  name: string;
   type: TVariableType;
   values?: TCategoricalValues;
   range?: TNumericRange;
 };
 
+export type TExcelSheetData = unknown[][];
+
 export type TExcelSheet = {
   name: string;
-  data: unknown[][];
+  data: TExcelSheetData;
   filters: TFilter[];
 };
 

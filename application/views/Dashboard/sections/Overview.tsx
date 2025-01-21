@@ -45,6 +45,7 @@ export default function Overview() {
   const svgParts = useAppSelector(selectUniqueSvgParts);
   const [filteredData, setFilteredData] = useState(excelData);
 
+  console.log('exceldata', excelData);
   useEffect(() => {
     if (!excelData?.length) return;
 
