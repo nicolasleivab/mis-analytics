@@ -139,6 +139,8 @@ export default function CustomExcelTypeModal({
 
   const onCloseHandler = () => {
     setLocalFile(null);
+    setColumnTypes([]);
+    setHeaders([]);
     setIdError(null);
     onClose();
   };
@@ -169,7 +171,7 @@ export default function CustomExcelTypeModal({
 
               // Infer column types
               const guessed: TVariableField[] = foundHeaders.map((header) => {
-                const lowerHeader = header.toLowerCase();
+                const lowerHeader = header;
 
                 // If column name has 'id' anywhere => guess 'id'
                 if (lowerHeader.includes('id')) {
@@ -238,14 +240,11 @@ export default function CustomExcelTypeModal({
     }
 
     const areAllSvgPartsIncluded = uniqueSvgParts.every((part) =>
-      columnTypes.some((col) => col.name.toLowerCase() === part.toLowerCase())
+      columnTypes.some((col) => col.name === part)
     );
 
     const listOfMissingSvgParts = uniqueSvgParts.filter(
-      (part) =>
-        !columnTypes.some(
-          (col) => col.name.toLowerCase() === part.toLowerCase()
-        )
+      (part) => !columnTypes.some((col) => col.name === part)
     );
 
     if (!areAllSvgPartsIncluded) {

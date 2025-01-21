@@ -73,7 +73,7 @@ export default function SvgViz({
         color = '#006400'; // Dark Green
       }
 
-      const partName = stat.svgPart.toLowerCase();
+      const partName = stat.svgPart;
 
       if (newColors[partName]) {
         newColors[partName].activeColor = color;

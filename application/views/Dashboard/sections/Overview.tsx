@@ -113,15 +113,10 @@ export default function Overview() {
     if (svgPartSelection.length > 0) {
       filtered = filtered.map((item) => {
         const filteredItem = { ...item };
-        const lowerCaseKeys = Object.keys(filteredItem).map((key) =>
-          key.toLowerCase()
-        );
-        const lowerCaseSvgPartSelection = svgPartSelection.map((key) =>
-          key.toLowerCase()
-        );
+        const keys = Object.keys(filteredItem);
 
-        lowerCaseKeys.forEach((key) => {
-          if (lowerCaseSvgPartSelection.includes(key)) {
+        keys.forEach((key) => {
+          if (svgPartSelection.includes(key)) {
             const typedKey = key as keyof typeof findPatient;
             const findPatient = currentDataset.find((patient) => {
               const typedPatient = patient as unknown as TPolymorphicRecord;
@@ -136,7 +131,7 @@ export default function Overview() {
               | undefined;
             return;
           }
-          if (!lowerCaseSvgPartSelection.includes(key)) {
+          if (!svgPartSelection.includes(key)) {
             return;
           }
           const typedFileteredItem =

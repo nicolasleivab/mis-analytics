@@ -15,23 +15,15 @@ export function getTableStats({
   svgParts,
 }: TGetMappedData): TStats[] {
   const stats: TStats[] = [];
-  const lowerCaseSvgPartSelection = svgPartSelection.map((part) =>
-    part.toLowerCase()
-  );
-
-  const lowerCaseVariableFields = variableFields.map((part) =>
-    part.name.toLowerCase()
-  );
-
-  const onlySvgParts = lowerCaseVariableFields.filter((part) =>
-    svgParts.includes(part.toLowerCase())
+  const onlySvgParts = variableFields.filter((part) =>
+    svgParts.includes(part.name)
   );
 
   const fieldVariablesThatAreNotSvgParts = variableFields.filter(
-    (part) => !onlySvgParts.includes(part.name.toLowerCase())
+    (part) => !onlySvgParts.includes(part)
   );
   const fieldVariablesThatAreSvgParts = variableFields.filter((part) =>
-    onlySvgParts.includes(part.name.toLowerCase())
+    onlySvgParts.includes(part)
   );
 
   const filteredVariableByType = fieldVariablesThatAreNotSvgParts.filter(
@@ -39,7 +31,7 @@ export function getTableStats({
   );
 
   const filteredSvgVariableFields = fieldVariablesThatAreSvgParts.filter(
-    (part) => lowerCaseSvgPartSelection.includes(part.name.toLowerCase())
+    (part) => svgPartSelection.includes(part.name)
   );
 
   const filteredVariableFields =
