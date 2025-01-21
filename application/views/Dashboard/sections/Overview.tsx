@@ -45,6 +45,8 @@ export default function Overview() {
   const [filteredData, setFilteredData] =
     useState<TExcelSheetData>(currentDataset);
 
+  console.log('excelData', excelData);
+
   useEffect(() => {
     if (!excelData?.length) return;
 

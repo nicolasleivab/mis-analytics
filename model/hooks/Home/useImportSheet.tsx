@@ -73,16 +73,18 @@ export default function useImportSheet() {
         range:
           field.type === 'numeric'
             ? [
-                Math.min(
-                  ...parsedData
-                    .map((e) => e[field.name as keyof typeof e])
-                    .filter(
-                      (value): value is number => typeof value === 'number'
+                parseIfNotANumber(
+                  Math.min(
+                    ...parsedData.map(
+                      (e) => e[field.name as keyof typeof e] as number
                     )
+                  )
                 ),
-                Math.max(
-                  ...parsedData.map(
-                    (e) => e[field.name as keyof typeof e] as number
+                parseIfNotANumber(
+                  Math.max(
+                    ...parsedData.map(
+                      (e) => e[field.name as keyof typeof e] as number
+                    )
                   )
                 ),
               ]
@@ -143,4 +145,16 @@ export default function useImportSheet() {
     handleSaveSheetName,
     handleConfirmClick,
   };
+}
+
+function parseIfNotANumber(value: number | string) {
+  if (isNaN(Number(value))) {
+    return 0;
+  }
+
+  if (value === 'Infinity' || value === '-Infinity') {
+    return 0;
+  }
+
+  return Number(value) ?? 0;
 }
