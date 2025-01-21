@@ -3,7 +3,7 @@ import { SvgViz } from '../../../../presentation/components';
 import { Card } from '../../../../presentation/layout';
 import { getTableStats } from '../../../../model/data-handlers';
 import StatsTable from '../../../../presentation/components/StatsTable/StatsTable';
-import { RangeSlider, Flex, Box, Select } from '@mantine/core';
+import { Flex, Box, Select } from '@mantine/core';
 import { useSvgPartSelection } from '../../../../model/hooks';
 import { TStats } from '../../../../model/definitions/Stats';
 import { DEFAULT_ALL_FIELD } from '../../../../model/definitions/ImportFields';
@@ -23,6 +23,12 @@ import {
 } from '../../../../model/Excel/definitions';
 import { TDropdownOption } from '../../../../model/definitions/Tabs';
 import { TGetMappedData } from '../../../../model/data-handlers/getTableStats';
+import {
+  RangeSlider,
+  RangeSliderFilledTrack,
+  RangeSliderThumb,
+  RangeSliderTrack,
+} from '@chakra-ui/react';
 
 export type TFilterStateItem = {
   name: string;
@@ -45,8 +51,6 @@ export default function Overview() {
   const svgParts = useAppSelector(selectUniqueSvgParts);
   const [filteredData, setFilteredData] =
     useState<TExcelSheetData>(currentDataset);
-
-  console.log('excelData', excelData);
 
   useEffect(() => {
     if (!excelData?.length) return;
@@ -77,7 +81,7 @@ export default function Overview() {
   // Apply sex and height filters
   useEffect(() => {
     if (currentDataset?.length === 0) return;
-    console.log('filterState', filterState);
+
     let filtered = currentDataset;
     // TODO add dynamic filters
     if (filterState?.length > 0) {
@@ -104,7 +108,6 @@ export default function Overview() {
 
   // Apply svg part selection filter
   useEffect(() => {
-    console.log('filteredData', filteredData);
     let filtered = filteredData.length > 0 ? filteredData : currentDataset;
 
     if (svgPartSelection.length > 0) {
@@ -155,7 +158,7 @@ export default function Overview() {
     svgParts,
   };
   const stats: TStats[] = getTableStats(data);
-  console.log('filters', currentExcelSheet?.filters);
+
   return (
     <Flex gap="md">
       <Flex direction="column" align="center" style={{ flex: 1 }}>
@@ -171,13 +174,15 @@ export default function Overview() {
                   <div style={{ width: '300px' }}>
                     <label>{filter.name}</label>
                     <Flex align="center">
-                      <Box mr="10px">{filter.range?.[0]}</Box>
+                      <Box mr="10px">
+                        {filterState.find(
+                          (stateFilter) => stateFilter.name === filter.name
+                        )?.range?.[0] ?? filter.range?.[0]}
+                      </Box>
                       <RangeSlider
-                        label={filter.name}
                         min={filter.range?.[0]}
                         max={filter.range?.[1]}
                         step={0.0001}
-                        precision={4}
                         defaultValue={[
                           filter.range?.[0] ?? 0,
                           filter.range?.[1] ?? 1,
@@ -192,7 +197,9 @@ export default function Overview() {
                             if (idx >= 0) {
                               // Update the existing filter
                               return prevState.map((item, i) =>
-                                i === idx ? { ...item, range: value } : item
+                                i === idx
+                                  ? { ...item, range: value as TNumericRange }
+                                  : item
                               );
                             } else {
                               // Create a new filter entry
@@ -201,15 +208,27 @@ export default function Overview() {
                                 {
                                   name: filter.name,
                                   type: filter.type,
-                                  range: value, // The new range
+                                  range: value as TNumericRange, // The new range
                                 },
                               ];
                             }
                           });
                         }}
                         style={{ width: '100%' }}
-                      />
-                      <Box ml="10px">{filter.range?.[1]}</Box>
+                      >
+                        {' '}
+                        <RangeSliderTrack bg="tomato">
+                          <RangeSliderFilledTrack bg="#3399ff" />
+                        </RangeSliderTrack>
+                        <RangeSliderThumb index={0} bg="#3399ff" />
+                        <RangeSliderThumb index={1} bg="#3399ff" />
+                      </RangeSlider>
+                      <Box ml="10px">
+                        {' '}
+                        {filterState.find(
+                          (stateFilter) => stateFilter.name === filter.name
+                        )?.range?.[1] ?? filter.range?.[1]}
+                      </Box>
                     </Flex>
                   </div>
                 ) : (
