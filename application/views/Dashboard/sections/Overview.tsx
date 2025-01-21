@@ -17,11 +17,19 @@ import {
 import {
   TExcelSheet,
   TExcelSheetData,
-  // TFilter,
+  TNumericRange,
   TPolymorphicRecord,
+  TVariableType,
 } from '../../../../model/Excel/definitions';
 import { TDropdownOption } from '../../../../model/definitions/Tabs';
 import { TGetMappedData } from '../../../../model/data-handlers/getTableStats';
+
+export type TFilterStateItem = {
+  name: string;
+  type: TVariableType;
+  value?: string | null;
+  range?: TNumericRange;
+};
 
 export default function Overview() {
   const [selectedSheet, setSelectedSheet] = useState<string>('0');
@@ -29,7 +37,7 @@ export default function Overview() {
   const [currentExcelSheet, setCurrentExcelSheet] = useState<TExcelSheet>();
   const [availableSheets, setAvailableSheets] = useState<TDropdownOption[]>([]);
   const { svgPartSelection, handleSvgPartSelection } = useSvgPartSelection();
-  // const [filters, setFilters] = useState<TFilter[]>([]);
+  const [filterState, setFilterState] = useState<TFilterStateItem[]>([]);
 
   const excelData = useAppSelector(selectAllSheets);
   const variableFields = useAppSelector(selectAllVariableFields);
@@ -66,11 +74,33 @@ export default function Overview() {
   }, [currentDataset]);
 
   // HERE define filters in useEffect from excelData.filters which is of type export type TVariableType = 'id' | 'numeric' | 'category';
+  // Apply sex and height filters
   useEffect(() => {
     if (currentDataset?.length === 0) return;
-    console.log('currentDataset', currentDataset);
-    setFilteredData(currentDataset);
-  }, [currentDataset]);
+    console.log('filterState', filterState);
+    let filtered = currentDataset;
+    // TODO add dynamic filters
+    if (filterState?.length > 0) {
+      filterState.forEach((filter) => {
+        if (filter.type === 'numeric') {
+          filtered = filtered.filter((item) => {
+            const typedItem = item as unknown as TPolymorphicRecord;
+            const value = typedItem[filter.name] as number;
+            return value >= filter.range![0] && value <= filter.range![1];
+          });
+        } else {
+          filtered = filtered.filter((item) => {
+            if (filter.value === DEFAULT_ALL_FIELD.value) return true;
+            const typedItem = item as unknown as TPolymorphicRecord;
+            const value = typedItem[filter.name] as string;
+            return value === filter.value;
+          });
+        }
+      });
+    }
+
+    setFilteredData(filtered);
+  }, [filterState, currentDataset]);
 
   // Apply svg part selection filter
   useEffect(() => {
@@ -125,7 +155,7 @@ export default function Overview() {
     svgParts,
   };
   const stats: TStats[] = getTableStats(data);
-
+  console.log('filters', currentExcelSheet?.filters);
   return (
     <Flex gap="md">
       <Flex direction="column" align="center" style={{ flex: 1 }}>
@@ -146,9 +176,37 @@ export default function Overview() {
                         label={filter.name}
                         min={filter.range?.[0]}
                         max={filter.range?.[1]}
-                        step={filter.range ? filter.range?.[1] / 100 : 1}
-                        defaultValue={[filter.range![0], filter.range![1]]}
-                        onChangeEnd={(value) => console.log(value)}
+                        step={0.0001}
+                        precision={4}
+                        defaultValue={[
+                          filter.range?.[0] ?? 0,
+                          filter.range?.[1] ?? 1,
+                        ]}
+                        onChangeEnd={(value) => {
+                          setFilterState((prevState) => {
+                            // Find if we already have a filter with `filter.name`
+                            const idx = prevState.findIndex(
+                              (f) => f.name === filter.name
+                            );
+
+                            if (idx >= 0) {
+                              // Update the existing filter
+                              return prevState.map((item, i) =>
+                                i === idx ? { ...item, range: value } : item
+                              );
+                            } else {
+                              // Create a new filter entry
+                              return [
+                                ...prevState,
+                                {
+                                  name: filter.name,
+                                  type: filter.type,
+                                  range: value, // The new range
+                                },
+                              ];
+                            }
+                          });
+                        }}
                         style={{ width: '100%' }}
                       />
                       <Box ml="10px">{filter.range?.[1]}</Box>
@@ -160,7 +218,34 @@ export default function Overview() {
                     defaultValue={filter.values![0]}
                     label={filter.name}
                     placeholder="Select option"
-                    onChange={(value) => console.log(value)}
+                    onChange={(value) => {
+                      setFilterState((prevState) => {
+                        // Check if there's already a filter item for `filter.name`
+                        const idx = prevState.findIndex(
+                          (f) => f.name === filter.name
+                        );
+
+                        // If found, update it
+                        if (idx >= 0) {
+                          return prevState.map((item, i) => {
+                            if (i === idx) {
+                              return { ...item, value };
+                            }
+                            return item;
+                          });
+                        }
+
+                        // Otherwise, create a new one
+                        return [
+                          ...prevState,
+                          {
+                            name: filter.name,
+                            type: filter.type,
+                            value: value,
+                          },
+                        ];
+                      });
+                    }}
                   />
                 )}
               </Box>
