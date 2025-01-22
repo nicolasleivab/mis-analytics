@@ -3,3 +3,4 @@ export { default as Home } from '../../application/views/Home/Home';
 export { default as SvgViz } from './SvgViz/SvgViz';
 export { default as StepsSlider } from './StepsSlider/StepsSlider';
 export { default as CustomExcelTypeModal } from './CustomExcelTypeModal/CustomExcelTypeModal';
+export { default as CustomTable } from './CustomTable/CustomTable';

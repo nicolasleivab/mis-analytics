@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
-import { SvgViz } from '../../../../presentation/components';
+import { CustomTable, SvgViz } from '../../../../presentation/components';
 import { Card } from '../../../../presentation/layout';
 import { getTableStats } from '../../../../model/data-handlers';
 import StatsTable from '../../../../presentation/components/StatsTable/StatsTable';
-import { Flex, Box, Select } from '@mantine/core';
+import { Flex, Box, Select, Text, Modal } from '@mantine/core';
 import { useSvgPartSelection } from '../../../../model/hooks';
 import { TStats } from '../../../../model/definitions/Stats';
 import { DEFAULT_ALL_FIELD } from '../../../../model/definitions/ImportFields';
@@ -28,6 +28,8 @@ import {
   RangeSliderThumb,
   RangeSliderTrack,
 } from '@chakra-ui/react';
+import { MODAL_OFFSET } from '../../Home/Home';
+import { CalendarIcon } from '@chakra-ui/icons';
 
 export type TFilterStateItem = {
   name: string;
@@ -43,6 +45,7 @@ export default function Overview() {
   const [availableSheets, setAvailableSheets] = useState<TDropdownOption[]>([]);
   const { svgPartSelection, handleSvgPartSelection } = useSvgPartSelection();
   const [filterState, setFilterState] = useState<TFilterStateItem[]>([]);
+  const [openTableModal, setOpenTableModal] = useState<boolean>(false);
   // const [rangeStates, setRangeStates] = useState<TFilterStateItem[]>([]);
 
   const excelData = useAppSelector(selectAllSheets);
@@ -280,7 +283,17 @@ export default function Overview() {
         ) : null}
         {stats?.length > 0 ? (
           <Flex direction="column" gap="20px">
-            <span>{`Number of rows: ${filteredData.length}`}</span>
+            <Flex
+              align="center"
+              gap="10px"
+              onClick={() => setOpenTableModal(true)}
+            >
+              <Text
+                fw={700}
+                style={{ cursor: 'pointer' }}
+              >{`Number of rows: ${filteredData.length}`}</Text>
+              <CalendarIcon />
+            </Flex>
             <StatsTable stats={stats} />
           </Flex>
         ) : (
@@ -289,6 +302,37 @@ export default function Overview() {
           </Card>
         )}
       </Flex>
+      {/* Action Modal */}
+      <Modal
+        yOffset={MODAL_OFFSET}
+        opened={openTableModal}
+        onClose={() => setOpenTableModal(false)}
+        title="Filtered data"
+        size="100%"
+      >
+        <Text fw={700}>
+          {`Total rows after filters: ${filteredData.length}`}
+        </Text>
+        <Text>
+          {`Data filtered by: ${
+            filterState.length === 0
+              ? 'no filters applied.'
+              : filterState
+                  .map((filter) => {
+                    if (filter.type === 'numeric') {
+                      return `${filter.name} between ${filter.range?.[0]} and ${filter.range?.[1]}`;
+                    }
+                    return `${filter.name} equals ${filter.value}`;
+                  })
+                  .join(', ')
+          }`}
+        </Text>
+        <CustomTable
+          headers={currentDataset[0] ? Object.keys(currentDataset[0]) : []}
+          data={filteredData as unknown as TPolymorphicRecord[]}
+          caption="Filtered data table"
+        />
+      </Modal>
     </Flex>
   );
 }
