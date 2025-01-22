@@ -46,13 +46,14 @@ export default function SvgViz({
 
   type TSvgPartsInitialColors = Record<
     TSvgColorPart,
-    { activeColor: string; inactiveColor: string }
+    { activeColor: string; inactiveColor: string; hoverColor: string }
   >;
 
   const initialColors = reduxUniqueParts.reduce((acc, part) => {
     acc[part] = {
       activeColor: DEFAULT_COLORS.activeColor,
       inactiveColor: DEFAULT_COLORS.inactiveColor,
+      hoverColor: DEFAULT_COLORS.activeColor,
     };
     return acc;
   }, {} as TSvgPartsInitialColors);
@@ -77,7 +78,8 @@ export default function SvgViz({
 
       if (newColors[partName]) {
         newColors[partName].activeColor = color;
-        newColors[partName].inactiveColor = `${color}80`; // 50% transparency
+        newColors[partName].hoverColor = `${color}80`;
+        newColors[partName].inactiveColor = `${color}60`; // 50% transparency
       }
     });
 

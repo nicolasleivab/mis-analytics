@@ -21,16 +21,22 @@ export type {
 } from './Excel/definitions';
 
 // SvgViz
-export { setSvgParts } from './SvgViz/svgVizSlice';
+export { setSvgParts, setHoveredPart } from './SvgViz/svgVizSlice';
 export {
   selectAllSvgParts,
   selectAllClipPaths,
   selectUniqueSvgParts,
   selectSvgLoading,
   selectSvgError,
+  selectHoveredPart,
 } from './SvgViz/svgVizSelectors';
 export { fetchSvgParts, postSvgParts } from './SvgViz/svgVizThunks';
 export type { TSvgPart, TClipPath } from './SvgViz/definitions';
 
-// ImportFields
-export { useImportFields, useSvgUpload, useImportSheet } from './hooks';
+// hooks
+export {
+  useImportFields,
+  useSvgUpload,
+  useImportSheet,
+  useStats,
+} from './hooks';

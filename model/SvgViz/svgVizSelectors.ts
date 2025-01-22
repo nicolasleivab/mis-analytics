@@ -12,3 +12,5 @@ export const selectSvgError = (state: RootState) => state.svgViz.error;
 
 export const selectPartById = (id: string) => (state: RootState) =>
   state.svgViz.svgParts.find((p) => p.id === id);
+
+export const selectHoveredPart = (state: RootState) => state.svgViz.hoveredPart;

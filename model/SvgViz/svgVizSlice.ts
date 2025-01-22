@@ -7,6 +7,7 @@ type SvgVizState = {
   svgParts: TSvgPart[];
   clipPaths: TClipPath[];
   uniqueSvgParts: string[];
+  hoveredPart: string | null;
   loading: boolean;
   error: string | null;
 };
@@ -15,6 +16,7 @@ const initialState: SvgVizState = {
   svgParts: [],
   clipPaths: [],
   uniqueSvgParts: [],
+  hoveredPart: null,
   loading: false,
   error: null,
 };
@@ -30,6 +32,9 @@ export const svgVizSlice = createSlice({
       state.clipPaths = clipPaths;
       // Also update uniqueSvgParts whenever we set svgParts:
       state.uniqueSvgParts = Array.from(new Set(svgParts.map((p) => p.name)));
+    },
+    setHoveredPart: (state, action: PayloadAction<string | null>) => {
+      state.hoveredPart = action.payload;
     },
     addSvgPart: (state, action: PayloadAction<TSvgPart>) => {
       state.svgParts.push(action.payload);
@@ -100,6 +105,7 @@ export const svgVizSlice = createSlice({
 export const {
   setSvgParts,
   addSvgPart,
+  setHoveredPart,
   updateSvgPart,
   removeSvgPart,
   clearSvgParts,

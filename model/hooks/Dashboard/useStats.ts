@@ -1,5 +1,7 @@
-import { TStats } from '../definitions/Stats';
-import { TVariableField } from '../Excel/definitions';
+import { TStats } from '../../definitions/Stats';
+import { TVariableField } from '../../Excel/definitions';
+import { useAppSelector } from '../../store';
+import { selectHoveredPart } from '../../SvgViz/svgVizSelectors';
 
 export type TGetMappedData = {
   parsedData: unknown[];
@@ -8,13 +10,14 @@ export type TGetMappedData = {
   svgParts: string[];
 };
 
-export function getTableStats({
+export default function useStats({
   parsedData,
   variableFields,
   svgPartSelection,
   svgParts,
 }: TGetMappedData): TStats[] {
   const stats: TStats[] = [];
+  const hoveredPart = useAppSelector(selectHoveredPart);
   const onlySvgParts = variableFields.filter((part) =>
     svgParts.includes(part.name)
   );
@@ -62,6 +65,7 @@ export function getTableStats({
       stdDev,
       min,
       max,
+      isHighlighted: part.name === hoveredPart,
     });
   });
 

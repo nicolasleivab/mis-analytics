@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { CustomTable, SvgViz } from '../../../../presentation/components';
 import { Card } from '../../../../presentation/layout';
-import { getTableStats } from '../../../../model/data-handlers';
 import StatsTable from '../../../../presentation/components/StatsTable/StatsTable';
 import { Flex, Box, Select, Text, Modal } from '@mantine/core';
 import { useSvgPartSelection } from '../../../../model/hooks';
@@ -12,6 +11,7 @@ import {
   selectAllVariableFields,
   selectUniqueSvgParts,
   useAppSelector,
+  useStats,
 } from '../../../../model';
 import {
   TExcelSheet,
@@ -21,7 +21,6 @@ import {
   TVariableType,
 } from '../../../../model/Excel/definitions';
 import { TDropdownOption } from '../../../../model/definitions/Tabs';
-import { TGetMappedData } from '../../../../model/data-handlers/getTableStats';
 import {
   RangeSlider,
   RangeSliderFilledTrack,
@@ -108,13 +107,12 @@ export default function Overview() {
     setFilteredData(filtered);
   }, [filterState, currentDataset]);
 
-  const data: TGetMappedData = {
+  const stats: TStats[] = useStats({
     parsedData: filteredData,
     variableFields,
     svgPartSelection,
     svgParts,
-  };
-  const stats: TStats[] = getTableStats(data);
+  });
 
   return (
     <Flex gap="md">
@@ -307,7 +305,7 @@ export default function Overview() {
         yOffset={MODAL_OFFSET}
         opened={openTableModal}
         onClose={() => setOpenTableModal(false)}
-        title={`Filtered data: sheet ${currentExcelSheet?.name}`}
+        title={`Filtered data of sheet: ${currentExcelSheet?.name}`}
         size="100%"
       >
         <Text fw={700}>
@@ -330,7 +328,7 @@ export default function Overview() {
         <CustomTable
           headers={currentDataset[0] ? Object.keys(currentDataset[0]) : []}
           data={filteredData as unknown as TPolymorphicRecord[]}
-          caption={`Filtered data: sheet ${currentExcelSheet?.name}`}
+          caption={`Filtered data of sheet: ${currentExcelSheet?.name}`}
         />
       </Modal>
     </Flex>
