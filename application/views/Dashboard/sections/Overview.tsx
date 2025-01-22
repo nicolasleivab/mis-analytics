@@ -307,7 +307,7 @@ export default function Overview() {
         yOffset={MODAL_OFFSET}
         opened={openTableModal}
         onClose={() => setOpenTableModal(false)}
-        title="Filtered data"
+        title={`Filtered data: sheet ${currentExcelSheet?.name}`}
         size="100%"
       >
         <Text fw={700}>
@@ -330,7 +330,7 @@ export default function Overview() {
         <CustomTable
           headers={currentDataset[0] ? Object.keys(currentDataset[0]) : []}
           data={filteredData as unknown as TPolymorphicRecord[]}
-          caption="Filtered data table"
+          caption={`Filtered data: sheet ${currentExcelSheet?.name}`}
         />
       </Modal>
     </Flex>
