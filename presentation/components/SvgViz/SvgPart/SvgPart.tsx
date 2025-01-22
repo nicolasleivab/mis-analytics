@@ -1,6 +1,12 @@
+import { useDispatch } from 'react-redux';
 import { TSvgPartProps } from '../types';
+import {
+  selectHoveredPart,
+  setHoveredPart,
+  useAppSelector,
+} from '../../../../model';
 
-const SvgPart = ({
+export default function SvgPart({
   name,
   path,
   clipPath,
@@ -9,22 +15,71 @@ const SvgPart = ({
   partTransform,
   onClick,
   selected,
-  svgPartColors: { activeColor, inactiveColor },
+  svgPartColors: { activeColor, hoverColor, inactiveColor },
   className,
   innerClass,
-}: TSvgPartProps) => (
-  <g className={className} transform={outerTransform} id={name}>
-    <g className={innerClass} transform={innerTransform}>
-      <path
-        className="b"
-        d={path}
-        clipPath={clipPath}
-        onClick={onClick}
-        style={{ fill: selected ? activeColor : inactiveColor }}
-        transform={partTransform}
-      />
-    </g>
-  </g>
-);
+}: TSvgPartProps) {
+  const hoveredPart = useAppSelector(selectHoveredPart);
+  const dispatch = useDispatch();
 
-export default SvgPart;
+  const onMouseEnter = () => {
+    dispatch(setHoveredPart(name));
+  };
+
+  const onMouseLeave = () => {
+    dispatch(setHoveredPart(null));
+  };
+
+  return (
+    <g
+      className={className}
+      transform={outerTransform}
+      id={name}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
+    >
+      <g className={innerClass} transform={innerTransform}>
+        <path
+          className="b"
+          d={path}
+          clipPath={clipPath}
+          onClick={onClick}
+          style={{
+            fill: getFillColor({
+              selected,
+              partIsHovered: hoveredPart === name,
+              activeColor,
+              inactiveColor,
+              hoverColor,
+            }),
+          }}
+          transform={partTransform}
+        />
+      </g>
+    </g>
+  );
+}
+
+function getFillColor({
+  selected,
+  partIsHovered,
+  activeColor,
+  inactiveColor,
+  hoverColor,
+}: {
+  selected: boolean;
+  partIsHovered: boolean;
+  activeColor: string;
+  inactiveColor: string;
+  hoverColor: string;
+}): string {
+  if (partIsHovered) {
+    return hoverColor;
+  }
+
+  if (selected) {
+    return activeColor;
+  }
+
+  return inactiveColor;
+}

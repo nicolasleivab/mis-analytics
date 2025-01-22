@@ -1,22 +1,14 @@
 import React from 'react';
 import { Table } from '@mantine/core';
-
-type Stats = {
-  svgPart: string;
-  mean: number;
-  median: number;
-  stdDev: number;
-  min: number;
-  max: number;
-};
+import { TStats } from '../../../model/definitions/Stats';
 
 type StatsTableProps = {
-  stats: Stats[];
+  stats: TStats[];
 };
 
 const StatsTable: React.FC<StatsTableProps> = ({ stats }) => {
   const rows = stats.map((stat, index) => (
-    <Table.Tr key={index}>
+    <Table.Tr key={index} bg={stat.isHighlighted ? '#3399ff50' : 'transparent'}>
       <Table.Td>{stat.svgPart}</Table.Td>
       <Table.Td>{stat.mean.toFixed(4)}</Table.Td>
       <Table.Td>{stat.median.toFixed(4)}</Table.Td>

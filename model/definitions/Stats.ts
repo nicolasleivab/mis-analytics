@@ -7,4 +7,5 @@ export type TStats = {
   stdDev: number;
   min: number;
   max: number;
+  isHighlighted: boolean;
 };

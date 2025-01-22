@@ -12,5 +12,6 @@ export type TSvgPartProps = {
   svgPartColors: {
     activeColor: string;
     inactiveColor: string;
+    hoverColor: string;
   };
 };

@@ -4,3 +4,4 @@ export { default as useViews } from './Dashboard/useViews';
 export { default as useModelComparison } from './Dashboard/useModelComparison';
 export { default as useSvgUpload } from './Home/useSvgUpload';
 export { default as useImportSheet } from './Home/useImportSheet';
+export { default as useStats } from './Dashboard/useStats';
