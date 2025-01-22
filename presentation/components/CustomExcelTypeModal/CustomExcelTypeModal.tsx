@@ -263,7 +263,7 @@ export default function CustomExcelTypeModal({
 
   return (
     <Modal
-      size="lg"
+      size="xl"
       yOffset={modalOffset}
       opened={isOpen}
       onClose={onCloseHandler}

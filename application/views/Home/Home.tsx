@@ -15,7 +15,7 @@ import * as styles from './Home.module.css';
 import { CustomExcelTypeModal } from '../../../presentation/components';
 import { TExcelSheetData } from '../../../model/Excel/definitions';
 
-const MODAL_OFFSET = 150;
+export const MODAL_OFFSET = 150;
 
 export default function Home() {
   const {
@@ -91,6 +91,7 @@ export default function Home() {
         opened={openSvgModal}
         onClose={() => setOpenSvgModal(false)}
         title="Upload SVG JSON Files for the Visualization"
+        size="lg"
       >
         {showAlert && (
           <Alert
@@ -153,6 +154,7 @@ export default function Home() {
         opened={openNameModal}
         onClose={() => setOpenNameModal(false)}
         title="Name your sheet"
+        size="lg"
       >
         {/* Display the alert if no sheet name is entered */}
         {showSheetAlert && (
