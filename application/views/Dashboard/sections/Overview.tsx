@@ -114,6 +114,8 @@ export default function Overview() {
     svgParts,
   });
 
+  const partsFromStats = stats.map((stat) => stat.svgPart);
+
   return (
     <Flex gap="md">
       <Flex direction="column" align="center" style={{ flex: 1 }}>
@@ -326,7 +328,13 @@ export default function Overview() {
           }`}
         </Text>
         <CustomTable
-          headers={currentDataset[0] ? Object.keys(currentDataset[0]) : []}
+          headers={
+            currentDataset[0]
+              ? Object.keys(currentDataset[0]).filter((e) =>
+                  partsFromStats.includes(e)
+                )
+              : []
+          }
           data={filteredData as unknown as TPolymorphicRecord[]}
           caption={`Filtered data of sheet: ${currentExcelSheet?.name}`}
         />
