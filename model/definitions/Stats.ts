@@ -1,4 +1,5 @@
-export type TStat = 'Mean' | 'Median' | 'Min' | 'Max';
+export type TStatLabel = 'Mean' | 'Median' | 'Min' | 'Max';
+export type TStatId = 'mean' | 'median' | 'min' | 'max';
 
 export type TStats = {
   svgPart: string;
