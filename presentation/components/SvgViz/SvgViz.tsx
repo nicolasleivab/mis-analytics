@@ -7,6 +7,7 @@ import { TStats } from '../../../model/definitions/Stats';
 import { selectAllSvgParts, useAppSelector } from '../../../model';
 import {
   selectAllClipPaths,
+  selectSvgThresholds,
   selectUniqueSvgParts,
 } from '../../../model/SvgViz/svgVizSelectors';
 
@@ -36,6 +37,7 @@ export default function SvgViz({
   const svgParts = useAppSelector(selectAllSvgParts);
   const reduxUniqueParts = useAppSelector(selectUniqueSvgParts);
   const clipPaths = useAppSelector(selectAllClipPaths);
+  const svgThresholds = useAppSelector(selectSvgThresholds);
 
   const svgRef = useRef<SVGSVGElement>(null);
 
@@ -66,9 +68,12 @@ export default function SvgViz({
 
     stats.forEach((stat) => {
       let color;
-      if (stat.median < 0.7) {
+      if (stat[svgThresholds.stat] < svgThresholds.values[0]) {
         color = '#8b0000'; // Dark Red
-      } else if (stat.median >= 0.7 && stat.median < 0.85) {
+      } else if (
+        stat[svgThresholds.stat] >= svgThresholds.values[0] &&
+        stat[svgThresholds.stat] < svgThresholds.values[1]
+      ) {
         color = '#d4b200'; // Dark Yellow
       } else {
         color = '#006400'; // Dark Green

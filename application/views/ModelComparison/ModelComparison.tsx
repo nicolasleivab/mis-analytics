@@ -2,7 +2,7 @@ import { MultiSelect, Select, Flex, Box, Text } from '@mantine/core';
 import { BarChart } from '@mantine/charts';
 import { darkColorPalette1 } from '../../../presentation/styles/colors';
 import { useModelComparison } from '../../../model/hooks';
-import { TStat } from '../../../model/definitions/Stats';
+import { TStatLabel } from '../../../model/definitions/Stats';
 import { selectAllSheets, TExcelSheet, useAppSelector } from '../../../model';
 import * as styles from './ModelComparison.module.css';
 
@@ -51,7 +51,7 @@ export default function ModelComparison() {
             data={['Mean', 'Median', 'Min', 'Max']}
             value={selectedStat}
             onChange={(id) => {
-              const statId = id as TStat;
+              const statId = id as TStatLabel;
               setSelectedStat(statId);
             }}
           />

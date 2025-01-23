@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { TStat } from '../../definitions/Stats';
+import { TStatLabel } from '../../definitions/Stats';
 import { useAppSelector } from '../../store';
 import { selectAllSheets } from '../../Excel/excelSelectors';
 import { TExcelSheet } from '../../Excel/definitions';
@@ -16,7 +16,7 @@ export default function useModelComparison() {
 
   const [selectedModels, setSelectedModels] = useState<string[]>([]);
   const [chartData, setChartData] = useState<ChartEntry[]>([]);
-  const [selectedStat, setSelectedStat] = useState<TStat>('Mean');
+  const [selectedStat, setSelectedStat] = useState<TStatLabel>('Mean');
 
   useEffect(() => {
     if (selectedModels.length > 0 && excelData.length > 0) {
