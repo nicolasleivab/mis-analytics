@@ -155,11 +155,29 @@ export default function Home() {
           />
         </Flex>
         <Group mt="xl">
-          {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
-          <Button onClick={handleSvgPartsSubmit}>Upload</Button>
-          <Button variant="outline" onClick={handleUseDefaultSvg}>
-            Use Default SVG
-          </Button>
+          <Flex justifyContent="flex-end">
+            {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
+            <Button mr="lg" onClick={handleSvgPartsSubmit}>
+              Upload
+            </Button>
+            <Button variant="outline" onClick={handleUseDefaultSvg}>
+              Use Default SVG
+            </Button>
+          </Flex>
+        </Group>
+        <Group mt="xl" mb="md">
+          <Flex justifyContent="space-between">
+            <a href="/public/bodySvg.json" className={styles.HomeLink} download>
+              Download default svg json
+            </a>
+            <a
+              href="/public/bodyClipPaths.json"
+              className={styles.HomeLink}
+              download
+            >
+              Download default clip paths json
+            </a>
+          </Flex>
         </Group>
       </Modal>
 

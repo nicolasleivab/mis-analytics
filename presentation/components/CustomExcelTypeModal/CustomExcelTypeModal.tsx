@@ -276,6 +276,7 @@ export default function CustomExcelTypeModal({
           placeholder="Click to upload"
           accept=".csv, .xlsx, .xls"
           onChange={(f) => f && handleFilePick(f)}
+          mb="md"
         />
       )}
 

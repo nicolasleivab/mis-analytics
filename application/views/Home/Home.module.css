@@ -20,3 +20,7 @@
 .HomeImg {
   flex: 1;
 }
+
+.HomeLink {
+  color: var(--link-color) !important;
+}
