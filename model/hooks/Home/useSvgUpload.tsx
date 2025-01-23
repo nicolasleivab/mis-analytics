@@ -1,7 +1,15 @@
 import { useState } from 'react';
-import { setSvgParts, TSvgPart, TClipPath, useAppDispatch } from '../..';
+import {
+  setSvgParts,
+  TSvgPart,
+  TClipPath,
+  useAppDispatch,
+  setSvgThresholds,
+} from '../..';
 import demoViz from '../../../services/api/SvgViz/demoViz.json';
 import demoClipPaths from '../../../services/api/SvgViz/demoClipPaths.json';
+import { TStatId } from '../../definitions/Stats';
+import { DEFAULT_THRESHOLD } from '../../SvgViz/definitions';
 
 /**
  * Manages uploading of user-provided JSON files and/or using default SVG data.
@@ -16,6 +24,13 @@ export default function useSvgUpload(
   const [clipPathsFile, setClipPathsFile] = useState<File | null>(null);
   const [showAlert, setShowAlert] = useState<boolean>(false);
   const [openSvgModal, setOpenSvgModal] = useState<boolean>(false);
+  const [selectedThresholdStat, setSelectedThresholdStat] = useState<TStatId>(
+    DEFAULT_THRESHOLD.stat
+  );
+  const [selectedThresholdValue1, setSelectedThresholdValue1] =
+    useState<number>(DEFAULT_THRESHOLD.values[0]);
+  const [selectedThresholdValue2, setSelectedThresholdValue2] =
+    useState<number>(DEFAULT_THRESHOLD.values[1]);
 
   /**
    * Attempts to parse and dispatch the uploaded SVG/ClipPath JSON files.
@@ -41,6 +56,12 @@ export default function useSvgUpload(
       dispatch(
         setSvgParts({ svgParts: svgPartsJson, clipPaths: clipPathsJson })
       );
+      dispatch(
+        setSvgThresholds({
+          stat: selectedThresholdStat,
+          values: [selectedThresholdValue1, selectedThresholdValue2],
+        })
+      );
 
       // Close the modal after successful upload
       setOpenSvgModal(false);
@@ -64,6 +85,12 @@ export default function useSvgUpload(
    */
   const handleUseDefaultSvg = () => {
     dispatch(setSvgParts({ svgParts: demoViz, clipPaths: demoClipPaths }));
+    dispatch(
+      setSvgThresholds({
+        stat: selectedThresholdStat,
+        values: [selectedThresholdValue1, selectedThresholdValue2],
+      })
+    );
     setOpenSvgModal(false);
     setOpenImportModal(true);
   };
@@ -78,6 +105,9 @@ export default function useSvgUpload(
     setShowAlert,
     openSvgModal,
     setOpenSvgModal,
+    setSelectedThresholdStat,
+    setSelectedThresholdValue1,
+    setSelectedThresholdValue2,
 
     // Handlers
     handleSvgPartsSubmit,

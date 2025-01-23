@@ -10,6 +10,7 @@ import {
   selectSvgThresholds,
   selectUniqueSvgParts,
 } from '../../../model/SvgViz/svgVizSelectors';
+import { Text } from '@mantine/core';
 
 const DEFAULT_COLORS = {
   activeColor: '#4f5f77',
@@ -162,14 +163,22 @@ export default function SvgViz({
           <strong>Legend:</strong>
         </Box>
         <Box>
-          <span style={{ color: '#8b0000' }}>●</span> Median &lt; 0.7 (Dark Red)
+          <Flex alignItems="center">
+            <span style={{ color: '#8b0000' }}>●</span>
+            <Text>{`${svgThresholds.stat} < ${svgThresholds.values[0]} (Dark Red)`}</Text>
+          </Flex>
         </Box>
         <Box>
-          <span style={{ color: '#d4b200' }}>●</span> 0.7 ≤ Median &lt; 0.85
-          (Dark Yellow)
+          <Flex alignItems="center">
+            <span style={{ color: '#d4b200' }}>●</span>
+            <Text>{`${svgThresholds.values[0]} ≤ ${svgThresholds.stat} < ${svgThresholds.values[1]} (Dark Yellow)`}</Text>
+          </Flex>
         </Box>
         <Box>
-          <span style={{ color: '#006400' }}>●</span> Median ≥ 0.85 (Dark Green)
+          <Flex alignItems="center">
+            <span style={{ color: '#006400' }}>●</span>
+            <Text>{`${svgThresholds.stat} ≥ ${svgThresholds.values[1]} (Dark Green)`}</Text>
+          </Flex>
         </Box>
       </Flex>
     </div>

@@ -8,14 +8,25 @@ import {
   TextInput,
   Alert,
   FileInput,
+  Select,
+  Input,
 } from '@mantine/core';
 import { IconAlertCircle } from '@tabler/icons-react';
 import { useImportFields, useSvgUpload, useImportSheet } from '../../../model';
 import * as styles from './Home.module.css';
 import { CustomExcelTypeModal } from '../../../presentation/components';
 import { TExcelSheetData } from '../../../model/Excel/definitions';
+import { TStatId, TStatLabel } from '../../../model/definitions/Stats';
+import { DEFAULT_THRESHOLD } from '../../../model/SvgViz/definitions';
 
 export const MODAL_OFFSET = 150;
+
+const THRESHOLDS_OPTIONS: { value: TStatId; label: TStatLabel }[] = [
+  { value: 'mean', label: 'Mean' },
+  { value: 'median', label: 'Median' },
+  { value: 'min', label: 'Min' },
+  { value: 'max', label: 'Max' },
+];
 
 export default function Home() {
   const {
@@ -53,6 +64,9 @@ export default function Home() {
     setOpenSvgModal,
     handleSvgPartsSubmit,
     handleUseDefaultSvg,
+    setSelectedThresholdStat,
+    setSelectedThresholdValue1,
+    setSelectedThresholdValue2,
   } = useSvgUpload(setTypeModalOpen);
 
   return (
@@ -91,7 +105,7 @@ export default function Home() {
         opened={openSvgModal}
         onClose={() => setOpenSvgModal(false)}
         title="Upload SVG JSON Files for the Visualization"
-        size="lg"
+        size="xl"
       >
         {showAlert && (
           <Alert
@@ -116,6 +130,30 @@ export default function Home() {
           onChange={setClipPathsFile}
           accept="application/json"
         />
+        <Text mt="md" fw={500}>
+          SVG threshold stat and values
+        </Text>
+        <Flex alignItems="center" justifyContent="space-between">
+          <Select
+            allowDeselect={false}
+            defaultValue={DEFAULT_THRESHOLD.stat}
+            placeholder="Select thresholds"
+            onChange={(val) => setSelectedThresholdStat(val as TStatId)}
+            data={THRESHOLDS_OPTIONS}
+          />
+          <Input
+            type="number"
+            // label="Threshold value 1"
+            defaultValue={DEFAULT_THRESHOLD.values[0]}
+            onChange={(e) => setSelectedThresholdValue1(Number(e.target.value))}
+          />
+          <Input
+            type="number"
+            defaultValue={DEFAULT_THRESHOLD.values[1]}
+            // label="Threshold value 2"
+            onChange={(e) => setSelectedThresholdValue2(Number(e.target.value))}
+          />
+        </Flex>
         <Group mt="xl">
           {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
           <Button onClick={handleSvgPartsSubmit}>Upload</Button>
@@ -154,7 +192,7 @@ export default function Home() {
         opened={openNameModal}
         onClose={() => setOpenNameModal(false)}
         title="Name your sheet"
-        size="lg"
+        size="xl"
       >
         {/* Display the alert if no sheet name is entered */}
         {showSheetAlert && (
