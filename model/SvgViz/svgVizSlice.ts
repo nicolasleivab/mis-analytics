@@ -1,5 +1,10 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { TClipPath, TSvgPart } from './definitions';
+import {
+  DEFAULT_THRESHOLD,
+  TClipPath,
+  TSvgPart,
+  TSvgThresholds,
+} from './definitions';
 import { fetchSvgParts, postSvgParts } from './svgVizThunks';
 import { TSvgPartsData } from '../../services/api/SvgViz/getSvgVizParts';
 
@@ -7,6 +12,7 @@ type SvgVizState = {
   svgParts: TSvgPart[];
   clipPaths: TClipPath[];
   uniqueSvgParts: string[];
+  svgThresholds: TSvgThresholds;
   hoveredPart: string | null;
   loading: boolean;
   error: string | null;
@@ -16,6 +22,7 @@ const initialState: SvgVizState = {
   svgParts: [],
   clipPaths: [],
   uniqueSvgParts: [],
+  svgThresholds: DEFAULT_THRESHOLD,
   hoveredPart: null,
   loading: false,
   error: null,
@@ -35,6 +42,9 @@ export const svgVizSlice = createSlice({
     },
     setHoveredPart: (state, action: PayloadAction<string | null>) => {
       state.hoveredPart = action.payload;
+    },
+    setSvgThresholds: (state, action: PayloadAction<TSvgThresholds>) => {
+      state.svgThresholds = action.payload;
     },
     addSvgPart: (state, action: PayloadAction<TSvgPart>) => {
       state.svgParts.push(action.payload);
@@ -106,6 +116,7 @@ export const {
   setSvgParts,
   addSvgPart,
   setHoveredPart,
+  setSvgThresholds,
   updateSvgPart,
   removeSvgPart,
   clearSvgParts,

@@ -21,7 +21,11 @@ export type {
 } from './Excel/definitions';
 
 // SvgViz
-export { setSvgParts, setHoveredPart } from './SvgViz/svgVizSlice';
+export {
+  setSvgParts,
+  setHoveredPart,
+  setSvgThresholds,
+} from './SvgViz/svgVizSlice';
 export {
   selectAllSvgParts,
   selectAllClipPaths,
@@ -29,6 +33,7 @@ export {
   selectSvgLoading,
   selectSvgError,
   selectHoveredPart,
+  selectSvgThresholds,
 } from './SvgViz/svgVizSelectors';
 export { fetchSvgParts, postSvgParts } from './SvgViz/svgVizThunks';
 export type { TSvgPart, TClipPath } from './SvgViz/definitions';

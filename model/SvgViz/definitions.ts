@@ -1,3 +1,5 @@
+import { TStat } from '../definitions/Stats';
+
 // Building block for the svg visualization
 export type TSvgPart = {
   name: string;
@@ -17,4 +19,14 @@ export type TClipPath = {
   id: string;
   className: string;
   d: string;
+};
+
+export type TSvgThresholds = {
+  stat: TStat;
+  values: number[];
+};
+
+export const DEFAULT_THRESHOLD: TSvgThresholds = {
+  stat: 'Median',
+  values: [0.7, 0.85],
 };
