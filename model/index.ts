@@ -44,4 +44,6 @@ export {
   useSvgUpload,
   useImportSheet,
   useStats,
+  useFilteredData,
+  useSvgPartSelection,
 } from './hooks';
