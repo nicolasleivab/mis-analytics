@@ -4,3 +4,4 @@ export { default as SvgViz } from './SvgViz/SvgViz';
 export { default as StepsSlider } from './StepsSlider/StepsSlider';
 export { default as CustomExcelTypeModal } from './CustomExcelTypeModal/CustomExcelTypeModal';
 export { default as CustomTable } from './CustomTable/CustomTable';
+export { default as CustomRangeSlider } from './CustomRangeSlider/CustomRangeSlider';

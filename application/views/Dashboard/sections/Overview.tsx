@@ -1,5 +1,9 @@
 import { useState } from 'react';
-import { CustomTable, SvgViz } from '../../../../presentation/components';
+import {
+  CustomRangeSlider,
+  CustomTable,
+  SvgViz,
+} from '../../../../presentation/components';
 import { Card } from '../../../../presentation/layout';
 import StatsTable from '../../../../presentation/components/StatsTable/StatsTable';
 import { Flex, Box, Select, Text, Modal } from '@mantine/core';
@@ -12,16 +16,7 @@ import {
   useAppSelector,
   useStats,
 } from '../../../../model';
-import {
-  TNumericRange,
-  TPolymorphicRecord,
-} from '../../../../model/Excel/definitions';
-import {
-  RangeSlider,
-  RangeSliderFilledTrack,
-  RangeSliderThumb,
-  RangeSliderTrack,
-} from '@chakra-ui/react';
+import { TPolymorphicRecord } from '../../../../model/Excel/definitions';
 import { MODAL_OFFSET } from '../../Home/Home';
 import { CalendarIcon } from '@chakra-ui/icons';
 
@@ -66,70 +61,12 @@ export default function Overview() {
             {currentExcelSheet?.filters.map((filter) => (
               <Box key={filter.name}>
                 {filter.type === 'numeric' ? (
-                  <div style={{ width: '300px' }}>
-                    <label>{filter.name}</label>
-                    <Flex align="center">
-                      <Box mr="10px">
-                        {filterState.find(
-                          (stateFilter) => stateFilter.name === filter.name
-                        )?.range?.[0] ?? filter.range?.[0]}
-                      </Box>
-                      <RangeSlider
-                        min={filter.range?.[0]}
-                        max={filter.range?.[1]}
-                        step={getStepValue(filter.range!)}
-                        defaultValue={[
-                          filter.range?.[0] ?? 0,
-                          filter.range?.[1] ?? 1,
-                        ]}
-                        // TODO: Add back with a debounce
-                        // onChange={(value) => {
-                        //   setRangeStates((prevState) => {
-                        //     // Find if we already have a filter with `filter.name`
-                        //     const idx = prevState.findIndex(
-                        //       (f) => f.name === filter.name
-                        //     );
-
-                        //     if (idx >= 0) {
-                        //       // Update the existing filter
-                        //       return prevState.map((item, i) =>
-                        //         i === idx
-                        //           ? { ...item, range: value as TNumericRange }
-                        //           : item
-                        //       );
-                        //     } else {
-                        //       // Create a new filter entry
-                        //       return [
-                        //         ...prevState,
-                        //         {
-                        //           name: filter.name,
-                        //           type: filter.type,
-                        //           range: value as TNumericRange, // The new range
-                        //         },
-                        //       ];
-                        //     }
-                        //   });
-                        // }}
-                        onChangeEnd={(val) =>
-                          onRangeSliderChange(val as TNumericRange, filter)
-                        }
-                        style={{ width: '100%' }}
-                      >
-                        {' '}
-                        <RangeSliderTrack bg="tomato">
-                          <RangeSliderFilledTrack bg="#3399ff" />
-                        </RangeSliderTrack>
-                        <RangeSliderThumb index={0} bg="#3399ff" />
-                        <RangeSliderThumb index={1} bg="#3399ff" />
-                      </RangeSlider>
-                      <Box ml="10px">
-                        {' '}
-                        {filterState.find(
-                          (stateFilter) => stateFilter.name === filter.name
-                        )?.range?.[1] ?? filter.range?.[1]}
-                      </Box>
-                    </Flex>
-                  </div>
+                  <CustomRangeSlider
+                    min={filter.range?.[0] ?? 0}
+                    max={filter.range?.[1] ?? 0}
+                    onChangeEnd={onRangeSliderChange}
+                    filter={filter}
+                  />
                 ) : (
                   <Select
                     data={filter.values}
@@ -228,11 +165,4 @@ export default function Overview() {
       </Modal>
     </Flex>
   );
-}
-
-function getStepValue(range: TNumericRange): number {
-  if (range?.[1] > 100) return 1;
-  if (range?.[1] > 10) return 0.1;
-  if (range?.[1] > 1) return 0.001;
-  return 0.0001;
 }
