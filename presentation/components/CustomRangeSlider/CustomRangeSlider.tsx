@@ -24,17 +24,24 @@ export default function CustomRangeSlider({
   filter,
   onChangeEnd,
 }: TCustomRangeSliderProps) {
-  const defaultValue: TNumericRange = [
-    parseFloat(min.toFixed(2)),
-    parseFloat(max.toFixed(2)),
-  ];
+  // Get the step value dynamically
+  const stepValue = step ?? getStepValue(max);
+
+  // Calculate a dynamic margin based on 5% of the range
+  const margin = (max - min) * 0.05;
+
+  // Round to the next significant step value
+  const computedMin = roundToSignificance(min - margin, stepValue);
+  const computedMax = roundToSignificance(max + margin, stepValue);
+
+  const defaultValue: TNumericRange = [computedMin, computedMax];
   // Keep the displayed labels separate from the actual slider value
   const [visibleRange, setVisibleRange] = useState<TNumericRange>(defaultValue);
 
   // Create a stable throttled function so it doesn't get re-created on each render
   const throttledSetRange = useCallback(
-    throttle((val: TNumericRange) => {
-      setVisibleRange(val);
+    throttle((val) => {
+      setVisibleRange(val as TNumericRange);
     }, 100), // update labels every 100ms (tweak to your liking)
     []
   );
@@ -45,9 +52,9 @@ export default function CustomRangeSlider({
       <Flex align="center">
         <Box mr="10px">{visibleRange[0].toFixed(2)}</Box>
         <RangeSlider
-          min={parseFloat(min.toFixed(2))}
-          max={parseFloat(max.toFixed(2))}
-          step={step ?? getStepValue(max)}
+          min={computedMin}
+          max={computedMax}
+          step={step ?? stepValue}
           defaultValue={defaultValue}
           onChange={(value) => {
             const formattedTo2Decimals = value.map((val) =>
@@ -99,4 +106,9 @@ function throttle<F extends (...args: unknown[]) => void>(
       }, remaining);
     }
   } as F;
+}
+
+// Helper function to round values to the nearest significant step
+function roundToSignificance(value: number, step: number): number {
+  return parseFloat((Math.round(value / step) * step).toFixed(2));
 }
