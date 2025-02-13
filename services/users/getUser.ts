@@ -1,4 +1,4 @@
-import { api, TUserResponse } from '../api';
+import { api, fetchCSRFToken, TUserResponse } from '../api';
 
 export async function getUser(): Promise<TUserResponse> {
   try {
@@ -11,7 +11,18 @@ export async function getUser(): Promise<TUserResponse> {
     const typedError = error as { response: { status: number } };
     if (typedError.response && typedError.response.status === 401) {
       try {
-        await api.post('/users/refresh'); // With refreshToken cookie
+        const csrfRes = await fetchCSRFToken();
+
+        await api.post(
+          '/users/refresh',
+          {},
+          {
+            withCredentials: true,
+            headers: {
+              'X-CSRF-Token': csrfRes.data.csrfToken,
+            },
+          }
+        ); // With refreshToken cookie and csrf token
 
         const retryResponse: TUserResponse = await api.get('/users/me');
         return retryResponse;

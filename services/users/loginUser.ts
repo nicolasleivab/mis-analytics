@@ -1,14 +1,21 @@
-import { api, TUserResponse } from '../api';
+import { api, fetchCSRFToken, TUserResponse } from '../api';
 
 export async function loginUser(
   email: string,
   password: string
 ): Promise<TUserResponse> {
   try {
+    const csrfRes = await fetchCSRFToken();
+
     const response: TUserResponse = await api.post(
       '/users/login',
       { email, password },
-      { withCredentials: true }
+      {
+        withCredentials: true,
+        headers: {
+          'X-CSRF-Token': csrfRes.data.csrfToken,
+        },
+      }
     );
 
     return response;
