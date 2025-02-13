@@ -13,7 +13,7 @@ export async function loginUser(
 
     return response;
   } catch (error) {
-    console.error(error);
+    console.error('Error logging in user', error);
     throw error;
   }
 }

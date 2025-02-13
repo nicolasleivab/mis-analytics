@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { TError } from '../../services/api';
-import { getUser, loginUser } from '../../services/users';
+import { getUser, loginUser, logoutUser as logout } from '../../services/users';
 
 export const authenticateUser = createAsyncThunk(
   'auth/login',
@@ -40,3 +40,12 @@ export const verifyUser = createAsyncThunk(
     }
   }
 );
+
+export const logoutUser = createAsyncThunk('auth/logout', async () => {
+  try {
+    await logout();
+  } catch (error: unknown) {
+    const typedError = error as TError;
+    throw new Error(typedError.message || 'Logout failed');
+  }
+});

@@ -5,8 +5,11 @@ import { useCallback } from 'react';
 import { APP_ROUTES as routes, HOME_ROUTE } from '../Router/routes';
 // import ThemeToggle from '../ThemeToggle/ThemeToggle';
 import { Flex } from '../../../presentation/layout';
+import { Button } from '@mantine/core';
+import { logoutUser, useAppDispatch } from '../../../model';
 
 export default function Nav() {
+  const dispatch = useAppDispatch();
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -36,6 +39,14 @@ export default function Nav() {
     [navigate]
   );
 
+  const handleLogout = async () => {
+    try {
+      await dispatch(logoutUser());
+    } catch (error) {
+      console.error('Logout failed:', error);
+    }
+  };
+
   return (
     <div className={styles.Nav}>
       <Flex justifyContent="space-between" alignItems="center">
@@ -52,6 +63,8 @@ export default function Nav() {
               {route.label}
             </Link>
           ))}
+          {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
+          <Button onClick={handleLogout}>Logout</Button>
         </Flex>
         {/* TODO: Fix theme conflicts */}
         {/* <ThemeToggle /> */}
