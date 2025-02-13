@@ -6,8 +6,8 @@ import {
   useAppDispatch,
   setSvgThresholds,
 } from '../..';
-import demoViz from '../../../services/api/SvgViz/demoViz.json';
-import demoClipPaths from '../../../services/api/SvgViz/demoClipPaths.json';
+import demoViz from '../../../services/projects/SvgViz/demoViz.json';
+import demoClipPaths from '../../../services/projects/SvgViz/demoClipPaths.json';
 import { TStatId } from '../../definitions/Stats';
 import { DEFAULT_THRESHOLD } from '../../SvgViz/definitions';
 

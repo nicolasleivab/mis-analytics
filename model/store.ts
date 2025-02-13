@@ -2,12 +2,12 @@ import { useDispatch, useSelector, TypedUseSelectorHook } from 'react-redux';
 
 import { configureStore } from '@reduxjs/toolkit';
 import svgVizReducer from './SvgViz/svgVizSlice';
-// import userReducer from './User/userSlice';
+import userReducer from './User/userSlice';
 import excelReducer from './Excel/excelSlice';
 
 export const store = configureStore({
   reducer: {
-    // user: userReducer,
+    user: userReducer,
     excelData: excelReducer,
     svgViz: svgVizReducer,
   },

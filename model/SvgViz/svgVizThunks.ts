@@ -1,7 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { TSvgPart } from './definitions';
 import { getSvgVizParts, postSvgPartsToServer } from '../../services';
-import { TSvgPartsData } from '../../services/api/SvgViz/getSvgVizParts';
+import { TSvgPartsData } from '../../services/projects/SvgViz/getSvgVizParts';
 
 // Thunk: fetch from the JSON file
 export const fetchSvgParts = createAsyncThunk<TSvgPartsData>(

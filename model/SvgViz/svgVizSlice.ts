@@ -6,7 +6,7 @@ import {
   TSvgThresholds,
 } from './definitions';
 import { fetchSvgParts, postSvgParts } from './svgVizThunks';
-import { TSvgPartsData } from '../../services/api/SvgViz/getSvgVizParts';
+import { TSvgPartsData } from '../../services/projects/SvgViz/getSvgVizParts';
 
 type SvgVizState = {
   svgParts: TSvgPart[];

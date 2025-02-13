@@ -11,7 +11,13 @@ import { useForm } from '@mantine/form';
 import { useNavigate } from 'react-router-dom';
 import { HOME_ROUTE } from '../../controller/Router/routes';
 import * as styles from './Login.module.css';
-import { FormEventHandler } from 'react';
+import { FormEventHandler, useEffect } from 'react';
+import {
+  authenticateUser,
+  selectUser,
+  useAppDispatch,
+  useAppSelector,
+} from '../../../model';
 
 type LoginFormValues = {
   email: string;
@@ -20,6 +26,8 @@ type LoginFormValues = {
 
 export default function Login() {
   const navigate = useNavigate();
+  const { user } = useAppSelector(selectUser);
+  const dispatch = useAppDispatch();
   const isLoading = false;
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
   const form = useForm<LoginFormValues>({
@@ -38,10 +46,14 @@ export default function Login() {
     },
   });
 
-  const handleSubmit = (values: LoginFormValues) => {
+  const handleSubmit = async (values: LoginFormValues) => {
+    const { email, password } = values;
     console.log('Login attempt with:', values);
-
-    navigate(HOME_ROUTE);
+    try {
+      await dispatch(authenticateUser({ email, password }));
+    } catch (error) {
+      console.error('Authentication failed:', error);
+    }
   };
 
   const typedForm = form as unknown as {
@@ -55,6 +67,13 @@ export default function Login() {
       error: string | null;
     };
   };
+
+  useEffect(() => {
+    console.log(user);
+    if (user) {
+      navigate(HOME_ROUTE);
+    }
+  }, [user, navigate]);
 
   return (
     <div className={styles.Login}>
@@ -75,6 +94,7 @@ export default function Login() {
           style={{ marginTop: 30 }}
           radius="md"
         >
+          {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
           <form onSubmit={typedForm.onSubmit(handleSubmit)}>
             <TextInput
               label="Email"

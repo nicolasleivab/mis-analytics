@@ -38,6 +38,11 @@ export {
 export { fetchSvgParts, postSvgParts } from './SvgViz/svgVizThunks';
 export type { TSvgPart, TClipPath } from './SvgViz/definitions';
 
+// User
+export { logout } from './User/userSlice';
+export { authenticateUser } from './User/userThunks';
+export { selectUser } from './User/userSelectors';
+
 // hooks
 export {
   useImportFields,
