@@ -48,7 +48,7 @@ export default function Login() {
 
   const handleSubmit = async (values: LoginFormValues) => {
     const { email, password } = values;
-    console.log('Login attempt with:', values);
+
     try {
       await dispatch(authenticateUser({ email, password }));
     } catch (error) {
@@ -69,7 +69,6 @@ export default function Login() {
   };
 
   useEffect(() => {
-    console.log(user);
     if (user) {
       navigate(HOME_ROUTE);
     }

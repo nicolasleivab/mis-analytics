@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { authenticateUser as login } from './userThunks';
+import { authenticateUser as login, verifyUser } from './userThunks';
 import { TUser } from './definitions';
 
 type AuthState = {
@@ -35,6 +35,18 @@ const authSlice = createSlice({
         state.user = action.payload as TUser;
       })
       .addCase(login.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload as string;
+      })
+      .addCase(verifyUser.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(verifyUser.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.user = action.payload as TUser;
+      })
+      .addCase(verifyUser.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload as string;
       });
