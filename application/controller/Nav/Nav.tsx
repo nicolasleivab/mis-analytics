@@ -2,7 +2,11 @@ import * as styles from './Nav.module.css';
 import { Logo } from '../../../presentation/assets/icons';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useCallback } from 'react';
-import { APP_ROUTES as routes, HOME_ROUTE } from '../Router/routes';
+import {
+  APP_ROUTES as routes,
+  HOME_ROUTE,
+  LOGIN_ROUTE,
+} from '../Router/routes';
 // import ThemeToggle from '../ThemeToggle/ThemeToggle';
 import { Flex } from '../../../presentation/layout';
 import { Button } from '@mantine/core';
@@ -46,6 +50,10 @@ export default function Nav() {
       console.error('Logout failed:', error);
     }
   };
+
+  if (location.pathname === LOGIN_ROUTE) {
+    return null;
+  }
 
   return (
     <div className={styles.Nav}>

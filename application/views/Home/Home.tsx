@@ -1,3 +1,4 @@
+/* Images source: https://www.pexels.com/search/medical/ */
 import { ReactSpreadsheetImport } from 'react-spreadsheet-import';
 import { Flex } from '../../../presentation/layout';
 import {

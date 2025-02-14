@@ -2,10 +2,9 @@ import {
   TextInput,
   PasswordInput,
   Paper,
-  Title,
   Container,
   Group,
-  Button,
+  Flex,
 } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { useNavigate } from 'react-router-dom';
@@ -18,6 +17,7 @@ import {
   useAppDispatch,
   useAppSelector,
 } from '../../../model';
+import { CustomButton, CustomCard } from '../../../presentation/components';
 
 type LoginFormValues = {
   email: string;
@@ -75,64 +75,44 @@ export default function Login() {
   }, [user, navigate]);
 
   return (
-    <div className={styles.Login}>
-      <Container size={420} style={{ marginTop: 40 }} className={styles.Login}>
-        <Title
-          style={{
-            textAlign: 'center',
-            fontWeight: 900,
-          }}
-        >
-          Welcome back
-        </Title>
+    <div className={styles.LoginWrapper}>
+      <div className={styles.LeftImage}></div>
 
-        <Paper
-          withBorder
-          shadow="md"
-          p={30}
-          style={{ marginTop: 30 }}
-          radius="md"
-        >
+      <div className={styles.RightForm}>
+        <h1 style={{ textAlign: 'center', fontSize: '32px' }}>Welcome back</h1>
+        <CustomCard>
           {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
           <form onSubmit={typedForm.onSubmit(handleSubmit)}>
-            <TextInput
-              label="Email"
-              placeholder="you@example.com"
-              required
-              size="md"
-              {...typedForm.getInputProps('email')}
-            />
-
-            <PasswordInput
-              label="Password"
-              placeholder="Your password"
-              required
-              style={{ marginTop: 16 }}
-              size="md"
-              {...typedForm.getInputProps('password')}
-            />
-
-            <Group
-              style={{
-                marginTop: 24,
-                display: 'flex',
-              }}
-            >
-              <Button
-                type="submit"
+            <Flex direction="column" gap="xl" style={{ marginTop: 24 }}>
+              <TextInput
+                label="Email"
+                placeholder="you@example.com"
+                required
                 size="md"
-                loading={isLoading}
-                loaderProps={{ type: 'dots' }}
-              >
-                Login
-              </Button>
-              <Button variant="outline" size="md">
-                Login as Guest
-              </Button>
-            </Group>
+                {...typedForm.getInputProps('email')}
+              />
+              <PasswordInput
+                label="Password"
+                placeholder="Your password"
+                required
+                style={{ marginTop: 16 }}
+                size="md"
+                {...typedForm.getInputProps('password')}
+              />
+              <Group style={{ marginTop: 24 }}>
+                <CustomButton
+                  type="submit"
+                  loading={isLoading}
+                  // loaderProps={{ type: 'dots' }}
+                >
+                  Login
+                </CustomButton>
+                <CustomButton variant="secondary">Login as Guest</CustomButton>
+              </Group>
+            </Flex>
           </form>
-        </Paper>
-      </Container>
+        </CustomCard>
+      </div>
     </div>
   );
 }
