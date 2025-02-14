@@ -3,6 +3,7 @@ import {
   authenticateUser as login,
   verifyUser,
   logoutUser as logout,
+  registerUser,
 } from './userThunks';
 import { TUser } from './definitions';
 
@@ -63,6 +64,19 @@ const authSlice = createSlice({
         state.user = null;
       })
       .addCase(logout.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload as string;
+      })
+      // -- register
+      .addCase(registerUser.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(registerUser.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.user = action.payload as TUser;
+      })
+      .addCase(registerUser.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload as string;
       });

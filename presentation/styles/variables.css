@@ -103,7 +103,3 @@ h5,
 h6 {
   font-family: var(--font-title);
 }
-
-a {
-  color: var(--link-color);
-}

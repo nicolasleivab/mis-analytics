@@ -11,6 +11,10 @@ export type TUserResponse = {
   message: string;
 };
 
+export type TRegisterResponse = {
+  data: TUser;
+};
+
 export const api = axios.create({
   baseURL: 'http://localhost:4000/api',
   withCredentials: true,

@@ -12,16 +12,17 @@ import { useEffect } from 'react';
 
 type ProtectedRouteProps = {
   children: JSX.Element;
+  isProtected: boolean;
 };
 
-export function ProtectedRoute({ children }: ProtectedRouteProps) {
+export function ProtectedRoute({ children, isProtected }: ProtectedRouteProps) {
   const dispatch = useAppDispatch();
   const { user, isLoading } = useAppSelector(selectUser);
 
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!user) {
+    if (!user && isProtected) {
       // Attempt to verify if we don't have user in state
       dispatch(verifyUser())
         .unwrap()
@@ -29,7 +30,7 @@ export function ProtectedRoute({ children }: ProtectedRouteProps) {
           navigate(LOGIN_ROUTE);
         });
     }
-  }, [dispatch, navigate, user]);
+  }, [dispatch, navigate, user, isProtected]);
 
   if (isLoading && !user) {
     return <div>Loading...</div>;
@@ -52,12 +53,13 @@ export function createAppRouter() {
               key={route.id}
               path={route.path}
               element={
-                <ProtectedRoute>
+                <ProtectedRoute isProtected={route.isProtected}>
                   <route.component />
                 </ProtectedRoute>
               }
             />
           ))}
+          <Route path="*" element={<div>404 Not Found</div>} />
         </Routes>
       </div>
     </Router>

@@ -39,7 +39,7 @@ export { fetchSvgParts, postSvgParts } from './SvgViz/svgVizThunks';
 export type { TSvgPart, TClipPath } from './SvgViz/definitions';
 
 // User
-export { authenticateUser, logoutUser } from './User/userThunks';
+export { authenticateUser, logoutUser, registerUser } from './User/userThunks';
 export { selectUser } from './User/userSelectors';
 
 // hooks

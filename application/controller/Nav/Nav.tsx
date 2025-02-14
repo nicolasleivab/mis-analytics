@@ -6,6 +6,8 @@ import {
   APP_ROUTES as routes,
   HOME_ROUTE,
   LOGIN_ROUTE,
+  REGISTER_ROUTE,
+  TRoute,
 } from '../Router/routes';
 // import ThemeToggle from '../ThemeToggle/ThemeToggle';
 import { Flex } from '../../../presentation/layout';
@@ -51,7 +53,11 @@ export default function Nav() {
     }
   };
 
-  if (location.pathname === LOGIN_ROUTE) {
+  if (
+    location.pathname === LOGIN_ROUTE ||
+    location.pathname === REGISTER_ROUTE ||
+    !routes.map((route) => route.path).includes(location.pathname)
+  ) {
     return null;
   }
 
@@ -61,16 +67,18 @@ export default function Nav() {
         <Flex padding="20px" justifyContent="flex-start" alignItems="center">
           <Logo />
           <h2 className={styles.title}>MIS Analytics</h2>
-          {routes.map((route) => (
-            <Link
-              key={route.id}
-              to={route.path}
-              className={activeLink(route.path)}
-              onKeyDown={(e) => handleKeyPress(e, route.path)}
-            >
-              {route.label}
-            </Link>
-          ))}
+          {routes
+            .filter((route: TRoute) => route.isProtected)
+            .map((route: TRoute) => (
+              <Link
+                key={route.id}
+                to={route.path}
+                className={activeLink(route.path)}
+                onKeyDown={(e) => handleKeyPress(e, route.path)}
+              >
+                {route.label}
+              </Link>
+            ))}
           {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
           <Button onClick={handleLogout}>Logout</Button>
         </Flex>
