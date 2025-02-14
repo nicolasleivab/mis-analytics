@@ -21,6 +21,12 @@
   padding: 2rem;
 }
 
+.PasswordReq {
+  margin-top: 24;
+  font-size: 14px;
+  color: #8e959b;
+}
+
 .Link {
   color: var(--link-color);
 }

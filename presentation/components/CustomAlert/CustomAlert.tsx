@@ -20,7 +20,7 @@ export default function CustomAlert() {
       // Auto-hide after 3s
       const timer = setTimeout(() => {
         dispatch(clearUserError());
-      }, 3000);
+      }, 5000);
 
       return () => clearTimeout(timer);
     } else {

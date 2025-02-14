@@ -83,7 +83,7 @@ export default function Register() {
         <CustomCard>
           {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
           <form onSubmit={typedForm.onSubmit(handleSubmit)}>
-            <Flex direction="column" gap="xl" style={{ marginTop: 24 }}>
+            <Flex direction="column" gap="lg" style={{ marginTop: 24 }}>
               <TextInput
                 label="Email"
                 placeholder="you@example.com"
@@ -107,9 +107,14 @@ export default function Register() {
                 size="md"
                 {...typedForm.getInputProps('confirmPassword')}
               />
-              <Group style={{ marginTop: 24 }}>
-                <p>Password needs to be at least 12 characters long.</p>
-              </Group>
+              <Flex direction="column" className={styles.PasswordReq}>
+                <p>Password requirements:</p>
+                <p>12 characters long.</p>
+                <p>At least one uppercase letter.</p>
+                <p>At least one lowercase letter.</p>
+                <p>At least one number.</p>
+                <p>At least one special character.</p>
+              </Flex>
 
               <Group style={{ marginTop: 24 }}>
                 <CustomButton type="submit" loading={isLoading}>
