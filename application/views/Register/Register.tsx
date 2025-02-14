@@ -33,7 +33,7 @@ export default function Register() {
       email: (value) => (/^\S+@\S+\.\S+$/.test(value) ? null : 'Invalid email'),
 
       password: (value) =>
-        value.length < 12 ? 'Password must be at least 6 characters' : null,
+        value.length < 12 ? 'Password must be at least 12 characters' : null,
 
       confirmPassword: (value, values) =>
         value !== values.password ? 'Passwords do not match' : null,

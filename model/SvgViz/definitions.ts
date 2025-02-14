@@ -30,3 +30,8 @@ export const DEFAULT_THRESHOLD: TSvgThresholds = {
   stat: 'median',
   values: [0.7, 0.85],
 };
+
+export type TSvgPartsData = {
+  svgParts: TSvgPart[];
+  clipPaths: TClipPath[];
+};

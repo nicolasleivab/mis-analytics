@@ -35,7 +35,6 @@ export {
   selectHoveredPart,
   selectSvgThresholds,
 } from './SvgViz/svgVizSelectors';
-export { fetchSvgParts, postSvgParts } from './SvgViz/svgVizThunks';
 export type { TSvgPart, TClipPath } from './SvgViz/definitions';
 
 // User

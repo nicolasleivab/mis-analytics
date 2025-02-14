@@ -3,10 +3,9 @@ import {
   DEFAULT_THRESHOLD,
   TClipPath,
   TSvgPart,
+  TSvgPartsData,
   TSvgThresholds,
 } from './definitions';
-import { fetchSvgParts, postSvgParts } from './svgVizThunks';
-import { TSvgPartsData } from '../../services/projects/SvgViz/getSvgVizParts';
 
 type SvgVizState = {
   svgParts: TSvgPart[];
@@ -74,40 +73,6 @@ export const svgVizSlice = createSlice({
       state.svgParts = [];
       state.uniqueSvgParts = [];
     },
-  },
-  extraReducers: (builder) => {
-    // fetchSvgParts Thunk
-    builder.addCase(fetchSvgParts.pending, (state) => {
-      state.loading = true;
-      state.error = null;
-    });
-    builder.addCase(fetchSvgParts.fulfilled, (state, action) => {
-      state.loading = false;
-      const { svgParts, clipPaths } = action.payload;
-      // Assign the parts
-      state.svgParts = svgParts;
-      state.clipPaths = clipPaths;
-      // Then compute the unique names
-      state.uniqueSvgParts = Array.from(new Set(svgParts.map((p) => p.name)));
-    });
-    builder.addCase(fetchSvgParts.rejected, (state, action) => {
-      state.loading = false;
-      state.error = action.error.message ?? 'Failed to fetch svg parts';
-    });
-
-    // postSvgParts Thunk (simulated server POST)
-    builder.addCase(postSvgParts.pending, (state) => {
-      state.loading = true;
-      state.error = null;
-    });
-    builder.addCase(postSvgParts.fulfilled, (state) => {
-      state.loading = false;
-      // Possibly do something upon success
-    });
-    builder.addCase(postSvgParts.rejected, (state, action) => {
-      state.loading = false;
-      state.error = action.error.message ?? 'Failed to post svg parts';
-    });
   },
 });
 
