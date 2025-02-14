@@ -9,6 +9,7 @@ import Nav from '../Nav/Nav';
 import { verifyUser } from '../../../model/User/userThunks';
 import { selectUser, useAppDispatch, useAppSelector } from '../../../model';
 import { useEffect } from 'react';
+import { CustomAlert } from '../../../presentation/components';
 
 type ProtectedRouteProps = {
   children: JSX.Element;
@@ -17,13 +18,12 @@ type ProtectedRouteProps = {
 
 export function ProtectedRoute({ children, isProtected }: ProtectedRouteProps) {
   const dispatch = useAppDispatch();
-  const { user, isLoading } = useAppSelector(selectUser);
+  const { user } = useAppSelector(selectUser);
 
   const navigate = useNavigate();
 
   useEffect(() => {
     if (!user && isProtected) {
-      // Attempt to verify if we don't have user in state
       dispatch(verifyUser())
         .unwrap()
         .catch(() => {
@@ -32,9 +32,9 @@ export function ProtectedRoute({ children, isProtected }: ProtectedRouteProps) {
     }
   }, [dispatch, navigate, user, isProtected]);
 
-  if (isLoading && !user) {
-    return <div>Loading...</div>;
-  }
+  // if (isLoading && !user) {
+  //   return <div>Loading...</div>;
+  // }
 
   return children;
 }
@@ -46,6 +46,7 @@ export function createAppRouter() {
   return (
     <Router>
       <div>
+        <CustomAlert />
         <Nav />
         <Routes>
           {APP_ROUTES.map((route) => (

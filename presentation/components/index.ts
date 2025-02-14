@@ -7,3 +7,4 @@ export { default as CustomTable } from './CustomTable/CustomTable';
 export { default as CustomRangeSlider } from './CustomRangeSlider/CustomRangeSlider';
 export { default as CustomButton } from './CustomButton/CustomButton';
 export { default as CustomCard } from './CustomCard/CustomCard';
+export { default as CustomAlert } from './CustomAlert/CustomAlert';

@@ -66,10 +66,10 @@ export default function Register() {
 
   useEffect(() => {
     // If user is logged in after registration, redirect
-    if (user) {
+    if (user && !error) {
       navigate(HOME_ROUTE);
     }
-  }, [user, navigate]);
+  }, [user, navigate, error]);
 
   return (
     <div className={styles.RegisterWrapper}>

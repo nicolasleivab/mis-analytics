@@ -3,7 +3,7 @@ import { useForm } from '@mantine/form';
 import { Link, useNavigate } from 'react-router-dom';
 import { HOME_ROUTE } from '../../controller/Router/routes';
 import * as styles from './Login.module.css';
-import { FormEventHandler, useEffect } from 'react';
+import { useEffect } from 'react';
 import {
   authenticateUser,
   selectUser,
@@ -19,7 +19,7 @@ type LoginFormValues = {
 
 export default function Login() {
   const navigate = useNavigate();
-  const { user } = useAppSelector(selectUser);
+  const { user, error } = useAppSelector(selectUser);
   const dispatch = useAppDispatch();
   const isLoading = false;
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
@@ -49,23 +49,11 @@ export default function Login() {
     }
   };
 
-  const typedForm = form as unknown as {
-    onSubmit: (
-      callback: (values: LoginFormValues) => void
-    ) => FormEventHandler<HTMLFormElement> | undefined;
-    getInputProps: (key: keyof LoginFormValues) => {
-      value: string;
-      onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-      onBlur: () => void;
-      error: string | null;
-    };
-  };
-
   useEffect(() => {
-    if (user) {
+    if (user && !error) {
       navigate(HOME_ROUTE);
     }
-  }, [user, navigate]);
+  }, [user, navigate, error]);
 
   return (
     <div className={styles.LoginWrapper}>
@@ -75,14 +63,19 @@ export default function Login() {
         <h1 style={{ textAlign: 'center', fontSize: '32px' }}>Welcome back</h1>
         <CustomCard>
           {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
-          <form onSubmit={typedForm.onSubmit(handleSubmit)}>
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              form.onSubmit(handleSubmit)();
+            }}
+          >
             <Flex direction="column" gap="xl" style={{ marginTop: 24 }}>
               <TextInput
                 label="Email"
                 placeholder="you@example.com"
                 required
                 size="md"
-                {...typedForm.getInputProps('email')}
+                {...form.getInputProps('email')}
               />
               <PasswordInput
                 label="Password"
@@ -90,14 +83,10 @@ export default function Login() {
                 required
                 style={{ marginTop: 16 }}
                 size="md"
-                {...typedForm.getInputProps('password')}
+                {...form.getInputProps('password')}
               />
               <Group style={{ marginTop: 24 }}>
-                <CustomButton
-                  type="submit"
-                  loading={isLoading}
-                  // loaderProps={{ type: 'dots' }}
-                >
+                <CustomButton type="submit" loading={isLoading}>
                   Login
                 </CustomButton>
                 <CustomButton variant="secondary">Login as Guest</CustomButton>
