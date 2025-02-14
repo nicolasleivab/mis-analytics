@@ -1,9 +1,9 @@
 import { api } from '../api';
-import { TProject } from '../definitions';
+import { TStoredProjectRes } from '../definitions';
 
-export async function retrieve(id: string): Promise<TProject> {
+export async function retrieve(id: string): Promise<TStoredProjectRes> {
   try {
-    const response: TProject = await api.get(`/projects/${id}`, {
+    const response: TStoredProjectRes = await api.get(`/projects/${id}`, {
       withCredentials: true,
     });
 

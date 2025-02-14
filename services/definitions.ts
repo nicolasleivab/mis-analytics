@@ -57,6 +57,8 @@ export type TProject = {
 };
 
 export type TStoredProjectRes = {
-  message: string;
-  project: TProject;
+  data: {
+    message: string;
+    project: TProject;
+  };
 };
