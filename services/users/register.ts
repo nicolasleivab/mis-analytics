@@ -1,4 +1,5 @@
-import { api, fetchCSRFToken, TRegisterResponse } from '../api';
+import { api, fetchCSRFToken } from '../api';
+import { TRegisterResponse } from '../definitions';
 
 export async function register(
   email: string,

@@ -1,4 +1,5 @@
-import { api, fetchCSRFToken, TUserResponse } from '../api';
+import { api, fetchCSRFToken } from '../api';
+import { TUserResponse } from '../definitions';
 
 export async function self(): Promise<TUserResponse> {
   try {

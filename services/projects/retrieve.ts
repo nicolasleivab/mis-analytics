@@ -1,28 +1,17 @@
-import { api, fetchCSRFToken, TProject } from '../api';
+import { api } from '../api';
+import { TProject } from '../definitions';
 
-export async function retrieve(
-  email: string,
-  password: string
-): Promise<TProject> {
+export async function retrieve(id: string): Promise<TProject> {
   try {
-    const csrfRes = await fetchCSRFToken();
-
-    const response: TProject = await api.post(
-      '/users/login',
-      { email, password },
-      {
-        withCredentials: true,
-        headers: {
-          'X-CSRF-Token': csrfRes.data.csrfToken,
-        },
-      }
-    );
+    const response: TProject = await api.get(`/projects/${id}`, {
+      withCredentials: true,
+    });
 
     console.log(response);
 
     return response;
   } catch (error) {
-    console.error('Error logging in user', error);
+    console.error('Error retrieving project', error);
     throw error;
   }
 }
