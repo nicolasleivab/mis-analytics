@@ -9,6 +9,7 @@ import {
   type TVariableField,
 } from './definitions';
 import { ID_FIELD } from '../definitions/ImportFields';
+import { retrieveProject } from './projectThunks';
 
 type TProjectState = {
   sheets: TExcelData;
@@ -19,8 +20,8 @@ type TProjectState = {
   uniqueSvgParts: string[];
   svgThresholds: TSvgThresholds;
   hoveredPart: string | null;
-  loading: boolean;
   error: string | null;
+  isLoading: boolean;
 };
 
 const initialState: TProjectState = {
@@ -32,8 +33,8 @@ const initialState: TProjectState = {
   uniqueSvgParts: [],
   svgThresholds: DEFAULT_THRESHOLD,
   hoveredPart: null,
-  loading: false,
   error: null,
+  isLoading: false,
 };
 
 export const projectSlice = createSlice({
@@ -63,6 +64,34 @@ export const projectSlice = createSlice({
     setSvgThresholds: (state, action: PayloadAction<TSvgThresholds>) => {
       state.svgThresholds = action.payload;
     },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(retrieveProject.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(retrieveProject.fulfilled, (state, action) => {
+        state.isLoading = false;
+        const project = action.payload;
+
+        const { data, variableFields, svgJson, clipPathsJson, svgThresholds } =
+          project;
+        state.sheets = data;
+        state.variableFields = variableFields;
+        state.idField = ID_FIELD;
+        const parsedSvgJson = svgJson;
+        state.svgParts = parsedSvgJson;
+        state.clipPaths = clipPathsJson;
+        state.uniqueSvgParts = Array.from(
+          new Set(parsedSvgJson.map((p) => p.name))
+        );
+        state.svgThresholds = svgThresholds;
+      })
+      .addCase(retrieveProject.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload as string;
+      });
   },
 });
 

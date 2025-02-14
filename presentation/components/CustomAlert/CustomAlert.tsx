@@ -18,8 +18,7 @@ export default function CustomAlert() {
   useEffect(() => {
     if (error) {
       setVisible(true);
-      console.log('error:', error);
-      // Auto-hide after 3s
+
       const timer = setTimeout(() => {
         dispatch(clearUserError());
       }, 5000);

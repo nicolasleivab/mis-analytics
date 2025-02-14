@@ -18,7 +18,8 @@ export const selectAllClipPaths = (state: RootState) =>
 export const selectUniqueSvgParts = (state: RootState) =>
   state.projectData.uniqueSvgParts;
 
-export const selectSvgLoading = (state: RootState) => state.projectData.loading;
+export const selectSvgLoading = (state: RootState) =>
+  state.projectData.isLoading;
 
 export const selectSvgError = (state: RootState) => state.projectData.error;
 

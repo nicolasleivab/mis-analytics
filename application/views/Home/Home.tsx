@@ -11,7 +11,15 @@ import {
   Input,
 } from '@mantine/core';
 import { IconAlertCircle } from '@tabler/icons-react';
-import { useImportFields, useSvgUpload, useImportSheet } from '../../../model';
+import {
+  useImportFields,
+  useSvgUpload,
+  useImportSheet,
+  useAppSelector,
+  selectUser,
+  useAppDispatch,
+  retrieveProject,
+} from '../../../model';
 import * as styles from './Home.module.css';
 import {
   CustomButton,
@@ -32,6 +40,9 @@ const THRESHOLDS_OPTIONS: { value: TStatId; label: TStatLabel }[] = [
 ];
 
 export default function Home() {
+  const { user } = useAppSelector(selectUser);
+  const dispatch = useAppDispatch();
+
   const {
     openModal,
     setOpenImportModal,
@@ -98,12 +109,39 @@ export default function Home() {
           />
         </div>
       </Flex>
+      {/* TODO: Factor out once ready */}
       <Flex justify={'center'} gap="20px">
-        <CustomButton onClick={() => setOpenSvgModal(true)}>
-          Import Excel
-        </CustomButton>
+        {user?.projects && user.projects.length > 0 ? (
+          <Flex direction="column" gap="20px">
+            <Flex align={'center'}>
+              <h2 style={{ marginRight: 20, fontSize: 20 }}>
+                Pick up where you left off, or
+              </h2>
+              <CustomButton onClick={() => setOpenSvgModal(true)}>
+                Start a New Project
+              </CustomButton>
+            </Flex>
+            {user.projects.map((project) => (
+              <Flex key={project.id} gap={'20px'} align={'center'}>
+                <h1>{project.name}</h1>
+                <CustomButton
+                  variant="secondary"
+                  // eslint-disable-next-line @typescript-eslint/no-misused-promises
+                  onClick={async () => {
+                    await dispatch(retrieveProject(project.id));
+                  }}
+                >
+                  Load project
+                </CustomButton>
+              </Flex>
+            ))}
+          </Flex>
+        ) : (
+          <CustomButton onClick={() => setOpenSvgModal(true)}>
+            Start New Project
+          </CustomButton>
+        )}
       </Flex>
-
       {/* SVG Parts Modal */}
       <Modal
         yOffset={MODAL_OFFSET}
@@ -183,7 +221,6 @@ export default function Home() {
           </Flex>
         </Group>
       </Modal>
-
       {/* Header types Import Modal */}
       <CustomExcelTypeModal
         file={excelFile}
@@ -193,7 +230,6 @@ export default function Home() {
         onFileSelected={handleOpenExcelTypeModal}
         onConfirm={handleTypeConfirm}
       />
-
       {/* Import Modal */}
       <ReactSpreadsheetImport
         isOpen={openModal}
@@ -216,7 +252,6 @@ export default function Home() {
           },
         }}
       />
-
       {/* Sheet Naming Modal */}
       <Modal
         yOffset={MODAL_OFFSET}
@@ -256,7 +291,6 @@ export default function Home() {
           </CustomButton>
         </Flex>
       </Modal>
-
       {/* Action Modal */}
       <Modal
         yOffset={MODAL_OFFSET}
@@ -275,6 +309,7 @@ export default function Home() {
           gap="20px"
           style={{ marginTop: 20, width: '100%' }}
         >
+          {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
           <CustomButton onClick={handleConfirmClick}>
             Confirm and Go to Dashboard
           </CustomButton>

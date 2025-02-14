@@ -35,11 +35,11 @@ export type TCSRFTokenResponse = {
 export type TRawProject = {
   user: TBareUser;
   name: string;
-  svgJson: JSON;
-  clipPathsJson: JSON;
-  data: JSON;
-  variableFields: JSON;
-  svgThresholds: JSON;
+  svgJson: string; // JSON;
+  clipPathsJson: string; // JSON;
+  data: string; // JSON;
+  variableFields: string; // JSON;
+  svgThresholds: string; // JSON;
   createdAt: string;
   updatedAt: string;
 };
@@ -52,8 +52,6 @@ export type TProject = {
   data: TExcelData;
   variableFields: TVariableField[];
   svgThresholds: TSvgThresholds;
-  createdAt: string;
-  updatedAt: string;
 };
 
 export type TStoredProjectRes = {

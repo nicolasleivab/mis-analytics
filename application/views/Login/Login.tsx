@@ -50,7 +50,7 @@ export default function Login() {
   };
 
   useEffect(() => {
-    if (user && !error) {
+    if (user) {
       navigate(HOME_ROUTE);
     }
   }, [user, navigate, error]);

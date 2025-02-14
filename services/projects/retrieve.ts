@@ -7,8 +7,6 @@ export async function retrieve(id: string): Promise<TStoredProjectRes> {
       withCredentials: true,
     });
 
-    console.log(response);
-
     return response;
   } catch (error) {
     console.error('Error retrieving project', error);
