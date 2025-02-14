@@ -8,3 +8,8 @@ export type TUser = {
   email: string;
   projects: TUserProject[];
 };
+
+export type TBareUser = {
+  id: string;
+  email: string;
+};

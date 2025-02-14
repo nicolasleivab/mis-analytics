@@ -5,7 +5,7 @@ import {
   RangeSliderTrack,
 } from '@chakra-ui/react';
 import { Box, Flex } from '@mantine/core';
-import { TNumericRange } from '../../../model/Excel/definitions';
+import { TNumericRange } from '../../../model/Project/definitions';
 import { TFilterStateItem } from '../../../model/hooks/Dashboard/useFilteredData';
 import { useCallback, useState } from 'react';
 

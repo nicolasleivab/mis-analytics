@@ -1,5 +1,11 @@
 import axios from 'axios';
-import { TUser } from '../model/User/definitions';
+import { TBareUser, TUser } from '../model/User/definitions';
+import {
+  TClipPath,
+  TSvgPart,
+  TSvgThresholds,
+} from '../model/Project/definitions';
+import { TExcelData, TVariableField } from '../model';
 
 export type TError = {
   message: string;
@@ -41,3 +47,27 @@ export async function fetchCSRFToken(): Promise<TCSRFTokenResponse> {
     throw error;
   }
 }
+
+export type TRawProject = {
+  user: TBareUser;
+  name: string;
+  svgJson: JSON;
+  clipPathsJson: JSON;
+  data: JSON;
+  variableFields: JSON;
+  svgThresholds: JSON;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type TProject = {
+  user: TBareUser;
+  name: string;
+  svgJson: TSvgPart[];
+  clipPathsJson: TClipPath[];
+  data: TExcelData;
+  variableFields: TVariableField[];
+  svgThresholds: TSvgThresholds;
+  createdAt: string;
+  updatedAt: string;
+};

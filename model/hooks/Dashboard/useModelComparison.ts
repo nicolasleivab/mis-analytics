@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import { TStatLabel } from '../../definitions/Stats';
 import { useAppSelector } from '../../store';
-import { selectAllSheets } from '../../Excel/excelSelectors';
-import { TExcelSheet } from '../../Excel/definitions';
-import { selectUniqueSvgParts } from '../../SvgViz/svgVizSelectors';
+import { selectAllSheets } from '../../Project/projectSelectors';
+import { TExcelSheet } from '../../Project/definitions';
+import { selectUniqueSvgParts } from '../../Project/projectSelectors';
 
 type ChartEntry = {
   part: string;

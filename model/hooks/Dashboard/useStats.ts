@@ -1,7 +1,7 @@
 import { TStats } from '../../definitions/Stats';
-import { TVariableField } from '../../Excel/definitions';
+import { TVariableField } from '../../Project/definitions';
 import { useAppSelector } from '../../store';
-import { selectHoveredPart } from '../../SvgViz/svgVizSelectors';
+import { selectHoveredPart } from '../../Project/projectSelectors';
 
 export type TGetMappedData = {
   parsedData: unknown[];

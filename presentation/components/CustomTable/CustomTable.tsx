@@ -1,6 +1,6 @@
 import React from 'react';
 import { Table } from '@mantine/core';
-import { TPolymorphicRecord } from '../../../model/Excel/definitions';
+import { TPolymorphicRecord } from '../../../model/Project/definitions';
 
 type DynamicTableProps = {
   headers: string[];

@@ -16,7 +16,7 @@ import {
   useAppSelector,
   useStats,
 } from '../../../../model';
-import { TPolymorphicRecord } from '../../../../model/Excel/definitions';
+import { TPolymorphicRecord } from '../../../../model/Project/definitions';
 import { MODAL_OFFSET } from '../../Home/Home';
 import { CalendarIcon } from '@chakra-ui/icons';
 

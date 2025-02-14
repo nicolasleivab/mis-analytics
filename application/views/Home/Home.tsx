@@ -17,9 +17,9 @@ import {
   CustomButton,
   CustomExcelTypeModal,
 } from '../../../presentation/components';
-import { TExcelSheetData } from '../../../model/Excel/definitions';
+import { TExcelSheetData } from '../../../model/Project/definitions';
 import { TStatId, TStatLabel } from '../../../model/definitions/Stats';
-import { DEFAULT_THRESHOLD } from '../../../model/SvgViz/definitions';
+import { DEFAULT_THRESHOLD } from '../../../model/Project/definitions';
 import { Flex } from '@chakra-ui/react';
 
 export const MODAL_OFFSET = 150;

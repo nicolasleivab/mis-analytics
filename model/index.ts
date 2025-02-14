@@ -1,32 +1,20 @@
 // Utils
 export { useAppDispatch, useAppSelector } from './store';
 
-// Excel
+// Project
 export {
   setExcelData,
   setVariableFields,
   setIdField,
-} from './Excel/excelSlice';
+  setSvgParts,
+  setHoveredPart,
+  setSvgThresholds,
+} from './Project/projectSlice';
 export {
   selectAllSheets,
   selectSheetByIndex,
   selectAllVariableFields,
   selectIdField,
-} from './Excel/excelSelectors';
-export type {
-  TExcelData,
-  TExcelSheet,
-  TVariableField,
-  TVariableType,
-} from './Excel/definitions';
-
-// SvgViz
-export {
-  setSvgParts,
-  setHoveredPart,
-  setSvgThresholds,
-} from './SvgViz/svgVizSlice';
-export {
   selectAllSvgParts,
   selectAllClipPaths,
   selectUniqueSvgParts,
@@ -34,8 +22,15 @@ export {
   selectSvgError,
   selectHoveredPart,
   selectSvgThresholds,
-} from './SvgViz/svgVizSelectors';
-export type { TSvgPart, TClipPath } from './SvgViz/definitions';
+} from './Project/projectSelectors';
+export type {
+  TExcelData,
+  TExcelSheet,
+  TVariableField,
+  TVariableType,
+  TSvgPart,
+  TClipPath,
+} from './Project/definitions';
 
 // User
 export { clearError as clearUserError } from './User/userSlice';

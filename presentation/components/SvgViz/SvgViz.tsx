@@ -8,7 +8,7 @@ import {
   selectAllClipPaths,
   selectSvgThresholds,
   selectUniqueSvgParts,
-} from '../../../model/SvgViz/svgVizSelectors';
+} from '../../../model';
 import { Flex, Text } from '@mantine/core';
 
 const DEFAULT_COLORS = {

@@ -8,7 +8,7 @@ import {
   selectAllVariableFields,
 } from '../..';
 import { DASHBOARD_ROUTE } from '../../../application/controller/Router/routes';
-import { TExcelSheetData } from '../../Excel/definitions';
+import { TExcelSheetData } from '../../Project/definitions';
 import { DEFAULT_ALL_FIELD } from '../../definitions/ImportFields';
 
 /**

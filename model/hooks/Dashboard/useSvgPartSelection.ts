@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useAppSelector } from '../../store';
-import { selectUniqueSvgParts } from '../../SvgViz/svgVizSelectors';
+import { selectUniqueSvgParts } from '../../Project/projectSelectors';
 
 export default function useSvgPartSelection() {
   // Pull unique svg parts from Redux
