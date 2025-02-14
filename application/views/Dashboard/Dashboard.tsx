@@ -1,12 +1,13 @@
 import * as styles from './Dashboard.module.css';
 import Overview from './sections/Overview';
-import { Box, Button, CloseButton, Flex, Text } from '@mantine/core';
+import { CloseButton, Flex, Text } from '@mantine/core';
 import { useViews } from '../../../model/hooks';
 import {
   selectAllSvgParts,
   selectSvgLoading,
   useAppSelector,
 } from '../../../model';
+import { CustomButton, CustomCard } from '../../../presentation/components';
 
 export default function Dashboard() {
   const { views, addView, removeView } = useViews();
@@ -35,17 +36,17 @@ export default function Dashboard() {
 
   const renderViews = () =>
     views.map((view) => (
-      <Box key={view.id} className={styles.View}>
+      <CustomCard key={view.id} style={{ margin: '10px 0' }}>
         <CloseButton onClick={() => removeView(view.id)} />
         <Overview />
-      </Box>
+      </CustomCard>
     ));
 
   return (
     <div className={styles.Dashboard}>
       <Flex direction="column">
         <Flex align="center" gap="sm">
-          <Button onClick={addView}>Add view</Button>
+          <CustomButton onClick={addView}>Add view</CustomButton>
           <Text>{`Active views: ${views.length}`}</Text>
         </Flex>
         {renderViews()}

@@ -1,8 +1,6 @@
 /* Images source: https://www.pexels.com/search/medical/ */
 import { ReactSpreadsheetImport } from 'react-spreadsheet-import';
-import { Flex } from '../../../presentation/layout';
 import {
-  Button,
   Group,
   Modal,
   Text,
@@ -15,10 +13,14 @@ import {
 import { IconAlertCircle } from '@tabler/icons-react';
 import { useImportFields, useSvgUpload, useImportSheet } from '../../../model';
 import * as styles from './Home.module.css';
-import { CustomExcelTypeModal } from '../../../presentation/components';
+import {
+  CustomButton,
+  CustomExcelTypeModal,
+} from '../../../presentation/components';
 import { TExcelSheetData } from '../../../model/Excel/definitions';
 import { TStatId, TStatLabel } from '../../../model/definitions/Stats';
 import { DEFAULT_THRESHOLD } from '../../../model/SvgViz/definitions';
+import { Flex } from '@chakra-ui/react';
 
 export const MODAL_OFFSET = 150;
 
@@ -72,7 +74,7 @@ export default function Home() {
 
   return (
     <div className={styles.Home}>
-      <Flex gap="20px" padding="50px" direction="column">
+      <Flex gap="20px" padding="50px" direction="column" align={'center'}>
         <div className={styles.HomeText}>
           <h1>Welcome to MIS Analytics</h1>
           <p>
@@ -82,9 +84,9 @@ export default function Home() {
             enhance the accuracy and efficiency of medical image analysis.
           </p>
           <p>
-            To get started, please select an XLS, XLSX, or CSV file containing
-            your model results. Follow the import and data validation steps to
-            properly import and parse your data into the system.
+            To get started, please select an XLSX file containing your model
+            results. Follow the import and data validation steps to properly
+            import and parse your data into the system.
           </p>
         </div>
         <div className={styles.HomeImg}>
@@ -96,8 +98,10 @@ export default function Home() {
           />
         </div>
       </Flex>
-      <Flex>
-        <Button onClick={() => setOpenSvgModal(true)}>Import Excel</Button>
+      <Flex justify={'center'} gap="20px">
+        <CustomButton onClick={() => setOpenSvgModal(true)}>
+          Import Excel
+        </CustomButton>
       </Flex>
 
       {/* SVG Parts Modal */}
@@ -156,14 +160,12 @@ export default function Home() {
           />
         </Flex>
         <Group mt="xl">
-          <Flex justifyContent="flex-end">
+          <Flex justifyContent="flex-end" gap="20px" style={{ width: '100%' }}>
             {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
-            <Button mr="lg" onClick={handleSvgPartsSubmit}>
-              Upload
-            </Button>
-            <Button variant="outline" onClick={handleUseDefaultSvg}>
+            <CustomButton onClick={handleSvgPartsSubmit}>Upload</CustomButton>
+            <CustomButton variant="secondary" onClick={handleUseDefaultSvg}>
               Use Default SVG
-            </Button>
+            </CustomButton>
           </Flex>
         </Group>
         <Group mt="xl" mb="md">
@@ -203,6 +205,16 @@ export default function Home() {
           setOpenImportModal(false);
         }}
         fields={fields}
+        customTheme={{
+          colors: {
+            highlight: '#CCC',
+            rsi: {
+              500: '#1b1b1b',
+              600: '#444',
+              700: '#444',
+            },
+          },
+        }}
       />
 
       {/* Sheet Naming Modal */}
@@ -234,9 +246,15 @@ export default function Home() {
           onChange={(e) => setCustomSheetName(e.currentTarget.value)}
           required
         />
-        <Group mt="xl">
-          <Button onClick={handleSaveSheetName}>Save and Continue</Button>
-        </Group>
+        <Flex
+          justify="flex-end"
+          gap="20px"
+          style={{ width: '100%', marginTop: 20 }}
+        >
+          <CustomButton onClick={handleSaveSheetName}>
+            Save and Continue
+          </CustomButton>
+        </Flex>
       </Modal>
 
       {/* Action Modal */}
@@ -251,14 +269,22 @@ export default function Home() {
           {importedSheets.length > 0 &&
             importedSheets[importedSheets.length - 1].name}
         </Text>
-        <Group mt="xl">
-          <Button onClick={handleConfirmClick}>
+        <Flex
+          direction={'column'}
+          align={'flex-end'}
+          gap="20px"
+          style={{ marginTop: 20, width: '100%' }}
+        >
+          <CustomButton onClick={handleConfirmClick}>
             Confirm and Go to Dashboard
-          </Button>
-          <Button variant="outline" onClick={() => setOpenImportModal(true)}>
+          </CustomButton>
+          <CustomButton
+            variant="secondary"
+            onClick={() => setOpenImportModal(true)}
+          >
             Import Another Sheet
-          </Button>
-        </Group>
+          </CustomButton>
+        </Flex>
       </Modal>
     </div>
   );

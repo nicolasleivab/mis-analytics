@@ -10,9 +10,10 @@ import {
   TRoute,
 } from '../Router/routes';
 // import ThemeToggle from '../ThemeToggle/ThemeToggle';
-import { Flex } from '../../../presentation/layout';
-import { Button } from '@mantine/core';
+
 import { logoutUser, useAppDispatch } from '../../../model';
+import { CustomButton } from '../../../presentation/components';
+import { Flex } from '@mantine/core';
 
 export default function Nav() {
   const dispatch = useAppDispatch();
@@ -63,8 +64,8 @@ export default function Nav() {
 
   return (
     <div className={styles.Nav}>
-      <Flex justifyContent="space-between" alignItems="center">
-        <Flex padding="20px" justifyContent="flex-start" alignItems="center">
+      <Flex justify="space-between" align="center" style={{ padding: '20px' }}>
+        <Flex justify="flex-start" align="center">
           <Logo />
           <h2 className={styles.title}>MIS Analytics</h2>
           {routes
@@ -79,11 +80,14 @@ export default function Nav() {
                 {route.label}
               </Link>
             ))}
-          {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
-          <Button onClick={handleLogout}>Logout</Button>
         </Flex>
         {/* TODO: Fix theme conflicts */}
         {/* <ThemeToggle /> */}
+
+        {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
+        <CustomButton variant="secondary" onClick={handleLogout}>
+          Logout
+        </CustomButton>
       </Flex>
     </div>
   );

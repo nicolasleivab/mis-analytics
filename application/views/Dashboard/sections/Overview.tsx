@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import {
+  CustomCard,
   CustomRangeSlider,
   CustomTable,
   SvgViz,
 } from '../../../../presentation/components';
-import { Card } from '../../../../presentation/layout';
 import StatsTable from '../../../../presentation/components/StatsTable/StatsTable';
 import { Flex, Box, Select, Text, Modal } from '@mantine/core';
 import { TStats } from '../../../../model/definitions/Stats';
@@ -121,9 +121,9 @@ export default function Overview() {
             <StatsTable stats={stats} />
           </Flex>
         ) : (
-          <Card>
+          <CustomCard>
             <p>No data available</p>
-          </Card>
+          </CustomCard>
         )}
       </Flex>
       {/* Action Modal */}

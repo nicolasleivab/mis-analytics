@@ -34,7 +34,7 @@ export default function CustomAlert() {
 
   return (
     <div className={styles.alertContainer}>
-      <p className={styles.alertText}>{error}</p>
+      <p className={styles.alertText}>{`Error: ${error}`}</p>
     </div>
   );
 }
