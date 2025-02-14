@@ -1,6 +1,6 @@
 import { api, fetchCSRFToken } from '../api';
 
-export async function logoutUser(): Promise<void> {
+export async function logout(): Promise<void> {
   try {
     const csrfRes = await fetchCSRFToken();
 

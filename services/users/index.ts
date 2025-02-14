@@ -1,4 +1,4 @@
-export { loginUser } from './loginUser';
-export { getUser } from './getUser';
-export { logoutUser } from './logoutUser';
-export { registerUser } from './registerUser';
+export { login } from './login';
+export { self } from './self';
+export { logout } from './logout';
+export { register } from './register';

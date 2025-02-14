@@ -1,6 +1,6 @@
 import { api, fetchCSRFToken, TRegisterResponse } from '../api';
 
-export async function registerUser(
+export async function register(
   email: string,
   password: string
 ): Promise<TRegisterResponse> {

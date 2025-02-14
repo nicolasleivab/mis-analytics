@@ -1,6 +1,6 @@
 import { api, fetchCSRFToken, TUserResponse } from '../api';
 
-export async function loginUser(
+export async function login(
   email: string,
   password: string
 ): Promise<TUserResponse> {

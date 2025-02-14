@@ -1,6 +1,6 @@
 import { api, fetchCSRFToken, TUserResponse } from '../api';
 
-export async function getUser(): Promise<TUserResponse> {
+export async function self(): Promise<TUserResponse> {
   try {
     const response: TUserResponse = await api.get('/users/me', {
       withCredentials: true,
