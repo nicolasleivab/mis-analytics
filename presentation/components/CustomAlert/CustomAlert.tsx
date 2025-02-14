@@ -7,6 +7,8 @@ import {
 } from '../../../model';
 import * as styles from './CustomAlert.module.css';
 
+const UNRELEVANT_ERROR = 'No token provided';
+
 export default function CustomAlert() {
   const { error } = useAppSelector(selectUser);
   const dispatch = useAppDispatch();
@@ -28,8 +30,8 @@ export default function CustomAlert() {
     }
   }, [error, dispatch]);
 
-  if (!error || !visible) {
-    return null; // No error to show
+  if (!error || !visible || error === UNRELEVANT_ERROR) {
+    return null;
   }
 
   return (
