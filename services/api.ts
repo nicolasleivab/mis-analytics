@@ -3,6 +3,11 @@ import { TUser } from '../model/User/definitions';
 
 export type TError = {
   message: string;
+  response: {
+    data: {
+      message: string;
+    };
+  };
 };
 
 export type TUserResponse = {
