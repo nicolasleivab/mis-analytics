@@ -58,3 +58,5 @@ export const APP_ROUTES: TRoute[] = [
     isProtected: false,
   },
 ];
+
+export const ANALYTICS_ROUTES = [DASHBOARD_ROUTE, MODEL_COMPARISON_ROUTE];

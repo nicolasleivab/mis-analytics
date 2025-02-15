@@ -4,10 +4,16 @@ import {
   BrowserRouter as Router,
   useNavigate,
 } from 'react-router-dom';
-import { APP_ROUTES, LOGIN_ROUTE } from './routes';
+import { APP_ROUTES, HOME_ROUTE, LOGIN_ROUTE } from './routes';
 import Nav from '../Nav/Nav';
 import { verifyUser } from '../../../model/User/userThunks';
-import { selectUser, useAppDispatch, useAppSelector } from '../../../model';
+import {
+  selectAllSheets,
+  selectAllSvgParts,
+  selectUser,
+  useAppDispatch,
+  useAppSelector,
+} from '../../../model';
 import { useEffect } from 'react';
 import { CustomAlert } from '../../../presentation/components';
 
@@ -19,28 +25,33 @@ type ProtectedRouteProps = {
 export function ProtectedRoute({ children, isProtected }: ProtectedRouteProps) {
   const dispatch = useAppDispatch();
   const { user } = useAppSelector(selectUser);
+  const excelData = useAppSelector(selectAllSheets);
+  const svgParts = useAppSelector(selectAllSvgParts);
 
   const navigate = useNavigate();
+  const shouldVerifyUser = !user && isProtected;
+  const shouldRedirectToHome =
+    (user && excelData.length === 0) ?? (user && svgParts.length === 0);
 
   useEffect(() => {
-    if (!user && isProtected) {
+    // Verify user and redirect to login if not logged in
+    if (shouldVerifyUser) {
       dispatch(verifyUser())
         .unwrap()
         .catch(() => {
           navigate(LOGIN_ROUTE);
         });
     }
-  }, [dispatch, navigate, user, isProtected]);
-
-  // if (isLoading && !user) {
-  //   return <div>Loading...</div>;
-  // }
+    // Redirect to home if user is logged in and there is no data
+    if (shouldRedirectToHome) {
+      navigate(HOME_ROUTE);
+    }
+  }, [dispatch, navigate, shouldVerifyUser, shouldRedirectToHome]);
 
   return children;
 }
 
 // Now this is just a function that returns the rendered JSX.
-// Note: It's no longer a React component by strict definition;
 // it's a helper function returning React elements.
 export function createAppRouter() {
   return (

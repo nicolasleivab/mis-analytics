@@ -29,6 +29,8 @@ import { TExcelSheetData } from '../../../model/Project/definitions';
 import { TStatId, TStatLabel } from '../../../model/definitions/Stats';
 import { DEFAULT_THRESHOLD } from '../../../model/Project/definitions';
 import { Flex } from '@chakra-ui/react';
+import { useNavigate } from 'react-router-dom';
+import { DASHBOARD_ROUTE } from '../../controller/Router/routes';
 
 export const MODAL_OFFSET = 150;
 
@@ -42,6 +44,7 @@ const THRESHOLDS_OPTIONS: { value: TStatId; label: TStatLabel }[] = [
 export default function Home() {
   const { user } = useAppSelector(selectUser);
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const {
     openModal,
@@ -129,6 +132,7 @@ export default function Home() {
                   // eslint-disable-next-line @typescript-eslint/no-misused-promises
                   onClick={async () => {
                     await dispatch(retrieveProject(project.id));
+                    navigate(DASHBOARD_ROUTE);
                   }}
                 >
                   Load project

@@ -8,10 +8,18 @@ import {
   LOGIN_ROUTE,
   REGISTER_ROUTE,
   TRoute,
+  ANALYTICS_ROUTES,
 } from '../Router/routes';
 // import ThemeToggle from '../ThemeToggle/ThemeToggle';
 
-import { logoutUser, useAppDispatch } from '../../../model';
+import {
+  logoutUser,
+  selectAllSheets,
+  selectAllSvgParts,
+  selectUser,
+  useAppDispatch,
+  useAppSelector,
+} from '../../../model';
 import { CustomButton } from '../../../presentation/components';
 import { Flex } from '@mantine/core';
 
@@ -19,6 +27,11 @@ export default function Nav() {
   const dispatch = useAppDispatch();
   const location = useLocation();
   const navigate = useNavigate();
+  const { user } = useAppSelector(selectUser);
+  const excelData = useAppSelector(selectAllSheets);
+  const svgParts = useAppSelector(selectAllSvgParts);
+  const shouldHideAnalyticsTabs =
+    (user && excelData.length === 0) ?? (user && svgParts.length === 0);
 
   const activeLink = useCallback(
     (link: string): string => {
@@ -62,13 +75,17 @@ export default function Nav() {
     return null;
   }
 
+  const preFilteredRoutes = shouldHideAnalyticsTabs
+    ? routes.filter((route: TRoute) => !ANALYTICS_ROUTES.includes(route.path))
+    : routes;
+
   return (
     <div className={styles.Nav}>
       <Flex justify="space-between" align="center" style={{ padding: '20px' }}>
         <Flex justify="flex-start" align="center">
           <Logo />
           <h2 className={styles.title}>MIS Analytics</h2>
-          {routes
+          {preFilteredRoutes
             .filter((route: TRoute) => route.isProtected)
             .map((route: TRoute) => (
               <Link
