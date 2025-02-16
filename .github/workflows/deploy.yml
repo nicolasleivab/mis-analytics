@@ -34,13 +34,13 @@ jobs:
           source: 'dist/'
           target: '~/mis-analytics-frontend'
 
-      # - name: Restart Service on Droplet
-      #   uses: appleboy/ssh-action@master
-      #   with:
-      #     host: ${{ secrets.DROPLET_IP }}
-      #     username: ${{ secrets.DROPLET_USER }}
-      #     key: ${{ secrets.SSH_PRIVATE_KEY }}
-      #     port: 22
-      #     script: |
-      #       cd ~/mis-analytics-frontend
-      #       pm2 restart frontend || echo "Service not running, skipping restart"
+      - name: Restart Service on Droplet
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.DROPLET_IP }}
+          username: ${{ secrets.DROPLET_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: 22
+          script: |
+            cd ~/mis-analytics-frontend
+            pm2 restart mis-analytics-frontend || echo "Service not running, skipping restart"
