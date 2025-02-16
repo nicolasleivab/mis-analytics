@@ -1,0 +1,46 @@
+name: Build and Deploy Frontend
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Build Frontend
+        run: npm run build
+
+      - name: Deploy to Droplet via SCP
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.DROPLET_IP }}
+          username: ${{ secrets.DROPLET_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: 22
+          source: 'dist/'
+          target: '~/mis-analytics-service/mis-analytics-frontend'
+
+      # - name: Restart Service on Droplet
+      #   uses: appleboy/ssh-action@master
+      #   with:
+      #     host: ${{ secrets.DROPLET_IP }}
+      #     username: ${{ secrets.DROPLET_USER }}
+      #     key: ${{ secrets.SSH_PRIVATE_KEY }}
+      #     port: 22
+      #     script: |
+      #       cd ~/mis-analytics-service/mis-analytics-frontend
+      #       pm2 restart frontend || echo "Service not running, skipping restart"
