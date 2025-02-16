@@ -2,12 +2,14 @@ import { Modal } from '@mantine/core';
 import { CustomButton, CustomTable } from '..';
 import { TUserProject } from '../../../model/User/definitions';
 import {
+  removeProject,
   retrieveProject,
   setCurrentProject,
   useAppDispatch,
 } from '../../../model';
 import { useNavigate } from 'react-router-dom';
 import { DASHBOARD_ROUTE } from '../../../application/controller/Router/routes';
+import { verifyUser } from '../../../model/User/userThunks';
 
 type TProjectsModal = {
   projects: TUserProject[];
@@ -25,10 +27,18 @@ export default function CustomProjectsModal({
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  const handleConfirm = async (project: TUserProject) => {
+  const handleLoadProject = async (project: TUserProject) => {
     await dispatch(retrieveProject(project.id));
-    dispatch(setCurrentProject(project.name));
+    dispatch(setCurrentProject({ name: project.name, id: project.id }));
     navigate(DASHBOARD_ROUTE);
+  };
+
+  const handleRemoveProject = async (project: TUserProject) => {
+    await dispatch(removeProject(project.id));
+    await dispatch(verifyUser());
+    // if (projects.length === 0) {
+    //   onCloseHandler();
+    // }
   };
 
   return (
@@ -40,14 +50,25 @@ export default function CustomProjectsModal({
       title="Select a project to load"
     >
       <CustomTable
-        headers={['name', 'createdAt', 'updatedAt', 'action']}
+        headers={['name', 'createdAt', 'updatedAt', 'load', 'remove']}
         data={projects}
         caption={'Saved projects'}
         customRenderers={{
-          action: (cellValue, row) => (
-            // eslint-disable-next-line @typescript-eslint/no-misused-promises
-            <CustomButton onClick={() => handleConfirm(row as TUserProject)}>
+          load: (cellValue, row) => (
+            <CustomButton
+              // eslint-disable-next-line @typescript-eslint/no-misused-promises
+              onClick={() => handleLoadProject(row as TUserProject)}
+            >
               Load project
+            </CustomButton>
+          ),
+          remove: (cellValue, row) => (
+            <CustomButton
+              variant="secondary"
+              // eslint-disable-next-line @typescript-eslint/no-misused-promises
+              onClick={() => handleRemoveProject(row as TUserProject)}
+            >
+              Remove
             </CustomButton>
           ),
         }}

@@ -19,6 +19,7 @@ import {
 import { CustomButton, CustomCard } from '../../../presentation/components';
 import { useState } from 'react';
 import { verifyUser } from '../../../model/User/userThunks';
+import { TUserProject } from '../../../model/User/definitions';
 
 export default function Dashboard() {
   const { views, addView, removeView } = useViews();
@@ -62,7 +63,7 @@ export default function Dashboard() {
     ));
 
   const saveProject = async () => {
-    await dispatch(
+    const newProject = await dispatch(
       createProject({
         data: sheets,
         variableFields,
@@ -74,7 +75,14 @@ export default function Dashboard() {
       })
     );
     await dispatch(verifyUser());
-    dispatch(setCurrentProject(projectName));
+
+    const typedNewProject = newProject as { payload: TUserProject };
+    dispatch(
+      setCurrentProject({
+        name: typedNewProject.payload.name,
+        id: typedNewProject.payload.id,
+      })
+    );
   };
 
   return (
@@ -85,8 +93,8 @@ export default function Dashboard() {
         gap="15px"
         style={{ marginBottom: '15px', fontSize: '22px' }}
       >
-        {currentProject ? (
-          <h2>{`Project: ${currentProject}`}</h2>
+        {currentProject.id !== '' ? (
+          <h2>{`Project: ${currentProject.name}`}</h2>
         ) : (
           <>
             <Input

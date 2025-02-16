@@ -6,6 +6,7 @@ import {
   setExcelData,
   useAppSelector,
   selectAllVariableFields,
+  setCurrentProject,
 } from '../..';
 import { DASHBOARD_ROUTE } from '../../../application/controller/Router/routes';
 import { TExcelSheetData } from '../../Project/definitions';
@@ -114,7 +115,7 @@ export default function useImportSheet() {
    */
   const handleConfirmClick = () => {
     dispatch(setExcelData(importedSheets));
-
+    dispatch(setCurrentProject({ name: '', id: '' }));
     navigate(DASHBOARD_ROUTE);
   };
 

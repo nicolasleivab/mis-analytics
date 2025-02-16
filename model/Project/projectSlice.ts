@@ -9,7 +9,7 @@ import {
   type TVariableField,
 } from './definitions';
 import { ID_FIELD } from '../definitions/ImportFields';
-import { retrieveProject } from './projectThunks';
+import { removeProject, retrieveProject } from './projectThunks';
 
 type TProjectState = {
   sheets: TExcelData;
@@ -22,7 +22,7 @@ type TProjectState = {
   hoveredPart: string | null;
   error: string | null;
   isLoading: boolean;
-  currentProject: string;
+  currentProject: { name: string; id: string };
 };
 
 const initialState: TProjectState = {
@@ -36,7 +36,7 @@ const initialState: TProjectState = {
   hoveredPart: null,
   error: null,
   isLoading: false,
-  currentProject: '',
+  currentProject: { name: '', id: '' },
 };
 
 export const projectSlice = createSlice({
@@ -66,7 +66,10 @@ export const projectSlice = createSlice({
     setSvgThresholds: (state, action: PayloadAction<TSvgThresholds>) => {
       state.svgThresholds = action.payload;
     },
-    setCurrentProject: (state, action: PayloadAction<string>) => {
+    setCurrentProject: (
+      state,
+      action: PayloadAction<{ name: string; id: string }>
+    ) => {
       state.currentProject = action.payload;
     },
   },
@@ -94,6 +97,28 @@ export const projectSlice = createSlice({
         state.svgThresholds = svgThresholds;
       })
       .addCase(retrieveProject.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload as string;
+      })
+      .addCase(removeProject.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(removeProject.fulfilled, (state, action) => {
+        state.isLoading = false;
+        if (action.payload.id === state.currentProject.id) {
+          state.sheets = [];
+          state.variableFields = [];
+          state.idField = ID_FIELD;
+          state.svgParts = [];
+          state.clipPaths = [];
+          state.uniqueSvgParts = [];
+          state.svgThresholds = DEFAULT_THRESHOLD;
+          state.hoveredPart = null;
+          state.currentProject = { name: '', id: '' };
+        }
+      })
+      .addCase(removeProject.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload as string;
       });

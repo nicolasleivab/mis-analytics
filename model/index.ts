@@ -33,7 +33,11 @@ export type {
   TSvgPart,
   TClipPath,
 } from './Project/definitions';
-export { retrieveProject, createProject } from './Project/projectThunks';
+export {
+  retrieveProject,
+  createProject,
+  removeProject,
+} from './Project/projectThunks';
 
 // User
 export { clearError as clearUserError } from './User/userSlice';

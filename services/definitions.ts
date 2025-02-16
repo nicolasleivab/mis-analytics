@@ -46,6 +46,7 @@ export type TRawProject = {
 
 export type TProject = {
   user: TBareUser;
+  id?: string;
   name: string;
   svgJson: TSvgPart[];
   clipPathsJson: TClipPath[];
@@ -59,4 +60,9 @@ export type TStoredProjectRes = {
     message: string;
     project: TProject;
   };
+};
+
+export type TRemovedProjectRes = {
+  message: string;
+  id: string;
 };
