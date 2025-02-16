@@ -1,8 +1,10 @@
 import axios from 'axios';
 import { TCSRFTokenResponse } from './definitions';
 
+const DEFAULT_API_BASE_URL = 'https://mis-analytics-service.duckdns.org/api';
+
 export const api = axios.create({
-  baseURL: 'https://104.248.250.179/api',
+  baseURL: process.env.API_BASE_URL ?? DEFAULT_API_BASE_URL,
   withCredentials: true,
 });
 

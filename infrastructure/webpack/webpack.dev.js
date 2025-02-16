@@ -10,6 +10,7 @@ module.exports = {
   plugins: [
     new webpack.DefinePlugin({
       'process.env.name': JSON.stringify('development'),
+      'process.env.API_BASE_URL': JSON.stringify(process.env.API_BASE_URL),
     }),
   ],
 };
