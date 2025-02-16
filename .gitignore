@@ -40,3 +40,5 @@ coverage/
 # Ignore lock files for this repo only (depends on your team)
 package-lock.json
 yarn.lock
+
+.env

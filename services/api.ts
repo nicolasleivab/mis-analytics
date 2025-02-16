@@ -2,7 +2,7 @@ import axios from 'axios';
 import { TCSRFTokenResponse } from './definitions';
 
 export const api = axios.create({
-  baseURL: 'http://104.248.250.179:4000/api',
+  baseURL: 'https://104.248.250.179/api',
   withCredentials: true,
 });
 
