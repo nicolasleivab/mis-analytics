@@ -17,20 +17,22 @@ import {
   useImportSheet,
   useAppSelector,
   selectUser,
-  useAppDispatch,
-  retrieveProject,
+  // useAppDispatch,
+  // retrieveProject,
 } from '../../../model';
 import * as styles from './Home.module.css';
 import {
   CustomButton,
   CustomExcelTypeModal,
+  CustomProjectsModal,
 } from '../../../presentation/components';
 import { TExcelSheetData } from '../../../model/Project/definitions';
 import { TStatId, TStatLabel } from '../../../model/definitions/Stats';
 import { DEFAULT_THRESHOLD } from '../../../model/Project/definitions';
 import { Flex } from '@chakra-ui/react';
-import { useNavigate } from 'react-router-dom';
-import { DASHBOARD_ROUTE } from '../../controller/Router/routes';
+// import { useNavigate } from 'react-router-dom';
+// import { DASHBOARD_ROUTE } from '../../controller/Router/routes';
+import { useState } from 'react';
 
 export const MODAL_OFFSET = 150;
 
@@ -43,8 +45,9 @@ const THRESHOLDS_OPTIONS: { value: TStatId; label: TStatLabel }[] = [
 
 export default function Home() {
   const { user } = useAppSelector(selectUser);
-  const dispatch = useAppDispatch();
-  const navigate = useNavigate();
+  // const dispatch = useAppDispatch();
+  // const navigate = useNavigate();
+  const [openProjectsModal, setOpenProjectsModal] = useState(false);
 
   const {
     openModal,
@@ -117,28 +120,17 @@ export default function Home() {
         {user?.projects && user.projects.length > 0 ? (
           <Flex direction="column" gap="20px">
             <Flex align={'center'}>
-              <h2 style={{ marginRight: 20, fontSize: 20 }}>
-                Pick up where you left off, or
-              </h2>
+              <CustomButton
+                variant="secondary"
+                onClick={() => setOpenProjectsModal(true)}
+              >
+                Load a project
+              </CustomButton>
+              <span style={{ margin: '0 15px 0 15px', fontSize: 20 }}>or</span>
               <CustomButton onClick={() => setOpenSvgModal(true)}>
                 Start a New Project
               </CustomButton>
             </Flex>
-            {user.projects.map((project) => (
-              <Flex key={project.id} gap={'20px'} align={'center'}>
-                <h1>{project.name}</h1>
-                <CustomButton
-                  variant="secondary"
-                  // eslint-disable-next-line @typescript-eslint/no-misused-promises
-                  onClick={async () => {
-                    await dispatch(retrieveProject(project.id));
-                    navigate(DASHBOARD_ROUTE);
-                  }}
-                >
-                  Load project
-                </CustomButton>
-              </Flex>
-            ))}
           </Flex>
         ) : (
           <CustomButton onClick={() => setOpenSvgModal(true)}>
@@ -146,6 +138,12 @@ export default function Home() {
           </CustomButton>
         )}
       </Flex>
+      <CustomProjectsModal
+        projects={user?.projects ?? []}
+        isOpen={openProjectsModal}
+        yOffset={MODAL_OFFSET}
+        onCloseHandler={() => setOpenProjectsModal(false)}
+      />
       {/* SVG Parts Modal */}
       <Modal
         yOffset={MODAL_OFFSET}

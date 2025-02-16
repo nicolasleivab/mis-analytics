@@ -2,6 +2,7 @@ export { default as ThemeToggle } from './ThemeToggle/ThemeToggle';
 export { default as Home } from '../../application/views/Home/Home';
 export { default as SvgViz } from './SvgViz/SvgViz';
 export { default as CustomExcelTypeModal } from './CustomExcelTypeModal/CustomExcelTypeModal';
+export { default as CustomProjectsModal } from './CustomProjectsModal/CustomProjectsModal';
 export { default as CustomTable } from './CustomTable/CustomTable';
 export { default as CustomRangeSlider } from './CustomRangeSlider/CustomRangeSlider';
 export { default as CustomButton } from './CustomButton/CustomButton';

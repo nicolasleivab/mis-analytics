@@ -11,6 +11,7 @@ import {
   useAppSelector,
 } from '../../../model';
 import { CustomButton, CustomCard } from '../../../presentation/components';
+import { authenticateUser } from '../../../model/User/userThunks';
 
 type RegisterFormValues = {
   email: string;
@@ -59,6 +60,7 @@ export default function Register() {
 
     try {
       await dispatch(registerUser({ email, password }));
+      await dispatch(authenticateUser({ email, password }));
     } catch (error) {
       console.error('Registration failed:', error);
     }

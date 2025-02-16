@@ -31,3 +31,6 @@ export const selectHoveredPart = (state: RootState) =>
 
 export const selectSvgThresholds = (state: RootState) =>
   state.projectData.svgThresholds;
+
+export const selectCurrentProject = (state: RootState) =>
+  state.projectData.currentProject;

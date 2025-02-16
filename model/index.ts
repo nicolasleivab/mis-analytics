@@ -9,6 +9,7 @@ export {
   setSvgParts,
   setHoveredPart,
   setSvgThresholds,
+  setCurrentProject,
 } from './Project/projectSlice';
 export {
   selectAllSheets,
@@ -22,6 +23,7 @@ export {
   selectSvgError,
   selectHoveredPart,
   selectSvgThresholds,
+  selectCurrentProject,
 } from './Project/projectSelectors';
 export type {
   TExcelData,

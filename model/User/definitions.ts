@@ -1,6 +1,8 @@
 export type TUserProject = {
   id: string;
   name: string;
+  createdAt: string;
+  updatedAt: string;
 };
 
 export type TUser = {

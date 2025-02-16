@@ -22,6 +22,7 @@ type TProjectState = {
   hoveredPart: string | null;
   error: string | null;
   isLoading: boolean;
+  currentProject: string;
 };
 
 const initialState: TProjectState = {
@@ -35,6 +36,7 @@ const initialState: TProjectState = {
   hoveredPart: null,
   error: null,
   isLoading: false,
+  currentProject: '',
 };
 
 export const projectSlice = createSlice({
@@ -63,6 +65,9 @@ export const projectSlice = createSlice({
     },
     setSvgThresholds: (state, action: PayloadAction<TSvgThresholds>) => {
       state.svgThresholds = action.payload;
+    },
+    setCurrentProject: (state, action: PayloadAction<string>) => {
+      state.currentProject = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -102,6 +107,7 @@ export const {
   setHoveredPart,
   setSvgParts,
   setSvgThresholds,
+  setCurrentProject,
 } = projectSlice.actions;
 
 export default projectSlice.reducer;

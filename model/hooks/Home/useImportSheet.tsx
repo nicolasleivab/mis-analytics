@@ -6,11 +6,6 @@ import {
   setExcelData,
   useAppSelector,
   selectAllVariableFields,
-  createProject,
-  selectAllSvgParts,
-  selectAllClipPaths,
-  selectUser,
-  selectSvgThresholds,
 } from '../..';
 import { DASHBOARD_ROUTE } from '../../../application/controller/Router/routes';
 import { TExcelSheetData } from '../../Project/definitions';
@@ -25,10 +20,6 @@ export default function useImportSheet() {
   const navigate = useNavigate();
 
   const varialbleFields = useAppSelector(selectAllVariableFields);
-  const svgParts = useAppSelector(selectAllSvgParts);
-  const clipPaths = useAppSelector(selectAllClipPaths);
-  const { user } = useAppSelector(selectUser);
-  const svgThresholds = useAppSelector(selectSvgThresholds);
 
   // Modal states
   const [openModal, setOpenImportModal] = useState<boolean>(false);
@@ -121,19 +112,9 @@ export default function useImportSheet() {
   /**
    * Saves all imported sheets to Redux and navigates to the dashboard.
    */
-  const handleConfirmClick = async () => {
+  const handleConfirmClick = () => {
     dispatch(setExcelData(importedSheets));
-    await dispatch(
-      createProject({
-        data: importedSheets,
-        variableFields: varialbleFields,
-        name: 'New Project',
-        svgJson: svgParts,
-        clipPathsJson: clipPaths,
-        svgThresholds: svgThresholds,
-        user: user!,
-      })
-    );
+
     navigate(DASHBOARD_ROUTE);
   };
 
