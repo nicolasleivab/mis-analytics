@@ -32,7 +32,7 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 22
           source: 'dist/'
-          target: '~/mis-analytics-service/mis-analytics-frontend'
+          target: '~/mis-analytics-frontend'
 
       # - name: Restart Service on Droplet
       #   uses: appleboy/ssh-action@master
@@ -42,5 +42,5 @@ jobs:
       #     key: ${{ secrets.SSH_PRIVATE_KEY }}
       #     port: 22
       #     script: |
-      #       cd ~/mis-analytics-service/mis-analytics-frontend
+      #       cd ~/mis-analytics-frontend
       #       pm2 restart frontend || echo "Service not running, skipping restart"
