@@ -8,7 +8,7 @@ Build and run container:
 
 ```
 docker build -f infrastructure/Dockerfile -t mis-analytics-react-app .
-docker run -d -p 3000:80 mis-analytics-react-app
+docker run -d -p 4000:80 mis-analytics-react-app
 ```
 
 # client local dev server

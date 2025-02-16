@@ -63,6 +63,6 @@ module.exports = {
     static: path.resolve(PROJECT_ROOT, 'dist'),
     historyApiFallback: true,
     host: '0.0.0.0',
-    port: '3000',
+    port: '4000',
   },
 };
