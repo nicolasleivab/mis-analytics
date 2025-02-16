@@ -5,9 +5,9 @@ import {
   // selectUniqueSvgParts,
   selectSvgError,
   selectSvgLoading,
-} from '../../SvgViz/svgVizSelectors';
-import { setVariableFields as setVariableFieldsRedux } from '../../Excel/excelSlice';
-import { TVariableField } from '../../Excel/definitions';
+} from '../../Project/projectSelectors';
+import { setVariableFields as setVariableFieldsRedux } from '../../Project/projectSlice';
+import { TVariableField } from '../../Project/definitions';
 
 export default function useImportFields(
   setOpenImportModal: React.Dispatch<React.SetStateAction<boolean>>

@@ -28,7 +28,16 @@ module.exports = {
       },
       {
         test: /\.css$/,
-        use: ['style-loader', 'css-loader'],
+        use: [
+          'style-loader',
+          {
+            loader: 'css-loader',
+            options: {
+              // Don't rewrite paths for css image urls.
+              url: false,
+            },
+          },
+        ],
       },
     ],
   },

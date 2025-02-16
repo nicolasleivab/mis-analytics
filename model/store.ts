@@ -1,15 +1,13 @@
 import { useDispatch, useSelector, TypedUseSelectorHook } from 'react-redux';
 
 import { configureStore } from '@reduxjs/toolkit';
-import svgVizReducer from './SvgViz/svgVizSlice';
-// import userReducer from './User/userSlice';
-import excelReducer from './Excel/excelSlice';
+import userReducer from './User/userSlice';
+import projectReducer from './Project/projectSlice';
 
 export const store = configureStore({
   reducer: {
-    // user: userReducer,
-    excelData: excelReducer,
-    svgViz: svgVizReducer,
+    user: userReducer,
+    projectData: projectReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

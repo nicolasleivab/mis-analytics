@@ -1,13 +1,5 @@
 import { useState, useEffect } from 'react';
-import {
-  Modal,
-  Button,
-  FileInput,
-  Select,
-  Alert,
-  Flex,
-  Text,
-} from '@mantine/core';
+import { Modal, FileInput, Select, Alert, Flex, Text } from '@mantine/core';
 import Papa, { ParseResult } from 'papaparse';
 import ExcelJS, { CellValue } from 'exceljs';
 import {
@@ -18,6 +10,7 @@ import {
   useAppDispatch,
   useAppSelector,
 } from '../../../model';
+import CustomButton from '../CustomButton/CustomButton';
 
 const DEFAULT_TYPE_OPTIONS = [
   { label: 'Numeric', value: 'numeric' },
@@ -338,15 +331,14 @@ export default function CustomExcelTypeModal({
                   );
                 })}
               </Flex>
-              <div style={{ width: '100%' }}>
+              <div style={{ width: '100%', marginTop: 20 }}>
                 <Flex justify={'flex-end'}>
-                  <Button
+                  <CustomButton
                     onClick={handleConfirm}
                     disabled={headers.length === 0}
-                    mt="md"
                   >
                     Confirm
-                  </Button>
+                  </CustomButton>
                 </Flex>
               </div>
             </>

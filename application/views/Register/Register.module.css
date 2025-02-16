@@ -1,0 +1,32 @@
+/* Images source: https://www.pexels.com/search/medical/ */
+
+.RegisterWrapper {
+  display: flex;
+  min-height: 100vh;
+  width: 100%;
+}
+
+.LeftImage {
+  flex: 1;
+  background: url('/public/radiography.jpg') center center no-repeat;
+  background-size: cover;
+}
+
+.RightForm {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.PasswordReq {
+  margin-top: 24;
+  font-size: 14px;
+  color: #8e959b;
+}
+
+.Link {
+  color: var(--link-color);
+}

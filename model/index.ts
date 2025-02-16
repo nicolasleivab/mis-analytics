@@ -1,32 +1,21 @@
 // Utils
 export { useAppDispatch, useAppSelector } from './store';
 
-// Excel
+// Project
 export {
   setExcelData,
   setVariableFields,
   setIdField,
-} from './Excel/excelSlice';
+  setSvgParts,
+  setHoveredPart,
+  setSvgThresholds,
+  setCurrentProject,
+} from './Project/projectSlice';
 export {
   selectAllSheets,
   selectSheetByIndex,
   selectAllVariableFields,
   selectIdField,
-} from './Excel/excelSelectors';
-export type {
-  TExcelData,
-  TExcelSheet,
-  TVariableField,
-  TVariableType,
-} from './Excel/definitions';
-
-// SvgViz
-export {
-  setSvgParts,
-  setHoveredPart,
-  setSvgThresholds,
-} from './SvgViz/svgVizSlice';
-export {
   selectAllSvgParts,
   selectAllClipPaths,
   selectUniqueSvgParts,
@@ -34,9 +23,26 @@ export {
   selectSvgError,
   selectHoveredPart,
   selectSvgThresholds,
-} from './SvgViz/svgVizSelectors';
-export { fetchSvgParts, postSvgParts } from './SvgViz/svgVizThunks';
-export type { TSvgPart, TClipPath } from './SvgViz/definitions';
+  selectCurrentProject,
+} from './Project/projectSelectors';
+export type {
+  TExcelData,
+  TExcelSheet,
+  TVariableField,
+  TVariableType,
+  TSvgPart,
+  TClipPath,
+} from './Project/definitions';
+export {
+  retrieveProject,
+  createProject,
+  removeProject,
+} from './Project/projectThunks';
+
+// User
+export { clearError as clearUserError } from './User/userSlice';
+export { authenticateUser, logoutUser, registerUser } from './User/userThunks';
+export { selectUser } from './User/userSelectors';
 
 // hooks
 export {

@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react';
 import { useAppSelector } from '../../store';
-import { selectAllSheets } from '../../Excel/excelSelectors';
+import { selectAllSheets } from '../../Project/projectSelectors';
 import {
   TExcelSheet,
   TExcelSheetData,
   TNumericRange,
   TPolymorphicRecord,
   TVariableType,
-} from '../../Excel/definitions';
+} from '../../Project/definitions';
 import { TDropdownOption } from '../../definitions/Tabs';
 import { DEFAULT_ALL_FIELD } from '../../definitions/ImportFields';
 

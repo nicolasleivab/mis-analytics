@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { useTheme } from '../../../presentation/theme';
 import SvgPart from './SvgPart/SvgPart';
-import { Flex } from '../../layout';
 import { Box } from '@chakra-ui/react';
 import { TStats } from '../../../model/definitions/Stats';
 import { selectAllSvgParts, useAppSelector } from '../../../model';
@@ -9,8 +8,8 @@ import {
   selectAllClipPaths,
   selectSvgThresholds,
   selectUniqueSvgParts,
-} from '../../../model/SvgViz/svgVizSelectors';
-import { Text } from '@mantine/core';
+} from '../../../model';
+import { Flex, Text } from '@mantine/core';
 
 const DEFAULT_COLORS = {
   activeColor: '#4f5f77',
@@ -158,24 +157,24 @@ export default function SvgViz({
           );
         })}
       </svg>
-      <Flex direction="column" padding="20px">
+      <Flex direction="column" style={{ margin: '20px' }}>
         <Box>
           <strong>Legend:</strong>
         </Box>
         <Box>
-          <Flex alignItems="center">
+          <Flex align="center">
             <span style={{ color: '#8b0000' }}>●</span>
             <Text>{`${svgThresholds.stat} < ${svgThresholds.values[0]} (Dark Red)`}</Text>
           </Flex>
         </Box>
         <Box>
-          <Flex alignItems="center">
+          <Flex align="center">
             <span style={{ color: '#d4b200' }}>●</span>
             <Text>{`${svgThresholds.values[0]} ≤ ${svgThresholds.stat} < ${svgThresholds.values[1]} (Dark Yellow)`}</Text>
           </Flex>
         </Box>
         <Box>
-          <Flex alignItems="center">
+          <Flex align="center">
             <span style={{ color: '#006400' }}>●</span>
             <Text>{`${svgThresholds.stat} ≥ ${svgThresholds.values[1]} (Dark Green)`}</Text>
           </Flex>

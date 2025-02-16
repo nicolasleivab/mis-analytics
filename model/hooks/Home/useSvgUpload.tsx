@@ -6,10 +6,10 @@ import {
   useAppDispatch,
   setSvgThresholds,
 } from '../..';
-import demoViz from '../../../services/api/SvgViz/demoViz.json';
-import demoClipPaths from '../../../services/api/SvgViz/demoClipPaths.json';
+import demoViz from '../../definitions/demoViz.json';
+import demoClipPaths from '../../definitions/demoClipPaths.json';
 import { TStatId } from '../../definitions/Stats';
-import { DEFAULT_THRESHOLD } from '../../SvgViz/definitions';
+import { DEFAULT_THRESHOLD } from '../../Project/definitions';
 
 /**
  * Manages uploading of user-provided JSON files and/or using default SVG data.

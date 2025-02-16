@@ -1,0 +1,23 @@
+.alertContainer {
+  position: fixed;
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, 100%);
+  transition: transform 0.5s ease;
+  background-color: hsl(4, 95%, 68%);
+  color: #fff;
+  padding: 16px 24px;
+  border-radius: 8px;
+  box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.2);
+  font-size: 16px;
+  transition: top 0.5s ease;
+  z-index: 9999;
+}
+
+.alertContainer.visible {
+  top: 20px;
+}
+
+.alertText {
+  margin: 0;
+}

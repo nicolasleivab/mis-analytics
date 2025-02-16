@@ -1,23 +1,36 @@
 import React from 'react';
 import { Table } from '@mantine/core';
-import { TPolymorphicRecord } from '../../../model/Excel/definitions';
+import { TPolymorphicRecord } from '../../../model/Project/definitions';
+
+type CustomCellRenderer = (
+  cellValue: unknown,
+  row: TPolymorphicRecord
+) => React.ReactNode;
 
 type DynamicTableProps = {
   headers: string[];
   data: TPolymorphicRecord[];
   caption?: string;
+  customRenderers?: Record<string, CustomCellRenderer>;
 };
 
 const DynamicTable: React.FC<DynamicTableProps> = ({
   headers,
   data,
   caption,
+  customRenderers = {},
 }) => {
   const rows = data.map((row, rowIndex) => (
     <Table.Tr key={rowIndex}>
-      {headers.map((header, cellIndex) => (
-        <Table.Td key={cellIndex}>{row[header]}</Table.Td>
-      ))}
+      {headers.map((header, cellIndex) => {
+        const cellValue = row[header];
+
+        const content = customRenderers[header]
+          ? customRenderers[header](cellValue, row)
+          : cellValue;
+
+        return <Table.Td key={cellIndex}>{content}</Table.Td>;
+      })}
     </Table.Tr>
   ));
 
