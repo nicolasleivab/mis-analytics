@@ -89,7 +89,7 @@ export default function Login() {
                 <CustomButton type="submit" loading={isLoading}>
                   Login
                 </CustomButton>
-                <CustomButton variant="secondary">Login as Guest</CustomButton>
+                {/* <CustomButton variant="secondary">Login as Guest</CustomButton> */}
               </Group>
               <Flex gap="sm" style={{ marginTop: 32 }}>
                 <p>No account?</p>
