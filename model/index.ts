@@ -10,6 +10,7 @@ export {
   setHoveredPart,
   setSvgThresholds,
   setCurrentProject,
+  clearProjectData,
 } from './Project/projectSlice';
 export {
   selectAllSheets,

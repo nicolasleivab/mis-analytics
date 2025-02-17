@@ -72,6 +72,17 @@ export const projectSlice = createSlice({
     ) => {
       state.currentProject = action.payload;
     },
+    clearProjectData: (state) => {
+      state.sheets = [];
+      state.variableFields = [];
+      state.idField = ID_FIELD;
+      state.svgParts = [];
+      state.clipPaths = [];
+      state.uniqueSvgParts = [];
+      state.svgThresholds = DEFAULT_THRESHOLD;
+      state.hoveredPart = null;
+      state.currentProject = { name: '', id: '' };
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -133,6 +144,7 @@ export const {
   setSvgParts,
   setSvgThresholds,
   setCurrentProject,
+  clearProjectData,
 } = projectSlice.actions;
 
 export default projectSlice.reducer;

@@ -13,6 +13,7 @@ import {
 // import ThemeToggle from '../ThemeToggle/ThemeToggle';
 
 import {
+  clearProjectData,
   logoutUser,
   selectAllSheets,
   selectAllSvgParts,
@@ -61,6 +62,7 @@ export default function Nav() {
 
   const handleLogout = async () => {
     try {
+      dispatch(clearProjectData());
       await dispatch(logoutUser());
     } catch (error) {
       console.error('Logout failed:', error);
