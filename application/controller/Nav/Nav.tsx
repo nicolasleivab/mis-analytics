@@ -21,8 +21,8 @@ import {
   useAppDispatch,
   useAppSelector,
 } from '../../../model';
-import { CustomButton } from '../../../presentation/components';
 import { Flex } from '@mantine/core';
+import { IconLogout } from '@tabler/icons-react';
 
 export default function Nav() {
   const dispatch = useAppDispatch();
@@ -83,10 +83,15 @@ export default function Nav() {
 
   return (
     <div className={styles.Nav}>
-      <Flex justify="space-between" align="center" style={{ padding: '20px' }}>
-        <Flex justify="flex-start" align="center">
+      <Flex justify="center" align="center" style={{ padding: '20px' }}>
+        <Flex
+          direction="column"
+          justify="flex-start"
+          align="center"
+          gap={'40px'}
+        >
           <Logo />
-          <h2 className={styles.title}>MIS Analytics</h2>
+          {/* <h2 className={styles.title}>MIS Analytics</h2> */}
           {preFilteredRoutes
             .filter((route: TRoute) => route.isProtected)
             .map((route: TRoute) => (
@@ -96,17 +101,15 @@ export default function Nav() {
                 className={activeLink(route.path)}
                 onKeyDown={(e) => handleKeyPress(e, route.path)}
               >
-                {route.label}
+                {route.icon}
               </Link>
             ))}
+          <div className={styles.separator} />
+          {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
+          <IconLogout onClick={handleLogout} title="Logout" />
         </Flex>
         {/* TODO: Fix theme conflicts */}
         {/* <ThemeToggle /> */}
-
-        {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
-        <CustomButton variant="secondary" onClick={handleLogout}>
-          Logout
-        </CustomButton>
       </Flex>
     </div>
   );

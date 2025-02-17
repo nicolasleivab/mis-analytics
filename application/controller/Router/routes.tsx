@@ -1,4 +1,5 @@
 import { Home, Dashboard, ModelComparison, Login, Register } from '../../views';
+import { IconChartPie, IconHome2, IconTableOptions } from '@tabler/icons-react';
 
 export const HOME_ROUTE = '/';
 export const DASHBOARD_ROUTE = '/analytics';
@@ -18,6 +19,7 @@ export type TRoute = {
   label: string;
   id: string;
   isProtected: boolean;
+  icon?: JSX.Element;
 };
 
 export const APP_ROUTES: TRoute[] = [
@@ -35,6 +37,7 @@ export const APP_ROUTES: TRoute[] = [
     label: HOME_LABEL,
     id: '1',
     isProtected: true,
+    icon: <IconHome2 title="Home" />,
   },
   {
     path: DASHBOARD_ROUTE,
@@ -42,6 +45,7 @@ export const APP_ROUTES: TRoute[] = [
     label: DASHBOARD_LABEL,
     id: '2',
     isProtected: true,
+    icon: <IconTableOptions title="Analytics" />,
   },
   {
     path: MODEL_COMPARISON_ROUTE,
@@ -49,6 +53,7 @@ export const APP_ROUTES: TRoute[] = [
     label: MODEL_COMPARISON_LABEL,
     id: '3',
     isProtected: true,
+    icon: <IconChartPie title="Model Comparison" />,
   },
   {
     path: REGISTER_ROUTE,
