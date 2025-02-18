@@ -149,6 +149,14 @@ export default function CustomExcelTypeModal({
 
     async function parse() {
       try {
+        const extension = localFile?.name.split('.').pop()?.toLowerCase();
+
+        if (extension === 'csv') {
+          // Already CSV => return file contents as text
+
+          return setIdError('Currently only XLS/XLSX files are supported.');
+        }
+
         const csvText = await parseFileToCsv(localFile!);
 
         // Now parse partial CSV (20 rows) to get headers & sample data
@@ -279,14 +287,13 @@ export default function CustomExcelTypeModal({
           <Flex mb={20}>
             <Text fw={700}>File: {localFile.name}</Text>
           </Flex>
-
+          {idError && (
+            <Alert color="red" variant="filled" mb="sm">
+              {idError}
+            </Alert>
+          )}
           {headers.length > 0 ? (
             <>
-              {idError && (
-                <Alert color="red" variant="filled" mb="sm">
-                  {idError}
-                </Alert>
-              )}
               <Flex direction="column" gap="md">
                 {headers.map((hdr) => {
                   const current = columnTypes.find((c) => c.name === hdr);
@@ -343,7 +350,7 @@ export default function CustomExcelTypeModal({
               </div>
             </>
           ) : (
-            <p>Parsing file headers...</p>
+            <p>No headers found.</p>
           )}
         </>
       )}

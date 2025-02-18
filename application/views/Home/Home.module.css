@@ -24,3 +24,29 @@
 .HomeLink {
   color: var(--link-color) !important;
 }
+
+.lineContainer {
+  display: flex;
+  width: 100%;
+  height: 8px; /* Adjust thickness as needed */
+  margin: 5px 0 5px 0;
+}
+
+.Red {
+  background-color: #8b0000; /* Dark Red */
+  flex: 1;
+}
+
+.Yellow {
+  background-color: #d4b200; /* Dark Yellow */
+  flex: 1;
+}
+
+.Green {
+  background-color: #006400; /* Dark Green */
+  flex: 1;
+}
+
+.Empty {
+  flex: 1;
+}
