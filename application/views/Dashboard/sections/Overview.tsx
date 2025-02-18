@@ -15,6 +15,7 @@ import {
   selectUniqueSvgParts,
   useAppSelector,
   useStats,
+  selectIdField,
 } from '../../../../model';
 import { TPolymorphicRecord } from '../../../../model/Project/definitions';
 import { MODAL_OFFSET } from '../../Home/Home';
@@ -28,7 +29,7 @@ export default function Overview() {
 
   const variableFields = useAppSelector(selectAllVariableFields);
   const svgParts = useAppSelector(selectUniqueSvgParts);
-
+  const idField = useAppSelector(selectIdField);
   const {
     filteredData,
     currentExcelSheet,
@@ -154,9 +155,12 @@ export default function Overview() {
         <CustomTable
           headers={
             currentDataset[0]
-              ? Object.keys(currentDataset[0]).filter((e) =>
-                  partsFromStats.includes(e)
-                )
+              ? [
+                  idField,
+                  ...Object.keys(currentDataset[0]).filter((e) =>
+                    partsFromStats.includes(e)
+                  ),
+                ]
               : []
           }
           data={filteredData as unknown as TPolymorphicRecord[]}

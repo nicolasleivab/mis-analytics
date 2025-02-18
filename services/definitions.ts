@@ -46,13 +46,14 @@ export type TRawProject = {
 
 export type TProject = {
   user: TBareUser;
-  id?: string;
+  idField: string;
   name: string;
   svgJson: TSvgPart[];
   clipPathsJson: TClipPath[];
   data: TExcelData;
   variableFields: TVariableField[];
   svgThresholds: TSvgThresholds;
+  id?: string;
 };
 
 export type TStoredProjectRes = {

@@ -94,11 +94,18 @@ export const projectSlice = createSlice({
         state.isLoading = false;
         const project = action.payload;
 
-        const { data, variableFields, svgJson, clipPathsJson, svgThresholds } =
-          project;
+        const {
+          data,
+          variableFields,
+          svgJson,
+          clipPathsJson,
+          svgThresholds,
+          idField,
+        } = project;
         state.sheets = data;
+        state.idField = idField;
         state.variableFields = variableFields;
-        state.idField = ID_FIELD;
+        state.idField = idField;
         const parsedSvgJson = svgJson;
         state.svgParts = parsedSvgJson;
         state.clipPaths = clipPathsJson;

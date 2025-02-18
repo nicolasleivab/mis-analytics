@@ -9,6 +9,7 @@ import {
   selectAllSvgParts,
   selectAllVariableFields,
   selectCurrentProject,
+  selectIdField,
   selectSvgLoading,
   selectSvgThresholds,
   selectUser,
@@ -31,6 +32,7 @@ export default function Dashboard() {
   const { user } = useAppSelector(selectUser);
   const currentProject = useAppSelector(selectCurrentProject);
   const sheets = useAppSelector(selectAllSheets);
+  const idField = useAppSelector(selectIdField);
   const dispatch = useAppDispatch();
   const [projectName, setProjectName] = useState('');
 
@@ -71,6 +73,7 @@ export default function Dashboard() {
         svgJson: svgParts,
         clipPathsJson: clipPaths,
         svgThresholds: svgThresholds,
+        idField,
         user: user!,
       })
     );
