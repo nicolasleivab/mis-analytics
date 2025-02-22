@@ -34,7 +34,7 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           context: .
-          dockerfile: ./infrastructure/Dockerfile
+          file: ./infrastructure/Dockerfile
           tags: nicolasleivab/mis-analytics:latest
           push: true
 
