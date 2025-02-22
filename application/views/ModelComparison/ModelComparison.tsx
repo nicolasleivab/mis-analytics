@@ -5,6 +5,8 @@ import { useModelComparison } from '../../../model/hooks';
 import { TStatLabel } from '../../../model/definitions/Stats';
 import { selectAllSheets, TExcelSheet, useAppSelector } from '../../../model';
 import * as styles from './ModelComparison.module.css';
+import { CustomCard, CustomTable } from '../../../presentation/components';
+// import { CustomHeaderRenderer } from '../../../presentation/components/CustomTable/CustomTable';
 
 export default function ModelComparison() {
   const excelData = useAppSelector(selectAllSheets);
@@ -28,6 +30,24 @@ export default function ModelComparison() {
       </div>
     );
   }
+  const customHeaderRenderers: Record<string, (header: string) => JSX.Element> =
+    {};
+
+  selectedModels.forEach((model, index) => {
+    customHeaderRenderers[model] = (header: string) => {
+      return (
+        <Flex align={'center'} gap={'10px'}>
+          <div
+            className={styles.circle}
+            style={{
+              backgroundColor: darkColorPalette1[index] ?? darkColorPalette1[0],
+            }}
+          ></div>
+          <Text>{header}</Text>
+        </Flex>
+      );
+    };
+  });
 
   return (
     <div className={styles.ModelComparison}>
@@ -75,24 +95,33 @@ export default function ModelComparison() {
         </Box>
 
         {selectedModels.length > 0 ? (
-          <Box style={{ width: '80%', marginTop: '100px' }}>
-            <BarChart
-              h={300}
-              data={chartData}
-              dataKey="part" // 'part' is the key representing body parts (x-axis)
-              series={selectedModels.map((model, index) => ({
-                name: model,
-                color: darkColorPalette1[index] ?? darkColorPalette1[0],
-                dataKey: model,
-              }))}
-              tickLine="y"
-            />
-          </Box>
+          <>
+            <Box style={{ width: '80%', marginTop: '100px' }}>
+              <BarChart
+                h={300}
+                data={chartData}
+                dataKey="part" // 'part' is the key representing body parts (x-axis)
+                series={selectedModels.map((model, index) => ({
+                  name: model,
+                  color: darkColorPalette1[index] ?? darkColorPalette1[0],
+                  dataKey: model,
+                }))}
+                tickLine="y"
+              />
+            </Box>
+            <Box style={{ width: '90%', marginTop: '50px' }}>
+              <CustomCard width="100%">
+                <CustomTable
+                  headers={['part', ...selectedModels]}
+                  data={chartData}
+                  customHeaderRenderers={customHeaderRenderers}
+                  caption={'Models Comparison'}
+                />
+              </CustomCard>
+            </Box>
+          </>
         ) : (
-          <p>
-            Please select at least one model to visualize the chart. Keep
-            selecting/removing models to update the chart on the fly.
-          </p>
+          <p>Please select at least one model to visualize the charts.</p>
         )}
       </Flex>
     </div>

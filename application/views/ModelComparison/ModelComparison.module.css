@@ -8,3 +8,9 @@
   color: var(--color); */
   padding: var(--page-padding);
 }
+
+.circle {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+}

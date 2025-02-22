@@ -4,9 +4,9 @@ import { useAppSelector } from '../../store';
 import {
   selectAllSheets,
   selectAllVariableFields,
+  selectUniqueSvgParts,
 } from '../../Project/projectSelectors';
 import { TExcelSheet } from '../../Project/definitions';
-import { selectUniqueSvgParts } from '../../Project/projectSelectors';
 
 type ChartEntry = {
   part: string;
@@ -34,10 +34,9 @@ export default function useModelComparison() {
 
   useEffect(() => {
     if (selectedModels.length > 0 && excelData.length > 0) {
-      // Map selected models to their corresponding datasets
       const datasets = selectedModels.map((modelName) => {
         const dataSet = excelData.find(
-          (dataSet: TExcelSheet) => dataSet.name === modelName
+          (d: TExcelSheet) => d.name === modelName
         );
         return dataSet?.data;
       });
@@ -49,7 +48,6 @@ export default function useModelComparison() {
 
           selectedModels.forEach((modelName, index) => {
             const dataset = datasets[index];
-            // Map rows to numeric values for the current body part
             const values = (
               dataset as unknown as Record<string, unknown>[]
             ).map((row) => parseFloat(row[partName] as string) || 0);
@@ -64,16 +62,15 @@ export default function useModelComparison() {
                   calculatedValue =
                     values.reduce((a, b) => a + b, 0) / values.length;
                   break;
-                case 'Median':
-                  // eslint-disable-next-line no-case-declarations
+                case 'Median': {
                   const sorted = values.slice().sort((a, b) => a - b);
-                  // eslint-disable-next-line no-case-declarations
                   const mid = Math.floor(sorted.length / 2);
                   calculatedValue =
                     sorted.length % 2 === 0
                       ? (sorted[mid - 1] + sorted[mid]) / 2
                       : sorted[mid];
                   break;
+                }
                 case 'Min':
                   calculatedValue = Math.min(...values);
                   break;
@@ -85,17 +82,23 @@ export default function useModelComparison() {
                     values.reduce((a, b) => a + b, 0) / values.length;
               }
             }
-
-            // Round the calculated value to 4 decimal places
             entry[modelName] = parseFloat(calculatedValue.toFixed(4));
           });
+
           return entry;
         });
 
         setChartData(comparisonData);
       }
     }
-  }, [selectedModels, excelData, selectedStat, svgUniqueParts, selectedFields]);
+  }, [
+    selectedModels,
+    excelData,
+    selectedStat,
+    svgUniqueParts,
+    selectedFields,
+    numericFields,
+  ]);
 
   return {
     selectedModels,
@@ -103,8 +106,8 @@ export default function useModelComparison() {
     chartData,
     selectedStat,
     setSelectedStat,
-    setSelectedFields,
     selectedFields,
+    setSelectedFields,
     numericFields,
   };
 }

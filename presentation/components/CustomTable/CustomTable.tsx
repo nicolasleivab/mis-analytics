@@ -4,16 +4,26 @@ import { TPolymorphicRecord } from '../../../model/Project/definitions';
 import { useIntlContext } from '../../intl/IntlContext';
 import { DATE_FIELDS } from '../../../model/definitions/ImportFields';
 
+// Renderer for body cells
 type CustomCellRenderer = (
   cellValue: unknown,
   row: TPolymorphicRecord
+) => React.ReactNode;
+
+// Renderer for header cells (e.g., custom label, icons, etc.)
+export type CustomHeaderRenderer = (
+  header: string,
+  index: number
 ) => React.ReactNode;
 
 type DynamicTableProps = {
   headers: string[];
   data: TPolymorphicRecord[];
   caption?: string;
+  // Maps a column name -> function to render its cell
   customRenderers?: Record<string, CustomCellRenderer>;
+  // Maps a column name -> function to render its header
+  customHeaderRenderers?: Record<string, CustomHeaderRenderer>;
 };
 
 const DynamicTable: React.FC<DynamicTableProps> = ({
@@ -21,6 +31,7 @@ const DynamicTable: React.FC<DynamicTableProps> = ({
   data,
   caption,
   customRenderers = {},
+  customHeaderRenderers = {},
 }) => {
   const { intl } = useIntlContext();
 
@@ -30,10 +41,12 @@ const DynamicTable: React.FC<DynamicTableProps> = ({
         const cellValue = row[header];
         const isCellValueADate = DATE_FIELDS.includes(header);
 
+        // Format as date if needed
         const parsedCellValue = isCellValueADate
           ? intl.formatDate(cellValue as string)
           : cellValue;
 
+        // If there's a custom renderer for this header, use it
         const content = customRenderers[header]
           ? customRenderers[header](cellValue, row)
           : parsedCellValue;
@@ -49,11 +62,13 @@ const DynamicTable: React.FC<DynamicTableProps> = ({
         {caption && <Table.Caption>{caption}</Table.Caption>}
         <Table.Thead>
           <Table.Tr>
-            {headers.map((header, index) => (
-              <Table.Th key={index}>
-                {intl.formatMessage(header?.toString() ?? '')}
-              </Table.Th>
-            ))}
+            {headers.map((header, index) => {
+              const content = customHeaderRenderers[header]
+                ? customHeaderRenderers[header](header, index)
+                : intl.formatMessage(header.toString() ?? '');
+
+              return <Table.Th key={index}>{content}</Table.Th>;
+            })}
           </Table.Tr>
         </Table.Thead>
         <Table.Tbody>{rows}</Table.Tbody>
