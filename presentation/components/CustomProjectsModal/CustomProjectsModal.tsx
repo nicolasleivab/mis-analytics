@@ -1,4 +1,4 @@
-import { Modal } from '@mantine/core';
+import { Flex, Modal } from '@mantine/core';
 import { CustomButton, CustomTable } from '..';
 import { TUserProject } from '../../../model/User/definitions';
 import {
@@ -10,6 +10,7 @@ import {
 import { useNavigate } from 'react-router-dom';
 import { DASHBOARD_ROUTE } from '../../../application/controller/Router/routes';
 import { verifyUser } from '../../../model/User/userThunks';
+import { IconChartBar, IconTrash } from '@tabler/icons-react';
 
 type TProjectsModal = {
   projects: TUserProject[];
@@ -56,19 +57,33 @@ export default function CustomProjectsModal({
         customRenderers={{
           load: (cellValue, row) => (
             <CustomButton
+              variant="secondary"
               // eslint-disable-next-line @typescript-eslint/no-misused-promises
               onClick={() => handleLoadProject(row as TUserProject)}
             >
-              Load project
+              <Flex
+                align="center"
+                justify={'space-evenly'}
+                style={{ width: '100%' }}
+              >
+                <IconChartBar />
+                Load
+              </Flex>
             </CustomButton>
           ),
           remove: (cellValue, row) => (
             <CustomButton
-              variant="secondary"
               // eslint-disable-next-line @typescript-eslint/no-misused-promises
               onClick={() => handleRemoveProject(row as TUserProject)}
             >
-              Remove
+              <Flex
+                align="center"
+                justify={'space-evenly'}
+                style={{ width: '100%' }}
+              >
+                <IconTrash />
+                Remove
+              </Flex>
             </CustomButton>
           ),
         }}
