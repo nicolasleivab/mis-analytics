@@ -87,7 +87,7 @@ export default function Dashboard() {
       })
     );
   };
-  console.log('currentProject nginx test');
+
   return (
     <div className={styles.Dashboard}>
       <Flex
