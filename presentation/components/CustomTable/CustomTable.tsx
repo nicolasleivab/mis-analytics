@@ -23,7 +23,7 @@ const DynamicTable: React.FC<DynamicTableProps> = ({
   customRenderers = {},
 }) => {
   const { intl } = useIntlContext();
-  console.log(data);
+
   const rows = data.map((row, rowIndex) => (
     <Table.Tr key={rowIndex}>
       {headers.map((header, cellIndex) => {

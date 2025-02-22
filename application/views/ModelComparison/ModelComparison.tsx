@@ -14,6 +14,9 @@ export default function ModelComparison() {
     chartData,
     selectedStat,
     setSelectedStat,
+    setSelectedFields,
+    selectedFields,
+    numericFields,
   } = useModelComparison();
 
   if (excelData?.length === 0) {
@@ -39,6 +42,20 @@ export default function ModelComparison() {
             }))}
             value={selectedModels}
             onChange={setSelectedModels}
+            clearable
+          />
+        </Box>
+
+        <Box style={{ width: '80%' }}>
+          <MultiSelect
+            label="Select Fields/Variables to Compare"
+            placeholder="Pick one or more models"
+            data={numericFields.map((field) => ({
+              value: field,
+              label: field,
+            }))}
+            value={selectedFields}
+            onChange={setSelectedFields}
             clearable
           />
         </Box>
