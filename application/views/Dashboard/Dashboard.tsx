@@ -87,9 +87,10 @@ export default function Dashboard() {
       })
     );
   };
-
+  console.log('currentProject', currentProject);
   return (
     <div className={styles.Dashboard}>
+      <></>
       <Flex
         justify="flex-start"
         align="center"
