@@ -90,7 +90,6 @@ export default function Dashboard() {
 
   return (
     <div className={styles.Dashboard}>
-      <>S</>
       <Flex
         justify="flex-start"
         align="center"
