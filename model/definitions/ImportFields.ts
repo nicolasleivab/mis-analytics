@@ -14,3 +14,5 @@ export type TField = {
   };
   example?: string;
 };
+
+export const DATE_FIELDS = ['createdAt', 'updatedAt'];

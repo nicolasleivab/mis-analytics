@@ -2,6 +2,7 @@ import React from 'react';
 import { Table } from '@mantine/core';
 import { TPolymorphicRecord } from '../../../model/Project/definitions';
 import { useIntlContext } from '../../intl/IntlContext';
+import { DATE_FIELDS } from '../../../model/definitions/ImportFields';
 
 type CustomCellRenderer = (
   cellValue: unknown,
@@ -22,18 +23,15 @@ const DynamicTable: React.FC<DynamicTableProps> = ({
   customRenderers = {},
 }) => {
   const { intl } = useIntlContext();
-
+  console.log(data);
   const rows = data.map((row, rowIndex) => (
     <Table.Tr key={rowIndex}>
       {headers.map((header, cellIndex) => {
         const cellValue = row[header];
-        const isCellValueADate =
-          cellValue !== undefined &&
-          (typeof cellValue === 'string' || typeof cellValue === 'number') &&
-          new Date(cellValue).toString() !== 'Invalid Date';
+        const isCellValueADate = DATE_FIELDS.includes(header);
 
         const parsedCellValue = isCellValueADate
-          ? intl.formatDate(cellValue)
+          ? intl.formatDate(cellValue as string)
           : cellValue;
 
         const content = customRenderers[header]
