@@ -332,7 +332,7 @@ export default function CustomExcelTypeModal({
                           <Select
                             value={current?.isFilter.toString()}
                             onChange={(val) =>
-                              handleIsFilterChange(hdr, Boolean(val))
+                              handleIsFilterChange(hdr, val === 'true')
                             }
                             data={DEFAULT_FILTER_OPTIONS}
                           />
