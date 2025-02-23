@@ -214,20 +214,18 @@ export default function Home() {
             </CustomButton>
           </Flex>
         </Group>
-        <Group mt="xl" mb="md">
-          <Flex justifyContent="space-between">
-            <a href="/public/bodySvg.json" className={styles.HomeLink} download>
-              Download default svg json
-            </a>
-            <a
-              href="/public/bodyClipPaths.json"
-              className={styles.HomeLink}
-              download
-            >
-              Download default clip paths json
-            </a>
-          </Flex>
-        </Group>
+        <Flex justifyContent="space-between" style={{ marginTop: 20 }}>
+          <a href="/public/bodySvg.json" className={styles.HomeLink} download>
+            Download default svg json
+          </a>
+          <a
+            href="/public/bodyClipPaths.json"
+            className={styles.HomeLink}
+            download
+          >
+            Download default clip paths json
+          </a>
+        </Flex>
       </Modal>
       {/* Header types Import Modal */}
       <CustomExcelTypeModal
