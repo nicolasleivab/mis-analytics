@@ -214,6 +214,10 @@ export default function CustomExcelTypeModal({
    * update that in our columnTypes state.
    */
   const handleTypeChange = (headerName: string, newType: TVariableType) => {
+    if (newType === 'id') {
+      dispatch(setIdField(headerName));
+    }
+
     setColumnTypes((prev) =>
       prev.map((col) =>
         col.name === headerName ? { ...col, type: newType } : col
