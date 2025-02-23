@@ -178,12 +178,6 @@ export default function Home() {
         <Text mt="md" fw={500}>
           SVG threshold stat and values
         </Text>
-        <Flex className={styles.lineContainer}>
-          <div className={styles.Empty} />
-          <div className={styles.Red} />
-          <div className={styles.Yellow} />
-          <div className={styles.Green} />
-        </Flex>
         <Flex alignItems="center" justifyContent="space-between">
           <Select
             allowDeselect={false}
@@ -192,6 +186,7 @@ export default function Home() {
             onChange={(val) => setSelectedThresholdStat(val as TStatId)}
             data={THRESHOLDS_OPTIONS}
           />
+          <div className={styles.Red} />
           <Input
             type="number"
             style={{ width: '70px' }}
@@ -199,6 +194,7 @@ export default function Home() {
             defaultValue={DEFAULT_THRESHOLD.values[0]}
             onChange={(e) => setSelectedThresholdValue1(Number(e.target.value))}
           />
+          <div className={styles.Yellow} />
           <Input
             type="number"
             style={{ width: '70px' }}
@@ -206,6 +202,7 @@ export default function Home() {
             // label="Threshold value 2"
             onChange={(e) => setSelectedThresholdValue2(Number(e.target.value))}
           />
+          <div className={styles.Green} />
           <div />
         </Flex>
         <Group mt="xl">

@@ -35,18 +35,17 @@
 .Red {
   background-color: #8b0000; /* Dark Red */
   flex: 1;
+  height: 10px;
 }
 
 .Yellow {
   background-color: #d4b200; /* Dark Yellow */
   flex: 1;
+  height: 10px;
 }
 
 .Green {
   background-color: #006400; /* Dark Green */
   flex: 1;
-}
-
-.Empty {
-  flex: 1;
+  height: 10px;
 }
