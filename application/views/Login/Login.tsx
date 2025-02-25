@@ -11,6 +11,7 @@ import {
   useAppSelector,
 } from '../../../model';
 import { CustomButton, CustomCard } from '../../../presentation/components';
+import { verifyUser } from '../../../model/User/userThunks';
 
 type LoginFormValues = {
   email: string;
@@ -19,7 +20,7 @@ type LoginFormValues = {
 
 export default function Login() {
   const navigate = useNavigate();
-  const { user, error } = useAppSelector(selectUser);
+  const { user } = useAppSelector(selectUser);
   const dispatch = useAppDispatch();
   const isLoading = false;
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
@@ -31,11 +32,6 @@ export default function Login() {
     validate: {
       email: (value: string) =>
         /^\S+@\S+\.\S+$/.test(value) ? null : 'Invalid email',
-      // password: (value: string) => {
-      //   return value.length < 6
-      //     ? 'Password must be at least 6 characters'
-      //     : null;
-      // },
     },
   });
 
@@ -53,7 +49,18 @@ export default function Login() {
     if (user) {
       navigate(HOME_ROUTE);
     }
-  }, [user, navigate, error]);
+  }, [user, navigate]);
+
+  useEffect(() => {
+    const checkUser = async () => {
+      try {
+        await dispatch(verifyUser());
+      } catch (error) {
+        console.warn('User needs to login');
+      }
+    };
+    void checkUser();
+  }, [dispatch, navigate]);
 
   return (
     <div className={styles.LoginWrapper}>
