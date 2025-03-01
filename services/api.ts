@@ -2,7 +2,7 @@ import axios from 'axios';
 import { TCSRFTokenResponse } from './definitions';
 
 const isProd = process.env.NODE_ENV === 'production';
-const prodUrl = 'https://mis-analytics-service.duckdns.org/api';
+const prodUrl = 'https://mis-analytics.org/api';
 const devUrl = 'http://localhost:3000/api';
 
 export const api = axios.create({
