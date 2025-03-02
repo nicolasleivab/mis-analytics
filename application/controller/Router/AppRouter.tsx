@@ -24,6 +24,7 @@ import { useEffect } from 'react';
 import {
   CustomAlert,
   Footer,
+  GithubLink,
   NotFoundPage,
 } from '../../../presentation/components';
 
@@ -71,6 +72,8 @@ export function createAppRouter() {
       <div>
         <CustomAlert />
         <Nav />
+        <GithubLink />
+        <Footer />
         <Routes>
           {APP_ROUTES.map((route) => (
             <Route
@@ -85,7 +88,6 @@ export function createAppRouter() {
           ))}
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
-        <Footer />
       </div>
     </Router>
   );

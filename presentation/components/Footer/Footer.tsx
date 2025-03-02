@@ -4,7 +4,7 @@ export default function Footer() {
   return (
     <div className={styles.footer}>
       <a
-        href="#https://github.com/nicolasleivab/mis-analytics"
+        href="https://github.com/nicolasleivab/mis-analytics"
         target="_blank"
         rel="noopener noreferrer"
       >
@@ -12,7 +12,7 @@ export default function Footer() {
       </a>{' '}
       is an open source project. Code licensed under{' '}
       <a
-        href="#https://github.com/nicolasleivab/mis-analytics?tab=MIT-1-ov-file"
+        href="https://github.com/nicolasleivab/mis-analytics?tab=MIT-1-ov-file"
         target="_blank"
         rel="noopener noreferrer"
       >
