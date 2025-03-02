@@ -3,8 +3,14 @@ import {
   Routes,
   BrowserRouter as Router,
   useNavigate,
+  useLocation,
 } from 'react-router-dom';
-import { APP_ROUTES, HOME_ROUTE, LOGIN_ROUTE } from './routes';
+import {
+  APP_ROUTES,
+  HOME_ROUTE,
+  LOGIN_ROUTE,
+  SVG_EDITOR_ROUTE,
+} from './routes';
 import Nav from '../Nav/Nav';
 import { verifyUser } from '../../../model/User/userThunks';
 import {
@@ -15,7 +21,7 @@ import {
   useAppSelector,
 } from '../../../model';
 import { useEffect } from 'react';
-import { CustomAlert } from '../../../presentation/components';
+import { CustomAlert, NotFoundPage } from '../../../presentation/components';
 
 type ProtectedRouteProps = {
   children: JSX.Element;
@@ -23,6 +29,7 @@ type ProtectedRouteProps = {
 };
 
 export function ProtectedRoute({ children, isProtected }: ProtectedRouteProps) {
+  const location = useLocation();
   const dispatch = useAppDispatch();
   const { user } = useAppSelector(selectUser);
   const excelData = useAppSelector(selectAllSheets);
@@ -31,7 +38,8 @@ export function ProtectedRoute({ children, isProtected }: ProtectedRouteProps) {
   const navigate = useNavigate();
   const shouldVerifyUser = !user && isProtected;
   const shouldRedirectToHome =
-    (user && excelData.length === 0) ?? (user && svgParts.length === 0);
+    ((user && excelData.length === 0) ?? (user && svgParts.length === 0)) &&
+    location.pathname !== SVG_EDITOR_ROUTE;
 
   useEffect(() => {
     // Verify user and redirect to login if not logged in
@@ -71,7 +79,7 @@ export function createAppRouter() {
               }
             />
           ))}
-          <Route path="*" element={<div>404 Not Found</div>} />
+          <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </div>
     </Router>

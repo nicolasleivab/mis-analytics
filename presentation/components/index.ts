@@ -8,3 +8,4 @@ export { default as CustomRangeSlider } from './CustomRangeSlider/CustomRangeSli
 export { default as CustomButton } from './CustomButton/CustomButton';
 export { default as CustomCard } from './CustomCard/CustomCard';
 export { default as CustomAlert } from './CustomAlert/CustomAlert';
+export { default as NotFoundPage } from './NotFoundPage/NotFoundPage';

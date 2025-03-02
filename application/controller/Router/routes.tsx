@@ -1,17 +1,31 @@
-import { Home, Dashboard, ModelComparison, Login, Register } from '../../views';
-import { IconChartPie, IconHome2, IconTableOptions } from '@tabler/icons-react';
+import {
+  Home,
+  Dashboard,
+  ModelComparison,
+  Login,
+  Register,
+  SVGEditor,
+} from '../../views';
+import {
+  IconBrandDatabricks,
+  IconBrandGoogleAnalytics,
+  IconHome2,
+  IconTableDashed,
+} from '@tabler/icons-react';
 
 export const HOME_ROUTE = '/';
 export const DASHBOARD_ROUTE = '/analytics';
 export const MODEL_COMPARISON_ROUTE = '/model-comparison';
 export const LOGIN_ROUTE = '/login';
 export const REGISTER_ROUTE = '/register';
+export const SVG_EDITOR_ROUTE = '/svg-editor';
 
 export const HOME_LABEL = 'Home';
 export const DASHBOARD_LABEL = 'Analytics';
 export const LOGIN_LABEL = 'Login';
 export const REGISTER_LABEL = 'Register';
 export const MODEL_COMPARISON_LABEL = 'Model Comparison';
+export const SVG_EDITOR_LABEL = 'SVG Editor';
 
 export type TRoute = {
   path: string;
@@ -45,7 +59,7 @@ export const APP_ROUTES: TRoute[] = [
     label: DASHBOARD_LABEL,
     id: '2',
     isProtected: true,
-    icon: <IconTableOptions title="Analytics" />,
+    icon: <IconTableDashed title="Analytics" />,
   },
   {
     path: MODEL_COMPARISON_ROUTE,
@@ -53,7 +67,7 @@ export const APP_ROUTES: TRoute[] = [
     label: MODEL_COMPARISON_LABEL,
     id: '3',
     isProtected: true,
-    icon: <IconChartPie title="Model Comparison" />,
+    icon: <IconBrandGoogleAnalytics title="Model Comparison" />,
   },
   {
     path: REGISTER_ROUTE,
@@ -61,6 +75,14 @@ export const APP_ROUTES: TRoute[] = [
     label: REGISTER_LABEL,
     id: '4',
     isProtected: false,
+  },
+  {
+    path: SVG_EDITOR_ROUTE,
+    component: SVGEditor,
+    label: SVG_EDITOR_LABEL,
+    id: '5',
+    isProtected: true,
+    icon: <IconBrandDatabricks title="SVG Editor" />,
   },
 ];
 

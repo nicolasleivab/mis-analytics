@@ -71,8 +71,7 @@ export default function Nav() {
 
   if (
     location.pathname === LOGIN_ROUTE ||
-    location.pathname === REGISTER_ROUTE ||
-    !routes.map((route) => route.path).includes(location.pathname)
+    location.pathname === REGISTER_ROUTE
   ) {
     return null;
   }

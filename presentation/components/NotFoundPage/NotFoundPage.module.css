@@ -1,0 +1,24 @@
+.NotFoundPage {
+  min-height: 100vh;
+  max-height: 100%;
+  min-width: 100%;
+  width: fit-content;
+  box-sizing: border-box;
+  padding: var(--page-padding);
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.NotFoundPage h1 {
+  margin-bottom: 20px;
+  font-size: 40px;
+}
+
+.SadEmoji {
+  font-size: 40px;
+  font-weight: bold;
+}
