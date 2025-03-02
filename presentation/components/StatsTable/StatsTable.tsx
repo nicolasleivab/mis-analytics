@@ -21,7 +21,7 @@ const StatsTable: React.FC<StatsTableProps> = ({ stats }) => {
   return (
     <Table.ScrollContainer minWidth={'100%'}>
       <Table>
-        <Table.Caption>Medical Image Segmentation Dice Scores</Table.Caption>
+        <Table.Caption>Aggregated Data Table</Table.Caption>
         <Table.Thead>
           <Table.Tr>
             <Table.Th>Svg Part/Indicator</Table.Th>

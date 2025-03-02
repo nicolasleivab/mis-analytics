@@ -96,9 +96,13 @@ export default function Home() {
           <h1>Welcome to MIS Analytics</h1>
           <p>
             This tool is designed to help you analyze and compare different
-            machine learning models for medical image segmentation. By
-            evaluating these models, you can make data-driven decisions that
-            enhance the accuracy and efficiency of medical image analysis.
+            models for medical image segmentation. By evaluating these models,
+            you can get insights about their performance with dynamically
+            generated filters and user-driven configurations, thus enhancing
+            your model analysis. While the tool was originally designed to
+            provide insights on medical image segmentation performance metrics,
+            its flexible architecture allows you to create your own analytics
+            experience using any base SVG and any data set.
           </p>
           <p>
             To get started, please select an XLSX file containing your model
