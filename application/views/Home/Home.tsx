@@ -93,7 +93,7 @@ export default function Home() {
     <div className={styles.Home}>
       <Flex gap="20px" padding="50px" direction="column" align={'center'}>
         <div className={styles.HomeText}>
-          <h1>Welcome to MIS Analytics</h1>
+          <h1>Welcome to MIS-Analytics</h1>
           <p>
             This tool is designed to help you analyze and compare different
             models for medical image segmentation. By evaluating these models,
