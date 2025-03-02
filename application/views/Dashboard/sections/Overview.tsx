@@ -95,13 +95,14 @@ export default function Overview() {
         style={{ flex: 1.5 }}
         justify="flex-start"
         align="center"
+        gap="30px"
       >
         {availableSheets.length > 0 ? (
           <Select
             allowDeselect={false}
             defaultValue={availableSheets[0]?.value}
-            label="Select dataset"
-            placeholder="Select dataset"
+            label="Select imported worksheet tab"
+            placeholder="Select imported worksheet tab"
             onChange={(val) => setSelectedSheet(val!)}
             data={availableSheets}
           />
