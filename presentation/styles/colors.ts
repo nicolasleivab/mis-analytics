@@ -1,24 +1,28 @@
-export const lightColorPalette1 = [
-  '#BAFFC9', // Light Green
-  '#BAE1FF', // Light Blue
-  '#E3BAFF', // Light Purple
-  '#FFC1E3', // Light Magenta
-  '#D4A5A5', // Light Rose
-  '#C6E2FF', // Light Sky Blue
-  '#FFDAC1', // Peach\  '#FFB3BA', // Light Pink
-  '#FFDFBA', // Light Orange
-  '#FFFFBA', // Light Yellow
+export const darkColorPalette1 = [
+  '#33b1ff',
+  '#ba4e00',
+  '#6fdc8c',
+  '#ff7eb6',
+  '#005d5d',
+  '#d2a106',
+  '#007d79',
+  '#8a3ffc',
+  '#bae6ff',
+  '#d12771',
+  '#08bdba',
+  '#4589ff',
+  '#d4bbff',
+  '#fa4d56',
 ];
 
-export const darkColorPalette1 = [
-  '#44D973', // Dark Green
-  '#429EF5', // Dark Blue
-  '#A163F8', // Dark Purple
-  '#FF77B5', // Dark Magenta
-  '#A56C5F', // Dark Rose
-  '#5A99E0', // Dark Sky Blue
-  '#FF8E72', // Dark Peach
-  '#FF6F61', // Dark Pink
-  '#FF8C42', // Dark Orange
-  '#FFDD57', // Dark Yellow
+export const lightColorPalette1 = [
+  '#fd7f6f',
+  '#7eb0d5',
+  '#b2e061',
+  '#bd7ebe',
+  '#ffb55a',
+  '#ffee65',
+  '#beb9db',
+  '#fdcce5',
+  '#8bd3c7',
 ];

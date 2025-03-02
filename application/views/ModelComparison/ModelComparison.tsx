@@ -1,6 +1,9 @@
 import { MultiSelect, Select, Flex, Box, Text } from '@mantine/core';
 import { BarChart } from '@mantine/charts';
-import { darkColorPalette1 } from '../../../presentation/styles/colors';
+import {
+  lightColorPalette1,
+  darkColorPalette1,
+} from '../../../presentation/styles/colors';
 import { useModelComparison } from '../../../model/hooks';
 import { TStatLabel } from '../../../model/definitions/Stats';
 import { selectAllSheets, TExcelSheet, useAppSelector } from '../../../model';
@@ -40,7 +43,10 @@ export default function ModelComparison() {
           <div
             className={styles.circle}
             style={{
-              backgroundColor: darkColorPalette1[index] ?? darkColorPalette1[0],
+              backgroundColor:
+                darkColorPalette1[index] ??
+                lightColorPalette1[index - darkColorPalette1.length] ??
+                darkColorPalette1[0],
             }}
           ></div>
           <Text>{header}</Text>
@@ -103,7 +109,10 @@ export default function ModelComparison() {
                 dataKey="part" // 'part' is the key representing body parts (x-axis)
                 series={selectedModels.map((model, index) => ({
                   name: model,
-                  color: darkColorPalette1[index] ?? darkColorPalette1[0],
+                  color:
+                    darkColorPalette1[index] ??
+                    lightColorPalette1[index - darkColorPalette1.length] ??
+                    darkColorPalette1[0],
                   dataKey: model,
                 }))}
                 tickLine="y"
