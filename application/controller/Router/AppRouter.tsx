@@ -21,7 +21,11 @@ import {
   useAppSelector,
 } from '../../../model';
 import { useEffect } from 'react';
-import { CustomAlert, NotFoundPage } from '../../../presentation/components';
+import {
+  CustomAlert,
+  Footer,
+  NotFoundPage,
+} from '../../../presentation/components';
 
 type ProtectedRouteProps = {
   children: JSX.Element;
@@ -81,6 +85,7 @@ export function createAppRouter() {
           ))}
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
+        <Footer />
       </div>
     </Router>
   );

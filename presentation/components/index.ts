@@ -9,3 +9,4 @@ export { default as CustomButton } from './CustomButton/CustomButton';
 export { default as CustomCard } from './CustomCard/CustomCard';
 export { default as CustomAlert } from './CustomAlert/CustomAlert';
 export { default as NotFoundPage } from './NotFoundPage/NotFoundPage';
+export { default as Footer } from './Footer/Footer';
