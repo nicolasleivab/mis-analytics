@@ -5,7 +5,7 @@ import {
   logoutUser as logout,
   registerUser,
 } from './userThunks';
-import { TUser } from './definitions';
+import { GUEST_ID, TUser } from './definitions';
 
 type AuthState = {
   user: TUser | null;
@@ -25,6 +25,18 @@ const authSlice = createSlice({
   reducers: {
     clearError: (state) => {
       state.error = null;
+    },
+    setGuestUser: (state) => {
+      state.user = {
+        id: GUEST_ID,
+        email: 'guest@guest.com',
+        projects: [],
+      };
+    },
+    logoutGuestUser: (state) => {
+      if (state.user?.id === GUEST_ID) {
+        state.user = null;
+      }
     },
   },
   extraReducers: (builder) => {
@@ -82,6 +94,6 @@ const authSlice = createSlice({
   },
 });
 
-export const { clearError } = authSlice.actions;
+export const { clearError, setGuestUser, logoutGuestUser } = authSlice.actions;
 
 export default authSlice.reducer;

@@ -7,6 +7,7 @@ import { useEffect } from 'react';
 import {
   authenticateUser,
   selectUser,
+  setGuestUser,
   useAppDispatch,
   useAppSelector,
 } from '../../../model';
@@ -43,6 +44,11 @@ export default function Login() {
     } catch (error) {
       console.error('Authentication failed:', error);
     }
+  };
+
+  const handleGuestLogin = () => {
+    dispatch(setGuestUser());
+    navigate(HOME_ROUTE);
   };
 
   useEffect(() => {
@@ -95,6 +101,14 @@ export default function Login() {
               <Group style={{ marginTop: 24 }}>
                 <CustomButton type="submit" loading={isLoading}>
                   Login
+                </CustomButton>
+                <CustomButton
+                  variant="secondary"
+                  type="button"
+                  onClick={handleGuestLogin}
+                  loading={isLoading}
+                >
+                  Login as Guest
                 </CustomButton>
                 {/* <CustomButton variant="secondary">Login as Guest</CustomButton> */}
               </Group>

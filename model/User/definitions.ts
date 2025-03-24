@@ -15,3 +15,5 @@ export type TBareUser = {
   id: string;
   email: string;
 };
+
+export const GUEST_ID = 'guest';

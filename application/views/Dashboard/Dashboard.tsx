@@ -16,6 +16,7 @@ import {
   setCurrentProject,
   useAppDispatch,
   useAppSelector,
+  GUEST_ID,
 } from '../../../model';
 import { CustomButton, CustomCard } from '../../../presentation/components';
 import { useState } from 'react';
@@ -90,28 +91,30 @@ export default function Dashboard() {
 
   return (
     <div className={styles.Dashboard}>
-      <Flex
-        justify="flex-start"
-        align="center"
-        gap="15px"
-        style={{ marginBottom: '15px', fontSize: '22px' }}
-      >
-        {currentProject.id !== '' ? (
-          <h2>{`Project: ${currentProject.name}`}</h2>
-        ) : (
-          <>
-            <Input
-              placeholder="Name project to save"
-              type="string"
-              onChange={(e) => setProjectName(e.target.value)}
-            />
-            {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
-            <CustomButton disabled={!projectName} onClick={saveProject}>
-              Save project
-            </CustomButton>{' '}
-          </>
-        )}
-      </Flex>
+      {user?.id !== GUEST_ID ? (
+        <Flex
+          justify="flex-start"
+          align="center"
+          gap="15px"
+          style={{ marginBottom: '15px', fontSize: '22px' }}
+        >
+          {currentProject.id !== '' ? (
+            <h2>{`Project: ${currentProject.name}`}</h2>
+          ) : (
+            <>
+              <Input
+                placeholder="Name project to save"
+                type="string"
+                onChange={(e) => setProjectName(e.target.value)}
+              />
+              {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
+              <CustomButton disabled={!projectName} onClick={saveProject}>
+                Save project
+              </CustomButton>{' '}
+            </>
+          )}
+        </Flex>
+      ) : null}
       <Flex direction="column">
         <Flex align="center" gap="sm">
           <CustomButton onClick={addView}>Add view</CustomButton>
