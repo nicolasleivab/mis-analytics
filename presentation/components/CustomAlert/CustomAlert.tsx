@@ -14,7 +14,7 @@ export default function CustomAlert() {
   const dispatch = useAppDispatch();
 
   const [visible, setVisible] = useState(false);
-
+  console.log('error', error);
   useEffect(() => {
     if (error) {
       setVisible(true);

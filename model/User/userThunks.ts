@@ -18,8 +18,9 @@ export const authenticateUser = createAsyncThunk(
     } catch (error: unknown) {
       const typedError = error as TError;
       return thunkAPI.rejectWithValue(
-        typedError.response.data.message ??
-          (typedError.message || 'Login failed')
+        typedError?.response?.data?.message ||
+          typedError?.message ||
+          'Login failed'
       );
     }
   }
@@ -42,8 +43,9 @@ export const registerUser = createAsyncThunk(
       const typedError = error as TError;
 
       return thunkAPI.rejectWithValue(
-        typedError.response.data.message ??
-          (typedError.message || 'Registration failed')
+        typedError?.response?.data?.message ||
+          typedError?.message ||
+          'Registration failed'
       );
     }
   }

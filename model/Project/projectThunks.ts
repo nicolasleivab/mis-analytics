@@ -16,8 +16,9 @@ export const createProject = createAsyncThunk(
     } catch (error: unknown) {
       const typedError = error as TError;
       return thunkAPI.rejectWithValue(
-        typedError.response.data.message ??
-          (typedError.message || 'Failed to create project')
+        typedError?.response?.data?.message ||
+          typedError?.message ||
+          'Failed to create project'
       );
     }
   }
@@ -36,8 +37,9 @@ export const retrieveProject = createAsyncThunk(
     } catch (error: unknown) {
       const typedError = error as TError;
       return thunkAPI.rejectWithValue(
-        typedError.response.data.message ??
-          (typedError.message || 'Failed to retrieve project')
+        typedError?.response?.data?.message ||
+          typedError?.message ||
+          'Failed to retrieve project'
       );
     }
   }
@@ -56,8 +58,9 @@ export const removeProject = createAsyncThunk(
     } catch (error: unknown) {
       const typedError = error as TError;
       return thunkAPI.rejectWithValue(
-        typedError.response.data.message ??
-          (typedError.message || 'Failed to remove project')
+        typedError?.response?.data?.message ||
+          typedError?.message ||
+          'Failed to remove project'
       );
     }
   }

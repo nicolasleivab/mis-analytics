@@ -41,9 +41,14 @@ export {
 } from './Project/projectThunks';
 
 // User
-export { clearError as clearUserError } from './User/userSlice';
+export {
+  clearError as clearUserError,
+  setGuestUser,
+  logoutGuestUser,
+} from './User/userSlice';
 export { authenticateUser, logoutUser, registerUser } from './User/userThunks';
 export { selectUser } from './User/userSelectors';
+export { GUEST_ID } from './User/definitions';
 
 // hooks
 export {

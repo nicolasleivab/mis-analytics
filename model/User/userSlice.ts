@@ -5,7 +5,7 @@ import {
   logoutUser as logout,
   registerUser,
 } from './userThunks';
-import { TUser } from './definitions';
+import { GUEST_ID, TUser } from './definitions';
 
 type AuthState = {
   user: TUser | null;
@@ -26,6 +26,18 @@ const authSlice = createSlice({
     clearError: (state) => {
       state.error = null;
     },
+    setGuestUser: (state) => {
+      state.user = {
+        id: GUEST_ID,
+        email: 'guest@guest.com',
+        projects: [],
+      };
+    },
+    logoutGuestUser: (state) => {
+      if (state.user?.id === GUEST_ID) {
+        state.user = null;
+      }
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -38,6 +50,7 @@ const authSlice = createSlice({
         state.user = action.payload as TUser;
       })
       .addCase(login.rejected, (state, action) => {
+        console.log('login.rejected', action);
         state.isLoading = false;
         state.error = action.payload as string;
       })
@@ -81,6 +94,6 @@ const authSlice = createSlice({
   },
 });
 
-export const { clearError } = authSlice.actions;
+export const { clearError, setGuestUser, logoutGuestUser } = authSlice.actions;
 
 export default authSlice.reducer;

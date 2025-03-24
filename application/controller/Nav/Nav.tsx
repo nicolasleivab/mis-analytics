@@ -14,6 +14,8 @@ import {
 
 import {
   clearProjectData,
+  GUEST_ID,
+  logoutGuestUser,
   logoutUser,
   selectAllSheets,
   selectAllSvgParts,
@@ -61,6 +63,9 @@ export default function Nav() {
   );
 
   const handleLogout = async () => {
+    if (user?.id === GUEST_ID) {
+      return dispatch(logoutGuestUser());
+    }
     try {
       dispatch(clearProjectData());
       await dispatch(logoutUser());
