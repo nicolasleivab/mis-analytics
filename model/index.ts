@@ -38,6 +38,7 @@ export {
   retrieveProject,
   createProject,
   removeProject,
+  updateProject,
 } from './Project/projectThunks';
 
 // User

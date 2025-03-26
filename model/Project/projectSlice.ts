@@ -9,7 +9,7 @@ import {
   type TVariableField,
 } from './definitions';
 import { ID_FIELD } from '../definitions/ImportFields';
-import { removeProject, retrieveProject } from './projectThunks';
+import { removeProject, retrieveProject, updateProject } from './projectThunks';
 
 type TProjectState = {
   sheets: TExcelData;
@@ -137,6 +137,40 @@ export const projectSlice = createSlice({
         }
       })
       .addCase(removeProject.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload as string;
+      })
+      .addCase(updateProject.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(updateProject.fulfilled, (state, action) => {
+        state.isLoading = false;
+        const project = action.payload;
+
+        const {
+          data,
+          variableFields,
+          svgJson,
+          clipPathsJson,
+          svgThresholds,
+          idField,
+          name,
+        } = project;
+        state.sheets = data;
+        state.idField = idField;
+        state.variableFields = variableFields;
+        state.idField = idField;
+        const parsedSvgJson = svgJson;
+        state.svgParts = parsedSvgJson;
+        state.clipPaths = clipPathsJson;
+        state.uniqueSvgParts = Array.from(
+          new Set(parsedSvgJson.map((p) => p.name))
+        );
+        state.svgThresholds = svgThresholds;
+        state.currentProject = { name: name, id: state.currentProject.id };
+      })
+      .addCase(updateProject.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload as string;
       });

@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { TError, TProject } from '../../services/definitions';
-import { create, remove, retrieve } from '../../services/projects';
+import { create, remove, retrieve, update } from '../../services/projects';
 
 export const createProject = createAsyncThunk(
   'project/create',
@@ -19,6 +19,27 @@ export const createProject = createAsyncThunk(
         typedError?.response?.data?.message ||
           typedError?.message ||
           'Failed to create project'
+      );
+    }
+  }
+);
+
+export const updateProject = createAsyncThunk(
+  'project/update',
+  async (projectData: TProject, thunkAPI) => {
+    try {
+      const res = await update(projectData);
+      if (res.data && 'project' in res.data) {
+        return res.data.project;
+      } else {
+        throw new Error('Failed to update project');
+      }
+    } catch (error: unknown) {
+      const typedError = error as TError;
+      return thunkAPI.rejectWithValue(
+        typedError?.response?.data?.message ||
+          typedError?.message ||
+          'Failed to update project'
       );
     }
   }
