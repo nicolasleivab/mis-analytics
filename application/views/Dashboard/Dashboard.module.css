@@ -14,3 +14,10 @@
   padding: 20px;
   box-shadow: 0 0 10px 5px rgba(0, 0, 0, 0.1);
 }
+
+.InvisibleButton {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  height: 70px;
+}
