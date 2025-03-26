@@ -52,7 +52,7 @@ export default function useFilteredData() {
     setAvailableSheets([...mappedSheets, DEFAULT_ALL_FIELD]);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentDataset]);
+  }, [currentDataset, excelData]);
 
   useEffect(() => {
     if (currentDataset?.length === 0) return;

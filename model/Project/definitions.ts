@@ -70,3 +70,10 @@ export type TVariableField = {
   isFilter: boolean;
   label?: string;
 };
+
+export type TUpdateMode = 'updateTitle' | 'updateData';
+
+export const UPDATE_OPTIONS: { value: TUpdateMode; label: string }[] = [
+  { value: 'updateTitle', label: 'Update title' },
+  { value: 'updateData', label: 'Add a new sheet' },
+];

@@ -1,5 +1,5 @@
 import { Flex } from '@chakra-ui/react';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import {
   createProject,
   updateProject,
@@ -15,6 +15,11 @@ import {
   setCurrentProject,
   useAppDispatch,
   useAppSelector,
+  UPDATE_OPTIONS,
+  selectUpdateMode,
+  setUpdateMode,
+  TUpdateMode,
+  addNewSheet,
 } from '../../../../model';
 import * as styles from '../Dashboard.module.css';
 import { Input, Select } from '@mantine/core';
@@ -22,15 +27,11 @@ import { CustomButton } from '../../../../presentation/components';
 import { IconSettings } from '@tabler/icons-react';
 import { TUserProject } from '../../../../model/User/definitions';
 import { verifyUser } from '../../../../model/User/userThunks';
-
-const UPDATE_OPTIONS = [
-  { value: 'updateTitle', label: 'Update title' },
-  { value: 'updateData', label: 'Update data' },
-];
+import { ReactSpreadsheetImport } from 'react-spreadsheet-import';
 
 export default function HeaderOptions() {
   const [openUpdateDropdown, setOpenUpdateDropdown] = useState(false);
-  const [updateMode, setUpdateMode] = useState('');
+  const updateMode = useAppSelector(selectUpdateMode);
   const { user } = useAppSelector(selectUser);
   const currentProject = useAppSelector(selectCurrentProject);
   const dispatch = useAppDispatch();
@@ -40,6 +41,16 @@ export default function HeaderOptions() {
   const svgThresholds = useAppSelector(selectSvgThresholds);
   const sheets = useAppSelector(selectAllSheets);
   const idField = useAppSelector(selectIdField);
+
+  const importFields = useMemo(
+    () =>
+      variableFields.map((field) => ({
+        label: field.name,
+        key: field.name,
+        fieldType: { type: 'input' },
+      })),
+    [variableFields]
+  );
 
   const [projectName, setProjectName] = useState('');
 
@@ -106,7 +117,10 @@ export default function HeaderOptions() {
         <CustomButton disabled={!projectName} onClick={updateProjectHandler}>
           Save project
         </CustomButton>
-        <CustomButton variant="secondary" onClick={() => setUpdateMode('')}>
+        <CustomButton
+          variant="secondary"
+          onClick={() => dispatch(setUpdateMode(null))}
+        >
           Cancel
         </CustomButton>{' '}
       </Flex>
@@ -141,7 +155,7 @@ export default function HeaderOptions() {
                 defaultDropdownOpened
                 label="Update options"
                 placeholder="Select an action"
-                onChange={(val) => setUpdateMode(val!)}
+                onChange={(val) => dispatch(setUpdateMode(val as TUpdateMode))}
                 data={UPDATE_OPTIONS}
                 onDropdownClose={() => setOpenUpdateDropdown(false)}
               />
@@ -161,6 +175,25 @@ export default function HeaderOptions() {
           </CustomButton>{' '}
         </>
       )}
+      <ReactSpreadsheetImport
+        isOpen={updateMode === 'updateData'}
+        // initialStepState={{ data: excelFile! }} TODO: Find a solution for the excel upload flow to avoid repittions
+        onClose={() => dispatch(setUpdateMode(null))}
+        onSubmit={(data) => {
+          dispatch(addNewSheet(data.validData as unknown as string));
+        }}
+        fields={importFields}
+        customTheme={{
+          colors: {
+            highlight: '#CCC',
+            rsi: {
+              500: '#1b1b1b',
+              600: '#444',
+              700: '#444',
+            },
+          },
+        }}
+      />
     </Flex>
   );
 }

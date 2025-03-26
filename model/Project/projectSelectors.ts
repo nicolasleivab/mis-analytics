@@ -34,3 +34,6 @@ export const selectSvgThresholds = (state: RootState) =>
 
 export const selectCurrentProject = (state: RootState) =>
   state.projectData.currentProject;
+
+export const selectUpdateMode = (state: RootState) =>
+  state.projectData.updateMode;

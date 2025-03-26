@@ -2,6 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import {
   DEFAULT_THRESHOLD,
   TSvgPartsData,
+  TUpdateMode,
   type TClipPath,
   type TExcelData,
   type TSvgPart,
@@ -23,6 +24,7 @@ type TProjectState = {
   error: string | null;
   isLoading: boolean;
   currentProject: { name: string; id: string };
+  updateMode: TUpdateMode | null;
 };
 
 const initialState: TProjectState = {
@@ -37,6 +39,7 @@ const initialState: TProjectState = {
   error: null,
   isLoading: false,
   currentProject: { name: '', id: '' },
+  updateMode: null,
 };
 
 export const projectSlice = createSlice({
@@ -82,6 +85,22 @@ export const projectSlice = createSlice({
       state.svgThresholds = DEFAULT_THRESHOLD;
       state.hoveredPart = null;
       state.currentProject = { name: '', id: '' };
+    },
+    setUpdateMode: (state, action: PayloadAction<TUpdateMode | null>) => {
+      state.updateMode = action.payload;
+    },
+    addNewSheet: (state, action: PayloadAction<string>) => {
+      const updatedSheets = [
+        ...state.sheets,
+        {
+          name: 'New Sheet',
+          data: action.payload as unknown as unknown[][],
+          filters: state.sheets[0].filters,
+        },
+      ];
+      console.log('updatedSheets', updatedSheets);
+      state.sheets = updatedSheets;
+      state.updateMode = null;
     },
   },
   extraReducers: (builder) => {
@@ -186,6 +205,8 @@ export const {
   setSvgThresholds,
   setCurrentProject,
   clearProjectData,
+  setUpdateMode,
+  addNewSheet,
 } = projectSlice.actions;
 
 export default projectSlice.reducer;
