@@ -48,7 +48,7 @@ export default function CustomProjectsModal({
       yOffset={yOffset}
       opened={isOpen}
       onClose={onCloseHandler}
-      title="Select a project to load"
+      title="Select a sheet to remove"
     >
       <CustomTable
         headers={['name', 'createdAt', 'updatedAt', 'load', 'remove']}

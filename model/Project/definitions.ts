@@ -71,9 +71,10 @@ export type TVariableField = {
   label?: string;
 };
 
-export type TUpdateMode = 'updateTitle' | 'updateData';
+export type TUpdateMode = 'updateTitle' | 'updateData' | 'removeData';
 
 export const UPDATE_OPTIONS: { value: TUpdateMode; label: string }[] = [
   { value: 'updateTitle', label: 'Update title' },
   { value: 'updateData', label: 'Add a new sheet' },
+  { value: 'removeData', label: 'Remove sheets' },
 ];

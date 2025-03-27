@@ -31,6 +31,7 @@ import { TUserProject } from '../../../../model/User/definitions';
 import { verifyUser } from '../../../../model/User/userThunks';
 import { ReactSpreadsheetImport } from 'react-spreadsheet-import';
 import { MODAL_OFFSET } from '../../Home/Home';
+import RemoveSheets from './RemoveSheets';
 
 export default function HeaderOptions() {
   const [newSheet, setNewSheet] = useState('');
@@ -273,6 +274,7 @@ export default function HeaderOptions() {
           </CustomButton>
         </Flex>
       </Modal>
+      <RemoveSheets />
     </Flex>
   );
 }
