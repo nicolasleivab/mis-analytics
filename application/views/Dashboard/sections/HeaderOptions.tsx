@@ -1,4 +1,5 @@
 import { Flex } from '@chakra-ui/react';
+import { Alert, Modal, TextInput } from '@mantine/core';
 import { useMemo, useState } from 'react';
 import {
   createProject,
@@ -19,18 +20,24 @@ import {
   selectUpdateMode,
   setUpdateMode,
   TUpdateMode,
-  addNewSheet,
+  // addNewSheet,
+  TExcelSheet,
 } from '../../../../model';
 import * as styles from '../Dashboard.module.css';
 import { Input, Select } from '@mantine/core';
 import { CustomButton } from '../../../../presentation/components';
-import { IconSettings } from '@tabler/icons-react';
+import { IconAlertCircle, IconSettings } from '@tabler/icons-react';
 import { TUserProject } from '../../../../model/User/definitions';
 import { verifyUser } from '../../../../model/User/userThunks';
 import { ReactSpreadsheetImport } from 'react-spreadsheet-import';
+import { MODAL_OFFSET } from '../../Home/Home';
 
 export default function HeaderOptions() {
+  const [newSheet, setNewSheet] = useState('');
   const [openUpdateDropdown, setOpenUpdateDropdown] = useState(false);
+  const [openNameModal, setOpenNameModal] = useState(false);
+  const [customSheetName, setCustomSheetName] = useState('');
+  const [showSheetAlert, setShowSheetAlert] = useState(false);
   const updateMode = useAppSelector(selectUpdateMode);
   const { user } = useAppSelector(selectUser);
   const currentProject = useAppSelector(selectCurrentProject);
@@ -93,12 +100,43 @@ export default function HeaderOptions() {
       })
     );
     await dispatch(verifyUser());
+    dispatch(setUpdateMode(null));
   };
 
+  const handleSaveSheet = async () => {
+    if (!customSheetName) {
+      setShowSheetAlert(true);
+      return;
+    }
+
+    const typedSheet = newSheet as unknown as unknown[][];
+    await dispatch(
+      updateProject({
+        data: [
+          ...(sheets as TExcelSheet[]),
+          {
+            data: typedSheet,
+            name: customSheetName,
+            filters: sheets[0].filters,
+          },
+        ],
+        variableFields,
+        name: currentProject.name,
+        svgJson: svgParts,
+        clipPathsJson: clipPaths,
+        svgThresholds: svgThresholds,
+        idField,
+        user: user!,
+        id: currentProject.id,
+      })
+    );
+    await dispatch(verifyUser());
+    setOpenNameModal(false);
+  };
   if (user?.id === GUEST_ID) {
     return null;
   }
-
+  console.log(sheets);
   if (updateMode === 'updateTitle') {
     return (
       <Flex
@@ -180,7 +218,8 @@ export default function HeaderOptions() {
         // initialStepState={{ data: excelFile! }} TODO: Find a solution for the excel upload flow to avoid repittions
         onClose={() => dispatch(setUpdateMode(null))}
         onSubmit={(data) => {
-          dispatch(addNewSheet(data.validData as unknown as string));
+          setNewSheet(data.validData as unknown as string);
+          setOpenNameModal(true);
         }}
         fields={importFields}
         customTheme={{
@@ -194,6 +233,46 @@ export default function HeaderOptions() {
           },
         }}
       />
+      {/* Sheet Naming Modal */}
+      <Modal
+        yOffset={MODAL_OFFSET}
+        opened={openNameModal}
+        onClose={() => setOpenNameModal(false)}
+        title="Name your sheet"
+        size="xl"
+      >
+        {/* Display the alert if no sheet name is entered */}
+        {showSheetAlert && (
+          <Alert
+            icon={<IconAlertCircle size={16} />}
+            title="Error!"
+            color="red"
+            withCloseButton
+            onClose={() => setShowSheetAlert(false)}
+            mb="md"
+          >
+            Please provide a valid sheet name.
+          </Alert>
+        )}
+
+        <TextInput
+          label="Enter a name for the sheet"
+          placeholder="Sheet name"
+          value={customSheetName}
+          onChange={(e) => setCustomSheetName(e.currentTarget.value)}
+          required
+        />
+        <Flex
+          justify="flex-end"
+          gap="20px"
+          style={{ width: '100%', marginTop: 20 }}
+        >
+          {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
+          <CustomButton onClick={handleSaveSheet}>
+            Add new data sheet
+          </CustomButton>
+        </Flex>
+      </Modal>
     </Flex>
   );
 }
