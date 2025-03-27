@@ -63,12 +63,12 @@ export default function RemoveSheets() {
       yOffset={MODAL_OFFSET}
       opened={updateMode === 'removeData'}
       onClose={() => dispatch(setUpdateMode(null))}
-      title="Select a project to load"
+      title="Select a sheet to remove"
     >
       <CustomTable
         headers={['name', 'remove']}
         data={tableData}
-        caption={'Saved projects'}
+        caption={'Saved sheets'}
         customRenderers={{
           remove: (cellValue, row) => (
             <CustomButton
@@ -76,7 +76,7 @@ export default function RemoveSheets() {
               onClick={() => handleRemoveSheet(row)}
             >
               <Flex
-                align="center"
+                align="right"
                 justify={'space-evenly'}
                 style={{ width: '100%' }}
               >
