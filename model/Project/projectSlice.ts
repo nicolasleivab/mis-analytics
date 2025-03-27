@@ -2,6 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import {
   DEFAULT_THRESHOLD,
   TSvgPartsData,
+  TUpdateMode,
   type TClipPath,
   type TExcelData,
   type TSvgPart,
@@ -9,7 +10,7 @@ import {
   type TVariableField,
 } from './definitions';
 import { ID_FIELD } from '../definitions/ImportFields';
-import { removeProject, retrieveProject } from './projectThunks';
+import { removeProject, retrieveProject, updateProject } from './projectThunks';
 
 type TProjectState = {
   sheets: TExcelData;
@@ -23,6 +24,7 @@ type TProjectState = {
   error: string | null;
   isLoading: boolean;
   currentProject: { name: string; id: string };
+  updateMode: TUpdateMode | null;
 };
 
 const initialState: TProjectState = {
@@ -37,6 +39,7 @@ const initialState: TProjectState = {
   error: null,
   isLoading: false,
   currentProject: { name: '', id: '' },
+  updateMode: null,
 };
 
 export const projectSlice = createSlice({
@@ -82,6 +85,22 @@ export const projectSlice = createSlice({
       state.svgThresholds = DEFAULT_THRESHOLD;
       state.hoveredPart = null;
       state.currentProject = { name: '', id: '' };
+    },
+    setUpdateMode: (state, action: PayloadAction<TUpdateMode | null>) => {
+      state.updateMode = action.payload;
+    },
+    addNewSheet: (state, action: PayloadAction<string>) => {
+      const updatedSheets = [
+        ...state.sheets,
+        {
+          name: 'New Sheet',
+          data: action.payload as unknown as unknown[][],
+          filters: state.sheets[0].filters,
+        },
+      ];
+      console.log('updatedSheets', updatedSheets);
+      state.sheets = updatedSheets;
+      state.updateMode = null;
     },
   },
   extraReducers: (builder) => {
@@ -139,6 +158,40 @@ export const projectSlice = createSlice({
       .addCase(removeProject.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload as string;
+      })
+      .addCase(updateProject.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(updateProject.fulfilled, (state, action) => {
+        state.isLoading = false;
+        const project = action.payload;
+
+        const {
+          data,
+          variableFields,
+          svgJson,
+          clipPathsJson,
+          svgThresholds,
+          idField,
+          name,
+        } = project;
+        state.sheets = data;
+        state.idField = idField;
+        state.variableFields = variableFields;
+        state.idField = idField;
+        const parsedSvgJson = svgJson;
+        state.svgParts = parsedSvgJson;
+        state.clipPaths = clipPathsJson;
+        state.uniqueSvgParts = Array.from(
+          new Set(parsedSvgJson.map((p) => p.name))
+        );
+        state.svgThresholds = svgThresholds;
+        state.currentProject = { name: name, id: state.currentProject.id };
+      })
+      .addCase(updateProject.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload as string;
       });
   },
 });
@@ -152,6 +205,8 @@ export const {
   setSvgThresholds,
   setCurrentProject,
   clearProjectData,
+  setUpdateMode,
+  addNewSheet,
 } = projectSlice.actions;
 
 export default projectSlice.reducer;

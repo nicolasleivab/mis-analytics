@@ -172,7 +172,7 @@ export default function CustomExcelTypeModal({
 
               // Infer column types
               const guessed: TVariableField[] = foundHeaders.map((header) => {
-                const lowerHeader = header.toLowerCase();
+                const lowerHeader = header?.toLowerCase();
 
                 // If column name has 'id' anywhere => guess 'id'
                 if (lowerHeader.includes('id')) {

@@ -11,6 +11,8 @@ export {
   setSvgThresholds,
   setCurrentProject,
   clearProjectData,
+  setUpdateMode,
+  addNewSheet,
 } from './Project/projectSlice';
 export {
   selectAllSheets,
@@ -25,6 +27,7 @@ export {
   selectHoveredPart,
   selectSvgThresholds,
   selectCurrentProject,
+  selectUpdateMode,
 } from './Project/projectSelectors';
 export type {
   TExcelData,
@@ -33,11 +36,14 @@ export type {
   TVariableType,
   TSvgPart,
   TClipPath,
+  TUpdateMode,
 } from './Project/definitions';
+export { UPDATE_OPTIONS } from './Project/definitions';
 export {
   retrieveProject,
   createProject,
   removeProject,
+  updateProject,
 } from './Project/projectThunks';
 
 // User
