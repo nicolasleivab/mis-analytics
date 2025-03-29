@@ -1,7 +1,12 @@
 import { useState } from 'react';
 import { FileInput, Flex, Input, Text } from '@mantine/core';
 import { CustomButton, SvgViz } from '../../../presentation/components';
-import { TSvgPart, setSvgParts, useAppDispatch } from '../../../model';
+import {
+  TSvgPart,
+  setHoveredPart,
+  setSvgParts,
+  useAppDispatch,
+} from '../../../model';
 import * as styles from './SVGEditor.module.css';
 
 export default function SVGEditor() {
@@ -70,8 +75,10 @@ export default function SVGEditor() {
 
   return (
     <Flex className={styles.SVGEditor} direction="column" gap="md">
-      {/* File input */}
-      <div style={{ width: '30%' }}>
+      <Text component="h1" fw={600} size={'24px'}>
+        SVG Editor
+      </Text>
+      <div style={{ width: '30%', marginTop: 50 }}>
         <FileInput
           accept="image/svg+xml"
           onChange={handleFileUpload}
@@ -111,6 +118,7 @@ export default function SVGEditor() {
                 gap="xs"
                 p="sm"
                 style={{ border: '1px solid #ccc', borderRadius: '4px' }}
+                onMouseEnter={() => dispatch(setHoveredPart(shape.name))}
               >
                 <Text fw={600}>{`Shape ${i + 1}`}</Text>
                 <Flex gap="xs" wrap="wrap">
