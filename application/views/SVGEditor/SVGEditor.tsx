@@ -75,9 +75,7 @@ export default function SVGEditor() {
 
   return (
     <Flex className={styles.SVGEditor} direction="column" gap="md">
-      <Text component="h1" fw={600} size={'24px'}>
-        SVG Editor
-      </Text>
+      <h2 style={{ fontSize: '26px' }}>SVG Editor</h2>
 
       <Text>
         You can upload an SVG image file here and edit its fields to match your

@@ -171,7 +171,7 @@ export default function HeaderOptions() {
       justify="flex-start"
       align="center"
       gap="15px"
-      style={{ marginBottom: '15px', fontSize: '22px' }}
+      style={{ marginBottom: '15px', fontSize: '26px' }}
     >
       {currentProject.id !== '' ? (
         <Flex align="center" gap="10px">

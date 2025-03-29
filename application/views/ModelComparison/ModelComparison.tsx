@@ -57,7 +57,8 @@ export default function ModelComparison() {
 
   return (
     <div className={styles.ModelComparison}>
-      <Flex direction="column" gap="lg" align="center">
+      <h2 style={{ fontSize: '26px' }}>Model Comparison</h2>
+      <Flex direction="column" gap="lg" align="center" mt={50}>
         <Box style={{ width: '80%' }}>
           <MultiSelect
             label="Select Models"
