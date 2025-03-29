@@ -14,6 +14,7 @@ import { Flex, Text } from '@mantine/core';
 const DEFAULT_COLORS = {
   activeColor: '#4f5f77',
   inactiveColor: '#c4d8fc',
+  hoverColor: '#4f5f77',
 };
 
 const DEFAULT_COLOR_SVG_PARTS = '#677a90';
@@ -64,6 +65,7 @@ export default function SvgViz({
     useState<TSvgPartsInitialColors>(initialColors);
 
   useEffect(() => {
+    if (stats?.length === 0) return;
     const newColors: TSvgPartsInitialColors = { ...initialColors };
 
     stats.forEach((stat) => {
@@ -104,7 +106,7 @@ export default function SvgViz({
 
       setViewBox(`${minX} ${minY} ${width} ${height}`);
     }
-  }, []);
+  }, [svgParts]);
 
   return (
     <div>
@@ -151,35 +153,39 @@ export default function SvgViz({
               onClick={() => makeClickHandler(part.name)}
               selected={selected.includes(part.name)}
               // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-              svgPartColors={svgPartColors[part.name]}
+              svgPartColors={
+                stats?.length > 0 ? svgPartColors[part.name] : DEFAULT_COLORS
+              }
               partTransform={part.partTransform}
             />
           );
         })}
       </svg>
-      <Flex direction="column" style={{ margin: '20px' }}>
-        <Box>
-          <strong>Legend:</strong>
-        </Box>
-        <Box>
-          <Flex align="center">
-            <span style={{ color: '#8b0000' }}>●</span>
-            <Text>{`${svgThresholds.stat} < ${svgThresholds.values[0]} (Dark Red)`}</Text>
-          </Flex>
-        </Box>
-        <Box>
-          <Flex align="center">
-            <span style={{ color: '#d4b200' }}>●</span>
-            <Text>{`${svgThresholds.values[0]} ≤ ${svgThresholds.stat} < ${svgThresholds.values[1]} (Dark Yellow)`}</Text>
-          </Flex>
-        </Box>
-        <Box>
-          <Flex align="center">
-            <span style={{ color: '#006400' }}>●</span>
-            <Text>{`${svgThresholds.stat} ≥ ${svgThresholds.values[1]} (Dark Green)`}</Text>
-          </Flex>
-        </Box>
-      </Flex>
+      {stats.length > 0 ? (
+        <Flex direction="column" style={{ margin: '20px' }}>
+          <Box>
+            <strong>Legend:</strong>
+          </Box>
+          <Box>
+            <Flex align="center">
+              <span style={{ color: '#8b0000' }}>●</span>
+              <Text>{`${svgThresholds.stat} < ${svgThresholds.values[0]} (Dark Red)`}</Text>
+            </Flex>
+          </Box>
+          <Box>
+            <Flex align="center">
+              <span style={{ color: '#d4b200' }}>●</span>
+              <Text>{`${svgThresholds.values[0]} ≤ ${svgThresholds.stat} < ${svgThresholds.values[1]} (Dark Yellow)`}</Text>
+            </Flex>
+          </Box>
+          <Box>
+            <Flex align="center">
+              <span style={{ color: '#006400' }}>●</span>
+              <Text>{`${svgThresholds.stat} ≥ ${svgThresholds.values[1]} (Dark Green)`}</Text>
+            </Flex>
+          </Box>
+        </Flex>
+      ) : null}
     </div>
   );
 }
