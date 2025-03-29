@@ -1,55 +1,52 @@
 import { useState } from 'react';
+import { FileInput, Flex, Input, Text } from '@mantine/core';
+import { CustomButton, SvgViz } from '../../../presentation/components';
+import { TSvgPart, setSvgParts, useAppDispatch } from '../../../model';
 import * as styles from './SVGEditor.module.css';
 
-type ShapeConfig = {
-  name: string;
-  id: string;
-  path: string;
-  className: string;
-  innerClass: string;
-  transform: string;
-  outerTransform: string;
-  innerTransform: string;
-  partTransform: string;
-};
-
 export default function SVGEditor() {
-  const [shapes, setShapes] = useState<ShapeConfig[]>([]);
+  const [rawSvg, setRawSvg] = useState<string>(''); // Keep the raw SVG text
+  const [shapes, setShapes] = useState<TSvgPart[]>([]); // Parsed shapes
+  const dispatch = useAppDispatch();
 
-  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
+  const handleFileUpload = (file: File | null) => {
     if (!file) return;
 
     const reader = new FileReader();
     reader.onload = (e) => {
       if (!e.target?.result) return;
       const svgText = e.target.result as string;
-      parseSVG(svgText);
+      setRawSvg(svgText);
     };
     reader.readAsText(file);
   };
 
-  const parseSVG = (svgText: string) => {
+  const parseSvgText = (svgText: string) => {
     const parser = new DOMParser();
     const doc = parser.parseFromString(svgText, 'image/svg+xml');
     const paths = Array.from(doc.querySelectorAll('path'));
 
-    const initialShapes = paths.map((path, i) => ({
+    return paths.map((path, i) => ({
       name: `shape-${i}`,
-      id: path.getAttribute('id') || `shape-${i}`,
-      path: path.getAttribute('d') || '',
-      className: path.getAttribute('class') || '',
+      id: path.getAttribute('id') ?? `shape-${i}`,
+      path: path.getAttribute('d') ?? '',
+      className: path.getAttribute('class') ?? '',
       innerClass: '',
-      transform: path.getAttribute('transform') || '',
+      transform: path.getAttribute('transform') ?? '',
       outerTransform: '',
       innerTransform: '',
       partTransform: '',
     }));
-
-    setShapes(initialShapes);
   };
 
-  const updateShape = (index: number, updatedFields: Partial<ShapeConfig>) => {
+  const handlePreview = () => {
+    if (!rawSvg) return;
+    const parsedShapes = parseSvgText(rawSvg);
+    setShapes(parsedShapes);
+    dispatch(setSvgParts({ svgParts: parsedShapes, clipPaths: [] }));
+  };
+
+  const updateShape = (index: number, updatedFields: Partial<TSvgPart>) => {
     setShapes((prev) => {
       const newShapes = [...prev];
       newShapes[index] = { ...newShapes[index], ...updatedFields };
@@ -57,7 +54,7 @@ export default function SVGEditor() {
     });
   };
 
-  const downloadJson = () => {
+  const handleExportJson = () => {
     const jsonString = JSON.stringify(shapes, null, 2);
     const blob = new Blob([jsonString], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
@@ -72,34 +69,80 @@ export default function SVGEditor() {
   };
 
   return (
-    <div className={styles.SVGEditor}>
-      <input type="file" accept="image/svg+xml" onChange={handleFileUpload} />
+    <Flex className={styles.SVGEditor} direction="column" gap="md">
+      {/* File input */}
+      <div style={{ width: '30%' }}>
+        <FileInput
+          accept="image/svg+xml"
+          onChange={handleFileUpload}
+          placeholder="Upload SVG"
+        />
+      </div>
 
-      {shapes.map((shape, i) => (
-        <div key={i}>
-          <label>Name</label>
-          <input
-            value={shape.name}
-            onChange={(e) => updateShape(i, { name: e.target.value })}
+      {/* Buttons row */}
+      <Flex gap="md">
+        <CustomButton variant="secondary" onClick={handlePreview}>
+          Preview
+        </CustomButton>
+        <CustomButton onClick={handleExportJson}>Export JSON</CustomButton>
+      </Flex>
+
+      {/* Editable shapes list */}
+      {shapes.length > 0 && (
+        <Flex gap="xl">
+          <SvgViz
+            selected={[]}
+            onPartClick={(part: string) => console.log('Clicked path:', part)}
+            stats={[]}
           />
-
-          <label>ID</label>
-          <input
-            value={shape.id}
-            onChange={(e) => updateShape(i, { id: e.target.value })}
-          />
-
-          <label>Path (d)</label>
-          <input
-            value={shape.path}
-            onChange={(e) => updateShape(i, { path: e.target.value })}
-          />
-
-          {/* Similarly for transform, className, etc. */}
-        </div>
-      ))}
-
-      <button onClick={downloadJson}>Export JSON</button>
-    </div>
+          <Flex
+            direction="column"
+            gap="md"
+            mt="lg"
+            w="50%"
+            h="700px"
+            style={{ overflowY: 'auto' }}
+          >
+            <Text fw={700}>Edit Shapes:</Text>
+            {shapes.map((shape, i) => (
+              <Flex
+                key={i}
+                direction="column"
+                gap="xs"
+                p="sm"
+                style={{ border: '1px solid #ccc', borderRadius: '4px' }}
+              >
+                <Text fw={600}>{`Shape ${i + 1}`}</Text>
+                <Flex gap="xs" wrap="wrap">
+                  <label>Name:</label>
+                  <Input
+                    style={{ flex: 1 }}
+                    value={shape.name}
+                    onChange={(e) => updateShape(i, { name: e.target.value })}
+                  />
+                </Flex>
+                <Flex gap="xs" wrap="wrap">
+                  <label>ID:</label>
+                  <Input
+                    style={{ flex: 1 }}
+                    value={shape.id}
+                    onChange={(e) => updateShape(i, { id: e.target.value })}
+                  />
+                </Flex>
+                <Flex gap="xs" wrap="wrap">
+                  <label>Path (d):</label>
+                  <Input
+                    style={{ flex: 1 }}
+                    value={shape.path}
+                    onChange={(e) => updateShape(i, { path: e.target.value })}
+                  />
+                </Flex>
+                {/* Can be expanded with more fields (transform, className, etc.)  */}
+              </Flex>
+            ))}
+          </Flex>
+        </Flex>
+      )}
+    </Flex>
   );
 }
