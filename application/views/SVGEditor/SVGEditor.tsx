@@ -78,6 +78,15 @@ export default function SVGEditor() {
       <Text component="h1" fw={600} size={'24px'}>
         SVG Editor
       </Text>
+
+      <Text>
+        You can upload an SVG image file here and edit its fields to match your
+        data. Each name field should be matched with the corresponding column in
+        your XLSX file. This will be used during the import phase in the Home
+        tab. The file can be previewed and edited, then exported with your
+        changes. The exported JSON can be used directly in the app’s data import
+        process.
+      </Text>
       <div style={{ width: '30%', marginTop: 50 }}>
         <FileInput
           accept="image/svg+xml"
